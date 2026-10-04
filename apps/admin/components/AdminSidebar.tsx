@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -18,10 +18,8 @@ import {
   LogOut,
   ChevronDown,
   Sparkles,
-  ShieldCheck,
   Menu,
   X,
-  Server,
   Activity,
   Truck,
   CreditCard,
@@ -29,6 +27,8 @@ import {
   RotateCcw,
   ShoppingCart,
   Mail,
+  Search,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface NavItem {
@@ -40,50 +40,109 @@ interface NavItem {
 }
 
 interface NavGroup {
+  id: string;
   title: string;
+  icon: React.ElementType;
   items: NavItem[];
 }
 
 const navGroups: NavGroup[] = [
   {
-    title: 'Overview & Analytics',
+    id: 'analytics',
+    title: 'Analytics & Sales',
+    icon: BarChart3,
     items: [
-      { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-      { label: 'Sales Report', href: '/sales', icon: BarChart3, badge: 'Insights', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
+      {
+        label: 'Sales Reports',
+        href: '/sales',
+        icon: BarChart3,
+        badge: 'Insights',
+        badgeColor: 'bg-indigo-500/20 text-indigo-400 dark:text-indigo-300',
+      },
     ],
   },
   {
-    title: 'Customers',
+    id: 'catalog',
+    title: 'Catalog & Products',
+    icon: Package,
     items: [
-      { label: 'All Customers', href: '/customers', icon: Users, badge: 'CRM', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
-      { label: 'Add Customer', href: '/customers?action=new', icon: UserPlus },
-    ],
-  },
-  {
-    title: 'Catalog',
-    items: [
-      { label: 'Products', href: '/products', icon: Package },
-      { label: 'Variant Matrix', href: '/products/new', icon: Layers, badge: 'New', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
+      { label: 'All Products', href: '/products', icon: Package },
+      {
+        label: 'Variant Matrix',
+        href: '/products/new',
+        icon: Layers,
+        badge: 'New',
+        badgeColor: 'bg-indigo-500/20 text-indigo-400 dark:text-indigo-300',
+      },
       { label: 'Categories', href: '/categories', icon: FolderTree },
-      { label: 'Inventory', href: '/inventory', icon: Boxes, badge: 'Alerts', badgeColor: 'bg-amber-500/20 text-amber-400' },
+      {
+        label: 'Stock Inventory',
+        href: '/inventory',
+        icon: Boxes,
+        badge: 'Alerts',
+        badgeColor: 'bg-amber-500/20 text-amber-500 dark:text-amber-400',
+      },
     ],
   },
   {
-    title: 'Operations',
+    id: 'operations',
+    title: 'Orders & Logistics',
+    icon: ShoppingBag,
     items: [
-      { label: 'Orders', href: '/orders', icon: ShoppingBag, badge: 'Live', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
-      { label: 'Return Orders', href: '/returns', icon: RotateCcw, badge: 'RMA', badgeColor: 'bg-purple-500/20 text-purple-400' },
-      { label: 'Abandoned Carts', href: '/abandoned-carts', icon: ShoppingCart, badge: 'Recovery', badgeColor: 'bg-amber-500/20 text-amber-400' },
+      {
+        label: 'Customer Orders',
+        href: '/orders',
+        icon: ShoppingBag,
+        badge: 'Live',
+        badgeColor: 'bg-emerald-500/20 text-emerald-500 dark:text-emerald-400',
+      },
+      {
+        label: 'Return Orders',
+        href: '/returns',
+        icon: RotateCcw,
+        badge: 'RMA',
+        badgeColor: 'bg-purple-500/20 text-purple-400 dark:text-purple-300',
+      },
+      {
+        label: 'Abandoned Carts',
+        href: '/abandoned-carts',
+        icon: ShoppingCart,
+        badge: 'Recovery',
+        badgeColor: 'bg-amber-500/20 text-amber-500 dark:text-amber-400',
+      },
       { label: 'Shipping & Delivery', href: '/shipping', icon: Truck },
       { label: 'Payment Gateways', href: '/payments', icon: CreditCard },
     ],
   },
   {
-    title: 'Marketing & Comms',
+    id: 'customers',
+    title: 'Customers & CRM',
+    icon: Users,
     items: [
-      { label: 'Email Notifications', href: '/notifications', icon: Mail, badge: 'Templates', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
-      { label: 'Discounts', href: '/discounts', icon: Tag },
-      { label: 'Reviews', href: '/reviews', icon: MessageSquare },
+      {
+        label: 'Customer Directory',
+        href: '/customers',
+        icon: Users,
+        badge: 'CRM',
+        badgeColor: 'bg-indigo-500/20 text-indigo-400 dark:text-indigo-300',
+      },
+      { label: 'Add Customer', href: '/customers?action=new', icon: UserPlus },
+    ],
+  },
+  {
+    id: 'marketing',
+    title: 'Marketing & Comms',
+    icon: Tag,
+    items: [
+      { label: 'Discount Coupons', href: '/discounts', icon: Tag },
+      { label: 'Customer Reviews', href: '/reviews', icon: MessageSquare },
+      {
+        label: 'Email Notifications',
+        href: '/notifications',
+        icon: Mail,
+        badge: 'Templates',
+        badgeColor: 'bg-indigo-500/20 text-indigo-400 dark:text-indigo-300',
+      },
     ],
   },
 ];
@@ -93,6 +152,16 @@ export default function AdminSidebar() {
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [adminUser, setAdminUser] = useState<{ name?: string; email?: string } | null>(null);
+  const [filterQuery, setFilterQuery] = useState('');
+
+  // Accordion state: default open groups
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    analytics: true,
+    catalog: true,
+    operations: true,
+    customers: false,
+    marketing: false,
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -107,10 +176,30 @@ export default function AdminSidebar() {
     }
   }, [pathname]);
 
+  // Automatically expand group containing active route
+  useEffect(() => {
+    navGroups.forEach((group) => {
+      const hasActive = group.items.some((item) => {
+        const basePath = item.href.split('?')[0];
+        return pathname === basePath;
+      });
+      if (hasActive) {
+        setOpenGroups((prev) => ({ ...prev, [group.id]: true }));
+      }
+    });
+  }, [pathname]);
+
   // If on login page, do not render sidebar
   if (pathname === '/login') {
     return null;
   }
+
+  const toggleGroup = (groupId: string) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
+  };
 
   const handleLogout = async () => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
@@ -121,8 +210,8 @@ export default function AdminSidebar() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         });
       } catch {
@@ -142,6 +231,39 @@ export default function AdminSidebar() {
         .slice(0, 2)
         .toUpperCase()
     : 'AD';
+
+  const isGroupActive = (group: NavGroup) => {
+    return group.items.some((item) => {
+      const basePath = item.href.split('?')[0];
+      return pathname === basePath;
+    });
+  };
+
+  const isDashboardActive = pathname === '/dashboard' || pathname === '/';
+
+  // Quick filter matching logic
+  const filteredNavGroups = useMemo(() => {
+    const q = filterQuery.trim().toLowerCase();
+    if (!q) return navGroups;
+
+    return navGroups
+      .map((group) => {
+        const matchesGroup = group.title.toLowerCase().includes(q);
+        const matchingItems = group.items.filter((item) =>
+          item.label.toLowerCase().includes(q) || (item.badge && String(item.badge).toLowerCase().includes(q))
+        );
+
+        if (matchesGroup) {
+          return group;
+        }
+
+        return {
+          ...group,
+          items: matchingItems,
+        };
+      })
+      .filter((group) => group.items.length > 0);
+  }, [filterQuery]);
 
   const NavContent = (
     <div className="flex flex-col h-full bg-white dark:bg-zinc-950 border-r border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 w-64 select-none transition-colors duration-200">
@@ -165,64 +287,163 @@ export default function AdminSidebar() {
         </Link>
         <button
           onClick={() => setMobileOpen(false)}
-          className="md:hidden text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          className="md:hidden text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-lg"
+          aria-label="Close Sidebar"
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-zinc-800">
-        {navGroups.map((group) => (
-          <div key={group.title} className="space-y-1">
-            <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-1.5">
-              {group.title}
-            </p>
-            {group.items.map((item) => {
-              const Icon = item.icon;
-              const isDashboard = item.href === '/dashboard';
-              const basePath = item.href.split('?')[0];
-              const isActionNew = item.href.includes('action=new');
-              const isActive = isDashboard
-                ? pathname === '/dashboard' || pathname === '/'
-                : !isActionNew && pathname === basePath;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => {
-                    setMobileOpen(false);
-                    if (isActionNew && typeof window !== 'undefined') {
-                      window.dispatchEvent(new CustomEvent('open-add-customer'));
-                    }
-                  }}
-                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group ${
-                    isActive
-                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 font-semibold'
-                      : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900/80'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-white' : 'text-slate-400 dark:text-zinc-500 group-hover:text-slate-700 dark:group-hover:text-zinc-300'}`} />
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
-                        isActive
-                          ? 'bg-white/20 text-white'
-                          : item.badgeColor || 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+      {/* Pinned Primary Dashboard Link */}
+      <div className="px-3 pt-3 pb-1">
+        <Link
+          href="/dashboard"
+          onClick={() => setMobileOpen(false)}
+          className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            isDashboardActive
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/25'
+              : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-900/80 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <LayoutDashboard
+              className={`w-4 h-4 ${isDashboardActive ? 'text-white' : 'text-slate-400 dark:text-zinc-500'}`}
+            />
+            <span>Executive Dashboard</span>
           </div>
-        ))}
+          <span
+            className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
+              isDashboardActive ? 'bg-white/20 text-white' : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+            }`}
+          >
+            Live
+          </span>
+        </Link>
+      </div>
+
+      {/* Quick Nav Search Filter */}
+      <div className="px-3 py-1.5">
+        <div className="relative">
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
+          <input
+            type="text"
+            placeholder="Quick search menu..."
+            value={filterQuery}
+            onChange={(e) => setFilterQuery(e.target.value)}
+            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl bg-slate-100 dark:bg-zinc-900/90 text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 border border-slate-200/80 dark:border-zinc-800/80 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+          />
+          {filterQuery && (
+            <button
+              onClick={() => setFilterQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs font-bold"
+              title="Clear filter"
+            >
+              ×
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Accordion Navigation Groups */}
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-zinc-800">
+        {filteredNavGroups.map((group) => {
+          const GroupIcon = group.icon;
+          const isOpen = filterQuery.trim() !== '' || Boolean(openGroups[group.id]);
+          const hasActiveChild = isGroupActive(group);
+
+          return (
+            <div key={group.id} className="rounded-xl overflow-hidden transition-colors">
+              {/* Accordion Header Button */}
+              <button
+                type="button"
+                onClick={() => toggleGroup(group.id)}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  hasActiveChild
+                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/30'
+                    : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-900/60'
+                }`}
+                aria-expanded={isOpen}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <GroupIcon
+                    className={`w-4 h-4 shrink-0 transition-colors ${
+                      hasActiveChild ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-zinc-500'
+                    }`}
+                  />
+                  <span className="truncate">{group.title}</span>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {/* Subtle active indicator dot when group is collapsed */}
+                  {!isOpen && hasActiveChild && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse" />
+                  )}
+                  <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
+                    {group.items.length}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-400 dark:text-zinc-500 transition-transform duration-200 ${
+                      isOpen ? 'rotate-0' : '-rotate-90'
+                    }`}
+                  />
+                </div>
+              </button>
+
+              {/* Accordion Expandable Sub-items */}
+              {isOpen && (
+                <div className="ml-4 pl-2.5 my-1 border-l-2 border-slate-200 dark:border-zinc-800 space-y-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
+                  {group.items.map((item) => {
+                    const ItemIcon = item.icon;
+                    const basePath = item.href.split('?')[0];
+                    const isActionNew = item.href.includes('action=new');
+                    const isActive = !isActionNew && pathname === basePath;
+
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => {
+                          setMobileOpen(false);
+                          if (isActionNew && typeof window !== 'undefined') {
+                            window.dispatchEvent(new CustomEvent('open-add-customer'));
+                          }
+                        }}
+                        className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all group ${
+                          isActive
+                            ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/25 font-semibold'
+                            : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900/60'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <ItemIcon
+                            className={`w-3.5 h-3.5 shrink-0 transition-colors ${
+                              isActive
+                                ? 'text-white'
+                                : 'text-slate-400 dark:text-zinc-500 group-hover:text-slate-700 dark:group-hover:text-zinc-300'
+                            }`}
+                          />
+                          <span className="truncate">{item.label}</span>
+                        </div>
+
+                        {item.badge && (
+                          <span
+                            className={`text-[9.5px] px-1.5 py-0.2 rounded font-mono font-bold shrink-0 ${
+                              isActive
+                                ? 'bg-white/20 text-white'
+                                : item.badgeColor || 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Footer Info & User */}
@@ -241,7 +462,7 @@ export default function AdminSidebar() {
           <ExternalLink className="w-3 h-3 text-slate-400 dark:text-neutral-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
         </a>
 
-        {/* User Card */}
+        {/* User Profile Card */}
         <div className="flex items-center justify-between p-2 rounded-xl bg-slate-100/60 dark:bg-zinc-900/40 border border-slate-200/80 dark:border-neutral-800/40">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow shrink-0">
@@ -259,7 +480,7 @@ export default function AdminSidebar() {
           <button
             onClick={handleLogout}
             title="Sign Out"
-            className="p-1.5 text-slate-400 hover:text-rose-600 dark:text-zinc-400 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition"
+            className="p-1.5 text-slate-400 hover:text-rose-600 dark:text-zinc-400 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -279,7 +500,8 @@ export default function AdminSidebar() {
       <div className="md:hidden fixed top-3 left-3 z-50">
         <button
           onClick={() => setMobileOpen(true)}
-          className="p-2 rounded-xl bg-white dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200 dark:border-zinc-800 shadow-xl"
+          className="p-2 rounded-xl bg-white dark:bg-zinc-900 text-slate-900 dark:text-white border border-slate-200 dark:border-zinc-800 shadow-xl cursor-pointer"
+          aria-label="Open mobile menu"
         >
           <Menu className="w-5 h-5" />
         </button>
