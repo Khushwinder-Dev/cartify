@@ -190,3 +190,73 @@ export interface VariantMatrixGeneratedItem {
   track_inventory: boolean;
   weight?: number | null;
 }
+
+export interface Discount {
+  id: number;
+  code: string;
+  type: 'percentage' | 'fixed';
+  value: number;
+  min_subtotal?: number | null;
+  starts_at?: string | null;
+  expires_at?: string | null;
+  usage_limit?: number | null;
+  times_used: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ProductReview {
+  id: number;
+  product_id: number;
+  user_id?: number | null;
+  customer_name: string;
+  rating: number; // 1-5
+  title?: string | null;
+  comment: string;
+  is_verified_purchase: boolean;
+  status: 'pending' | 'approved' | 'rejected';
+  product?: Product;
+  user?: User;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Collection {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  image_url?: string | null;
+  is_featured: boolean;
+  products_count?: number;
+  products?: Product[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface WishlistItem {
+  id: number;
+  wishlist_id: number;
+  product_id: number;
+  product_variant_id?: number | null;
+  product?: Product;
+  variant?: ProductVariant;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Wishlist {
+  id: number;
+  user_id?: number | null;
+  guest_token?: string | null;
+  items_count?: number;
+  items?: WishlistItem[];
+}
+
+export interface Customer extends User {
+  orders_count?: number;
+  lifetime_spend?: number;
+  default_address?: CustomerAddress;
+  orders?: Order[];
+}

@@ -61,6 +61,21 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class)->latest();
+    }
+
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class)->approved()->latest();
+    }
+
+    public function collections(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Collection::class, 'collection_product');
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 'active');
