@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import AdminSidebar from '@/components/AdminSidebar';
-import AdminTopNav from '@/components/AdminTopNav';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
+import AdminShell from '@/components/AdminShell';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,14 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}>
       <body className="min-h-full bg-neutral-950 text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white">
         <AdminAuthGuard>
-          <AdminSidebar />
-          <div className="md:pl-64 flex flex-col min-h-screen">
-            <AdminTopNav />
-            <main className="flex-1">{children}</main>
-          </div>
+          <AdminShell>{children}</AdminShell>
         </AdminAuthGuard>
       </body>
     </html>
