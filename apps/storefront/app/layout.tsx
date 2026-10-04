@@ -23,14 +23,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${fontSans.variable} ${fontSerif.variable} h-full antialiased`}
+      className={`${fontSans.variable} ${fontSerif.variable} h-full w-full max-w-full overflow-x-hidden antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-zinc-900 dark:bg-[#09090b] dark:text-zinc-100 font-sans selection:bg-indigo-600 selection:text-white transition-colors duration-200">
+      <body className="min-h-full w-full max-w-full overflow-x-hidden flex flex-col bg-white text-zinc-900 dark:bg-[#09090b] dark:text-zinc-100 font-sans selection:bg-indigo-600 selection:text-white transition-colors duration-200">
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
               <Navbar />
-              <div className="flex-1">{children}</div>
+              <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
               <Footer />
               <CartDrawer />
               <CheckoutModal />

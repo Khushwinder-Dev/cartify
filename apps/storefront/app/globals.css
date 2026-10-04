@@ -53,6 +53,13 @@
   --font-display: var(--font-serif), "Bodoni Moda", Didot, "Bodoni MT", Garamond, serif;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--background);
@@ -60,7 +67,6 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
