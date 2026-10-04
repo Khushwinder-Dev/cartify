@@ -379,7 +379,7 @@ const navCategories: NavCategory[] = [
   },
   {
     id: 'last-call',
-    label: 'Archive / Sale',
+    label: 'Sale',
     href: '/#catalog',
     isAccent: true,
   },
@@ -479,9 +479,9 @@ export default function Navbar() {
         className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-neutral-200/90 shadow-xs transition-colors"
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           {/* Left: Mobile Toggle & Brand Logo */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 lg:gap-10 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="lg:hidden p-2 text-neutral-900 hover:text-black cursor-pointer"
@@ -490,37 +490,37 @@ export default function Navbar() {
               <Menu className="w-6 h-6" />
             </button>
 
-            <Link href="/" className="flex items-center group">
-              <span className="font-extrabold tracking-[0.25em] text-2xl text-neutral-950 font-sans uppercase">
+            <Link href="/" className="flex items-center group shrink-0">
+              <span className="font-extrabold tracking-[0.22em] text-xl sm:text-2xl text-neutral-950 font-sans uppercase">
                 CARTIFY
               </span>
             </Link>
           </div>
 
           {/* Center: Desktop Navigation Categories */}
-          <nav className="hidden lg:flex items-center space-x-8 h-full">
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 h-full">
             {navCategories.map((cat) => {
               const isActive = activeMenuId === cat.id;
               return (
                 <div
                   key={cat.id}
-                  className="h-full flex items-center"
+                  className="h-full flex items-center shrink-0"
                   onMouseEnter={() => handleMouseEnter(cat.id)}
                 >
                   <Link
                     href={cat.href}
-                    className={`relative py-7 text-xs font-bold uppercase tracking-[0.16em] transition-all duration-200 ${
+                    className={`relative py-7 text-[13.5px] whitespace-nowrap transition-colors duration-150 ${
                       cat.isAccent
-                        ? 'text-rose-600 hover:text-rose-700'
+                        ? 'text-rose-600 hover:text-rose-700 font-semibold'
                         : isActive
-                        ? 'text-neutral-950'
-                        : 'text-neutral-600 hover:text-neutral-950'
+                        ? 'text-neutral-950 font-semibold'
+                        : 'text-neutral-700 hover:text-neutral-950 font-medium'
                     }`}
                   >
                     <span>{cat.label}</span>
                     {/* Active Underline Pill */}
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-neutral-950 rounded-full animate-in fade-in duration-200" />
+                      <span className="absolute bottom-0 inset-x-0 h-[2px] bg-neutral-950 animate-in fade-in duration-150" />
                     )}
                   </Link>
                 </div>
@@ -529,20 +529,20 @@ export default function Navbar() {
           </nav>
 
           {/* Right: Utility Links & Icons */}
-          <div className="flex items-center gap-3 sm:gap-4 text-neutral-800">
+          <div className="flex items-center gap-3 sm:gap-3.5 text-neutral-800 shrink-0">
             {/* Region / Currency Pill */}
-            <div className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-neutral-100 border border-neutral-200 text-neutral-800 shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>India (₹)</span>
+            <div className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-neutral-100/90 border border-neutral-200/80 text-neutral-800 whitespace-nowrap shrink-0 shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span className="whitespace-nowrap">India (₹)</span>
             </div>
 
             {/* Live Search Trigger (Cmd+K) */}
             <button
               onClick={() => setIsSearchDialogOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-neutral-600 bg-neutral-100 hover:bg-neutral-200 transition cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-neutral-600 bg-neutral-100 hover:bg-neutral-200 transition cursor-pointer whitespace-nowrap shrink-0"
               aria-label="Search Catalog"
             >
-              <Search className="w-3.5 h-3.5 text-neutral-500" />
+              <Search className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
               <span className="hidden sm:inline font-medium">Search...</span>
               <kbd className="hidden lg:inline text-[10px] font-mono px-1 rounded bg-white text-neutral-400 border border-neutral-200 shadow-2xs">
                 ⌘K
