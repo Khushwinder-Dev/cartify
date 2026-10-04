@@ -27,6 +27,13 @@ COPY . /var/www/html
 # Install production dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
+# Setup database directory and sqlite file with proper write permissions
+RUN mkdir -p /var/www/html/database \
+    && touch /var/www/html/database/database.sqlite \
+    && chown -R www-data:www-data /var/www/html/database \
+    && chmod -R 775 /var/www/html/database \
+    && chmod 664 /var/www/html/database/database.sqlite
+
 # Setup permissions for Laravel storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache

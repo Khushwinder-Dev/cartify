@@ -15,17 +15,22 @@ mkdir -p /var/www/html/bootstrap/cache
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# If SQLite is selected and the file does not exist, initialize it
-if [ "$DB_CONNECTION" = "sqlite" ]; then
+# If SQLite is being used (default or explicitly set), ensure directory & file permissions
+if [ -z "$DB_CONNECTION" ] || [ "$DB_CONNECTION" = "sqlite" ]; then
+    mkdir -p /var/www/html/database
     touch /var/www/html/database/database.sqlite
-    chown www-data:www-data /var/www/html/database/database.sqlite
+    chown -R www-data:www-data /var/www/html/database
+    chmod -R 775 /var/www/html/database
+    chmod 664 /var/www/html/database/database.sqlite
 fi
 
-# Run database migrations if RUN_MIGRATIONS=true
-if [ "$RUN_MIGRATIONS" = "true" ]; then
-    echo "Running database migrations..."
-    php artisan migrate --force || echo "Migration skipped or database not ready yet."
-fi
+# Automatically run database migrations on boot
+echo "Running database migrations..."
+php artisan migrate --force || echo "Migration encountered an issue, continuing..."
+
+# Automatically seed default admin and sample data if not already seeded
+echo "Seeding database..."
+php artisan db:seed --force || echo "Seed skipped or already present."
 
 # Cache configurations and routes for optimal production performance
 php artisan config:cache || true
