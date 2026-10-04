@@ -284,10 +284,10 @@ export default function AdminProductsPage() {
         header: ({ table }) => (
           <button
             onClick={table.getToggleAllRowsSelectedHandler()}
-            className="p-1 hover:text-white text-neutral-400 cursor-pointer"
+            className="p-1 hover:text-slate-900 dark:hover:text-white text-slate-400 dark:text-neutral-400 cursor-pointer"
           >
             {table.getIsAllRowsSelected() ? (
-              <CheckSquare className="w-4 h-4 text-indigo-500" />
+              <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             ) : (
               <Square className="w-4 h-4" />
             )}
@@ -296,10 +296,10 @@ export default function AdminProductsPage() {
         cell: ({ row }) => (
           <button
             onClick={row.getToggleSelectedHandler()}
-            className="p-1 hover:text-white text-neutral-400 cursor-pointer"
+            className="p-1 hover:text-slate-900 dark:hover:text-white text-slate-400 dark:text-neutral-400 cursor-pointer"
           >
             {row.getIsSelected() ? (
-              <CheckSquare className="w-4 h-4 text-indigo-500" />
+              <CheckSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             ) : (
               <Square className="w-4 h-4" />
             )}
@@ -311,7 +311,7 @@ export default function AdminProductsPage() {
         header: ({ column }) => (
           <button
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs hover:text-white"
+            className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs hover:text-slate-900 dark:hover:text-white text-slate-600 dark:text-neutral-400"
           >
             <span>Product</span>
             <ArrowUpDown className="w-3.5 h-3.5" />
@@ -319,8 +319,8 @@ export default function AdminProductsPage() {
         ),
         cell: ({ row }) => (
           <div>
-            <span className="font-semibold text-white block text-sm">{row.original.title}</span>
-            <span className="text-xs text-neutral-500 font-mono">/{row.original.slug}</span>
+            <span className="font-semibold text-slate-900 dark:text-white block text-sm">{row.original.title}</span>
+            <span className="text-xs text-slate-400 dark:text-neutral-500 font-mono">/{row.original.slug}</span>
           </div>
         ),
       },
@@ -333,10 +333,10 @@ export default function AdminProductsPage() {
             <span
               className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${
                 s === 'active'
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                   : s === 'draft'
-                  ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                  : 'bg-neutral-800 text-neutral-400 border border-neutral-700'
+                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                  : 'bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-neutral-400 border border-slate-200 dark:border-neutral-700'
               }`}
             >
               {s}
@@ -349,7 +349,7 @@ export default function AdminProductsPage() {
         header: ({ column }) => (
           <button
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs hover:text-white"
+            className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-xs hover:text-slate-900 dark:hover:text-white text-slate-600 dark:text-neutral-400"
           >
             <span>Inventory</span>
             <ArrowUpDown className="w-3.5 h-3.5" />
@@ -359,12 +359,12 @@ export default function AdminProductsPage() {
           <div>
             <span
               className={`font-semibold ${
-                row.original.total_inventory <= 5 ? 'text-amber-400' : 'text-neutral-200'
+                row.original.total_inventory <= 5 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-800 dark:text-neutral-200'
               }`}
             >
               {row.original.total_inventory} in stock
             </span>
-            <span className="block text-xs text-neutral-500">
+            <span className="block text-xs text-slate-400 dark:text-neutral-500">
               for {row.original.variant_count} variant{row.original.variant_count !== 1 ? 's' : ''}
             </span>
           </div>
@@ -374,9 +374,9 @@ export default function AdminProductsPage() {
         accessorKey: 'vendor',
         header: 'Vendor & Type',
         cell: ({ row }) => (
-          <div className="text-xs text-neutral-300">
-            <span className="font-medium text-white block">{row.original.vendor}</span>
-            <span className="text-neutral-500">{row.original.product_type}</span>
+          <div className="text-xs text-slate-700 dark:text-neutral-300">
+            <span className="font-medium text-slate-900 dark:text-white block">{row.original.vendor}</span>
+            <span className="text-slate-400 dark:text-neutral-500">{row.original.product_type}</span>
           </div>
         ),
       },
@@ -386,7 +386,7 @@ export default function AdminProductsPage() {
         cell: ({ row }) => {
           const { min_price, max_price } = row.original;
           return (
-            <span className="font-semibold text-white text-xs">
+            <span className="font-semibold text-slate-900 dark:text-white text-xs">
               {min_price === max_price
                 ? `$${min_price.toFixed(2)}`
                 : `$${min_price.toFixed(2)} - $${max_price.toFixed(2)}`}
@@ -401,14 +401,14 @@ export default function AdminProductsPage() {
           <div className="flex items-center justify-end gap-2">
             <button
               onClick={() => handleOpenEdit(row.original)}
-              className="p-1.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white transition cursor-pointer"
+              className="p-1.5 rounded-lg bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white transition cursor-pointer shadow-xs"
               title="Edit Product"
             >
               <Edit2 className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setDeletingProduct(row.original)}
-              className="p-1.5 rounded-lg bg-red-950/30 border border-red-900/40 hover:bg-red-900/50 text-red-400 transition cursor-pointer"
+              className="p-1.5 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 transition cursor-pointer"
               title="Delete Product"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -440,18 +440,18 @@ export default function AdminProductsPage() {
   const selectedCount = Object.keys(rowSelection).length;
 
   return (
-    <div className="min-h-full bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
+    <div className="min-h-full bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20 transition-colors">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
                 <Package className="w-5 h-5" />
               </span>
-              <h1 className="text-2xl font-bold tracking-tight text-white">Catalog & Products</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Catalog & Products</h1>
             </div>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className="text-sm text-slate-500 dark:text-neutral-400 mt-1">
               Add, update, adjust prices and stock, or delete apparel garments with multi-variant synchronization.
             </p>
           </div>
@@ -459,16 +459,16 @@ export default function AdminProductsPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={fetchProducts}
-              className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-400 hover:text-white transition cursor-pointer"
+              className="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white shadow-xs transition cursor-pointer"
               title="Refresh"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
             <Link
               href="/products/new"
-              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-slate-700 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white text-xs font-semibold shadow-xs transition"
             >
-              <Layers className="w-4 h-4 text-indigo-400" />
+              <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>Variant Matrix</span>
             </Link>
             <button
@@ -483,38 +483,38 @@ export default function AdminProductsPage() {
 
         {/* Notifications */}
         {successMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2 animate-fade-in">
-            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="mb-6 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2 animate-fade-in shadow-xs">
+            <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-red-950/60 border border-red-800 text-red-300 text-xs flex items-center gap-2 animate-fade-in">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+          <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-xs flex items-center gap-2 animate-fade-in shadow-xs">
+            <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {/* Bulk Action Controls */}
         {selectedCount > 0 && (
-          <div className="flex items-center gap-2 bg-neutral-900 border border-neutral-700/80 px-4 py-2 rounded-xl text-xs shadow-xl animate-fade-in mb-6">
-            <span className="font-semibold text-indigo-400">{selectedCount} selected</span>
-            <span className="text-neutral-600">|</span>
+          <div className="flex items-center gap-2 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700/80 px-4 py-2 rounded-xl text-xs shadow-xs dark:shadow-xl animate-fade-in mb-6">
+            <span className="font-semibold text-indigo-600 dark:text-indigo-400">{selectedCount} selected</span>
+            <span className="text-slate-300 dark:text-neutral-600">|</span>
             <button
               onClick={() => handleBulkStatusChange('active')}
-              className="px-2.5 py-1 rounded bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 transition font-medium cursor-pointer"
+              className="px-2.5 py-1 rounded bg-emerald-50 dark:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-600/30 transition font-medium cursor-pointer"
             >
               Set Active
             </button>
             <button
               onClick={() => handleBulkStatusChange('draft')}
-              className="px-2.5 py-1 rounded bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 transition font-medium cursor-pointer"
+              className="px-2.5 py-1 rounded bg-amber-50 dark:bg-amber-600/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-600/30 transition font-medium cursor-pointer"
             >
               Set Draft
             </button>
             <button
               onClick={() => handleBulkStatusChange('archived')}
-              className="px-2.5 py-1 rounded bg-neutral-800 text-neutral-400 hover:text-white transition font-medium cursor-pointer"
+              className="px-2.5 py-1 rounded bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition font-medium cursor-pointer"
             >
               Archive
             </button>
@@ -522,27 +522,27 @@ export default function AdminProductsPage() {
         )}
 
         {/* Search & Filters Filter Bar */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs dark:shadow-xl transition-colors">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400 dark:text-neutral-500" />
             <input
               type="text"
               placeholder="Search products, vendors, or slugs..."
               value={globalFilter ?? ''}
               onChange={(e) => setGlobalFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-neutral-400">
+            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-neutral-400">
               <Filter className="w-3.5 h-3.5" />
               <span>Filter:</span>
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active Only</option>
@@ -553,10 +553,10 @@ export default function AdminProductsPage() {
         </div>
 
         {/* TanStack Table */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl overflow-hidden shadow-xs dark:shadow-xl transition-colors">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-neutral-950/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+              <thead className="bg-slate-50 dark:bg-neutral-950/80 text-slate-600 dark:text-neutral-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-neutral-800">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
@@ -569,11 +569,11 @@ export default function AdminProductsPage() {
                   </tr>
                 ))}
               </thead>
-              <tbody className="divide-y divide-neutral-800/60 bg-neutral-950/40">
+              <tbody className="divide-y divide-slate-100 dark:divide-neutral-800/60 bg-white dark:bg-neutral-950/40">
                 {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="hover:bg-neutral-900/50 transition">
+                  <tr key={row.id} className="hover:bg-slate-50/80 dark:hover:bg-neutral-900/50 transition">
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="py-3.5 px-4 text-neutral-300">
+                      <td key={cell.id} className="py-3.5 px-4 text-slate-800 dark:text-neutral-300">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     ))}
@@ -581,7 +581,7 @@ export default function AdminProductsPage() {
                 ))}
                 {table.getRowModel().rows.length === 0 && (
                   <tr>
-                    <td colSpan={columns.length} className="py-12 text-center text-neutral-500">
+                    <td colSpan={columns.length} className="py-12 text-center text-slate-500 dark:text-neutral-500">
                       No matching products found.
                     </td>
                   </tr>
@@ -591,7 +591,7 @@ export default function AdminProductsPage() {
           </div>
 
           {/* Table Pagination */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-neutral-800 bg-neutral-950/60 text-xs text-neutral-400">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-950/60 text-xs text-slate-500 dark:text-neutral-400">
             <div>
               Showing {table.getRowModel().rows.length} of {filteredData.length} records
             </div>
@@ -599,14 +599,14 @@ export default function AdminProductsPage() {
               <button
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
-                className="p-1.5 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="p-1.5 rounded-lg border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs transition"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
-                className="p-1.5 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="p-1.5 rounded-lg border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs transition"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -617,16 +617,16 @@ export default function AdminProductsPage() {
 
       {/* Add / Edit Product Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Package className="w-4 h-4 text-indigo-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-900 dark:text-neutral-100">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-neutral-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Package className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>{editingProduct ? 'Edit Product' : 'Add New Product'}</span>
               </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-neutral-800 text-neutral-400 hover:text-white transition"
+                className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-400 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -634,20 +634,20 @@ export default function AdminProductsPage() {
 
             <form onSubmit={handleSaveProduct} className="space-y-4 mt-4 text-xs">
               <div>
-                <label className="block text-neutral-400 font-semibold mb-1">Product Title *</label>
+                <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Product Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Pure Mongolian Cashmere Sweater"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Price ($) *</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Price ($) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -655,11 +655,11 @@ export default function AdminProductsPage() {
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Compare-at Price ($)</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Compare-at Price ($)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -667,29 +667,29 @@ export default function AdminProductsPage() {
                     placeholder="Regular price"
                     value={formData.compare_at_price}
                     onChange={(e) => setFormData({ ...formData, compare_at_price: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Stock Quantity *</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Stock Quantity *</label>
                   <input
                     type="number"
                     min="0"
                     required
                     value={formData.inventory_quantity}
                     onChange={(e) => setFormData({ ...formData, inventory_quantity: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Status</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e: any) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   >
                     <option value="active">Active</option>
                     <option value="draft">Draft</option>
@@ -700,61 +700,61 @@ export default function AdminProductsPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Vendor / Brand</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Vendor / Brand</label>
                   <input
                     type="text"
                     value={formData.vendor}
                     onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Product Category</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Product Category</label>
                   <input
                     type="text"
                     value={formData.product_type}
                     onChange={(e) => setFormData({ ...formData, product_type: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
               </div>
 
               {!editingProduct && (
                 <div>
-                  <label className="block text-neutral-400 font-semibold mb-1">Primary Image URL</label>
+                  <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Primary Image URL</label>
                   <input
                     type="url"
                     placeholder="https://images.unsplash.com/..."
                     value={formData.image_url}
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-neutral-400 font-semibold mb-1">Description</label>
+                <label className="block text-slate-700 dark:text-neutral-400 font-semibold mb-1">Description</label>
                 <textarea
                   rows={3}
                   placeholder="Material specs, tailored fit details, styling tips..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-800">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-neutral-800">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-semibold transition"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-300 font-semibold transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition disabled:opacity-50 cursor-pointer"
                 >
                   {saving ? 'Saving...' : editingProduct ? 'Update Product' : 'Create Product'}
                 </button>
@@ -766,26 +766,26 @@ export default function AdminProductsPage() {
 
       {/* Delete Confirmation Modal */}
       {deletingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-red-400">
-              <div className="w-10 h-10 rounded-full bg-red-950/60 border border-red-800/80 flex items-center justify-center shrink-0">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4 text-slate-900 dark:text-neutral-100">
+            <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
+              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/80 flex items-center justify-center shrink-0">
                 <Trash2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Delete Product?</h3>
-                <p className="text-xs text-neutral-400">This permanently removes the product and all variants.</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Delete Product?</h3>
+                <p className="text-xs text-slate-500 dark:text-neutral-400">This permanently removes the product and all variants.</p>
               </div>
             </div>
 
-            <p className="text-xs text-neutral-300">
-              Are you sure you want to permanently delete <strong className="text-white">"{deletingProduct.title}"</strong>?
+            <p className="text-xs text-slate-600 dark:text-neutral-300">
+              Are you sure you want to permanently delete <strong className="text-slate-900 dark:text-white">"{deletingProduct.title}"</strong>?
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setDeletingProduct(null)}
-                className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold transition"
+                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-300 text-xs font-semibold transition"
               >
                 Cancel
               </button>

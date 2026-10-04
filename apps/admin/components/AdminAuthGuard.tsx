@@ -46,8 +46,8 @@ export default function AdminAuthGuard({ children }: { children: React.ReactNode
   // Prevent flash of protected dashboard content before checking token
   if (!authorized) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-neutral-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+      <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 flex flex-col items-center justify-center text-slate-500 dark:text-neutral-400 gap-3 transition-colors duration-200">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600 dark:text-indigo-500" />
         <span className="text-xs uppercase tracking-widest font-mono">Verifying Admin Credentials...</span>
       </div>
     );

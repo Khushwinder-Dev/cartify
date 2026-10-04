@@ -129,30 +129,30 @@ export default function AdminInventoryPage() {
   });
 
   return (
-    <div className="min-h-full bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
+    <div className="min-h-full bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20 transition-colors">
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-              <Package className="w-6 h-6 text-indigo-400" />
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+              <Package className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               <span>Inventory & Stock Adjustments</span>
             </h1>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className="text-sm text-slate-500 dark:text-neutral-400 mt-1">
               Pessimistic concurrency safe stock levels with quick batch steppers and low-stock alarms
             </p>
           </div>
         </div>
 
         {/* Search & Low Stock Toggle */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-4 mb-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-4 mb-6 shadow-xs dark:shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400 dark:text-neutral-500" />
             <input
               type="text"
               placeholder="Search by SKU, product, or variant..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>
 
@@ -160,19 +160,19 @@ export default function AdminInventoryPage() {
             onClick={() => setLowStockOnly(!lowStockOnly)}
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
               lowStockOnly
-                ? 'bg-amber-500 text-neutral-950 font-bold shadow-lg shadow-amber-500/20'
-                : 'bg-neutral-900 border border-neutral-800 text-neutral-300 hover:bg-neutral-800'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/20'
+                : 'bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-800 shadow-xs'
             }`}
           >
-            <AlertTriangle className="w-3.5 h-3.5" />
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
             <span>Show Low Stock Only (&le; 5 units)</span>
           </button>
         </div>
 
         {/* Inventory Table */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl overflow-hidden shadow-xs dark:shadow-xl transition-colors">
           <table className="w-full text-left text-xs">
-            <thead className="bg-neutral-950/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+            <thead className="bg-slate-50 dark:bg-neutral-950/80 text-slate-600 dark:text-neutral-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-neutral-800">
               <tr>
                 <th className="py-3.5 px-4">SKU / Variant</th>
                 <th className="py-3.5 px-4">Product</th>
@@ -182,27 +182,27 @@ export default function AdminInventoryPage() {
                 <th className="py-3.5 px-4 text-right">Quick Stock Adjustment</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-800/60 bg-neutral-950/40">
+            <tbody className="divide-y divide-slate-100 dark:divide-neutral-800/60 bg-white dark:bg-neutral-950/40">
               {filteredItems.map((item) => (
-                <tr key={item.id} className="hover:bg-neutral-900/50 transition">
+                <tr key={item.id} className="hover:bg-slate-50/80 dark:hover:bg-neutral-900/50 transition">
                   <td className="py-3.5 px-4">
-                    <span className="font-mono font-bold text-white block text-sm">{item.sku}</span>
-                    <span className="text-neutral-400">{item.variant_title}</span>
+                    <span className="font-mono font-bold text-slate-900 dark:text-white block text-sm">{item.sku}</span>
+                    <span className="text-slate-500 dark:text-neutral-400">{item.variant_title}</span>
                   </td>
-                  <td className="py-3.5 px-4 text-neutral-300 font-medium">
+                  <td className="py-3.5 px-4 text-slate-700 dark:text-neutral-300 font-medium">
                     {item.product_title}
                   </td>
-                  <td className="py-3.5 px-4 font-semibold text-white">
+                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
                     ${item.price.toFixed(2)}
                   </td>
                   <td className="py-3.5 px-4">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
                         item.inventory_quantity === 0
-                          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
                           : item.inventory_quantity <= 5
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                          : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                          : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                       }`}
                     >
                       {item.inventory_quantity === 0 ? 'Out of Stock' : item.inventory_quantity <= 5 ? 'Low Stock' : 'In Stock'}
@@ -213,7 +213,7 @@ export default function AdminInventoryPage() {
                       type="number"
                       value={item.inventory_quantity}
                       onChange={(e) => handleSetStock(item.id, parseInt(e.target.value, 10) || 0)}
-                      className="w-20 px-2 py-1 bg-neutral-900 border border-neutral-800 rounded text-xs font-bold text-white text-center focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="w-20 px-2 py-1 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded text-xs font-bold text-slate-900 dark:text-white text-center focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </td>
                   <td className="py-3.5 px-4 text-right">
@@ -221,28 +221,28 @@ export default function AdminInventoryPage() {
                       <button
                         onClick={() => handleAdjustStock(item.id, -10)}
                         title="Remove 10 units"
-                        className="px-2 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-mono text-[11px]"
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-300 font-mono text-[11px]"
                       >
                         -10
                       </button>
                       <button
                         onClick={() => handleAdjustStock(item.id, -1)}
                         title="Remove 1 unit"
-                        className="p-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300"
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-300"
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleAdjustStock(item.id, 1)}
                         title="Add 1 unit"
-                        className="p-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300"
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-300"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleAdjustStock(item.id, 10)}
                         title="Add 10 units"
-                        className="px-2 py-1 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-mono text-[11px]"
+                        className="px-2 py-1 rounded bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-600/30 dark:hover:bg-indigo-600/50 text-indigo-700 dark:text-indigo-300 font-mono text-[11px]"
                       >
                         +10
                       </button>

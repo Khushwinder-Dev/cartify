@@ -269,20 +269,20 @@ export default function AdminOrdersPage() {
   };
 
   return (
-    <div className="min-h-full bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
+    <div className="min-h-full bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20 transition-colors">
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">Orders & Fulfillment</h1>
-            <p className="text-sm text-neutral-400 mt-1">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Orders & Fulfillment</h1>
+            <p className="text-sm text-slate-500 dark:text-neutral-400 mt-1">
               Live transactional lifecycle, automated packing slips, and tracking assignments
             </p>
           </div>
           <button
             onClick={fetchOrders}
             disabled={loading}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-xs font-semibold text-neutral-200 hover:text-white hover:border-neutral-700 transition cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-neutral-200 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-neutral-700 shadow-xs transition cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>{loading ? 'Refreshing...' : 'Refresh Orders'}</span>
@@ -290,25 +290,25 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Filter Controls Bar */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs dark:shadow-xl transition-colors">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400 dark:text-neutral-500" />
             <input
               type="text"
               placeholder="Search by order #, customer, email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-neutral-400">Financial:</span>
+              <span className="text-xs text-slate-500 dark:text-neutral-400">Financial:</span>
               <select
                 value={filterFinancial}
                 onChange={(e) => setFilterFinancial(e.target.value)}
-                className="bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-neutral-200"
+                className="bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-neutral-200"
               >
                 <option value="all">All</option>
                 <option value="paid">Paid</option>
@@ -318,11 +318,11 @@ export default function AdminOrdersPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-neutral-400">Fulfillment:</span>
+              <span className="text-xs text-slate-500 dark:text-neutral-400">Fulfillment:</span>
               <select
                 value={filterFulfillment}
                 onChange={(e) => setFilterFulfillment(e.target.value)}
-                className="bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-neutral-200"
+                className="bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-neutral-200"
               >
                 <option value="all">All</option>
                 <option value="unfulfilled">Unfulfilled</option>
@@ -333,10 +333,10 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Order Table */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl overflow-hidden shadow-xs dark:shadow-xl transition-colors">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-neutral-950/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+              <thead className="bg-slate-50 dark:bg-neutral-950/80 text-slate-600 dark:text-neutral-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-neutral-800">
                 <tr>
                   <th className="py-3.5 px-4">Order</th>
                   <th className="py-3.5 px-4">Date</th>
@@ -347,25 +347,25 @@ export default function AdminOrdersPage() {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800/60 bg-neutral-950/40">
+              <tbody className="divide-y divide-slate-100 dark:divide-neutral-800/60 bg-white dark:bg-neutral-950/40">
                 {filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-neutral-900/50 transition">
-                    <td className="py-3.5 px-4 font-mono font-bold text-white">
+                  <tr key={order.id} className="hover:bg-slate-50/80 dark:hover:bg-neutral-900/50 transition">
+                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">
                       {order.order_number}
                     </td>
-                    <td className="py-3.5 px-4 text-neutral-400">
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-neutral-400">
                       {order.created_at}
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="font-semibold text-white block">{order.customer_name}</span>
-                      <span className="text-neutral-500 text-xs">{order.email}</span>
+                      <span className="font-semibold text-slate-900 dark:text-white block">{order.customer_name}</span>
+                      <span className="text-slate-400 dark:text-neutral-500 text-xs">{order.email}</span>
                     </td>
                     <td className="py-3.5 px-4">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${
                           order.financial_status === 'paid'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
                         }`}
                       >
                         {order.financial_status}
@@ -376,22 +376,22 @@ export default function AdminOrdersPage() {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold w-fit capitalize ${
                             order.fulfillment_status === 'fulfilled'
-                              ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                              : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                              ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
+                              : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
                           }`}
                         >
                           {order.fulfillment_status}
                         </span>
                         {order.tracking_number && (
-                          <span className="text-[11px] text-neutral-500 font-mono">
+                          <span className="text-[11px] text-slate-400 dark:text-neutral-500 font-mono">
                             {order.carrier}: {order.tracking_number}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-white">
+                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
                       {formatPrice(order.grand_total)}
-                      <span className="block text-[11px] text-neutral-500 font-normal">
+                      <span className="block text-[11px] text-slate-400 dark:text-neutral-500 font-normal">
                         {order.items_count} items
                       </span>
                     </td>
@@ -400,7 +400,7 @@ export default function AdminOrdersPage() {
                         <button
                           onClick={() => setActivePackingSlip(order)}
                           title="Generate Packing Slip"
-                          className="p-1.5 rounded-lg bg-neutral-800 text-neutral-300 hover:text-white hover:bg-neutral-700 transition cursor-pointer"
+                          className="p-1.5 rounded-lg bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-700 transition cursor-pointer"
                         >
                           <Printer className="w-4 h-4" />
                         </button>
@@ -427,23 +427,23 @@ export default function AdminOrdersPage() {
 
         {/* Packing Slip Modal */}
         {activePackingSlip && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-xl w-full p-8 shadow-2xl relative text-neutral-100">
+          <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl max-w-xl w-full p-8 shadow-2xl relative text-slate-900 dark:text-neutral-100">
               <button
                 onClick={() => setActivePackingSlip(null)}
-                className="absolute top-5 right-5 text-neutral-400 hover:text-white"
+                className="absolute top-5 right-5 text-slate-400 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="border-b border-neutral-800 pb-4 mb-6 flex justify-between items-start">
+              <div className="border-b border-slate-200 dark:border-neutral-800 pb-4 mb-6 flex justify-between items-start">
                 <div>
-                  <h2 className="text-lg font-bold text-white">PACKING SLIP</h2>
-                  <p className="text-xs text-neutral-400 mt-0.5">Order #{activePackingSlip.order_number}</p>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">PACKING SLIP</h2>
+                  <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">Order #{activePackingSlip.order_number}</p>
                 </div>
                 <button
                   onClick={() => window.print()}
-                  className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold flex items-center gap-1.5 text-white"
+                  className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-xs font-semibold flex items-center gap-1.5 text-slate-800 dark:text-white"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Print Slip</span>
@@ -451,29 +451,29 @@ export default function AdminOrdersPage() {
               </div>
 
               {/* Ship To */}
-              <div className="mb-6 p-4 rounded-xl bg-neutral-950/80 border border-neutral-800 text-xs space-y-1">
-                <span className="font-semibold text-neutral-400 uppercase tracking-wider block mb-2">Ship To</span>
-                <p className="font-bold text-white text-sm">{activePackingSlip.shipping_address.name}</p>
-                <p className="text-neutral-300">{activePackingSlip.shipping_address.line1}</p>
-                <p className="text-neutral-300">
+              <div className="mb-6 p-4 rounded-xl bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800 text-xs space-y-1">
+                <span className="font-semibold text-slate-500 dark:text-neutral-400 uppercase tracking-wider block mb-2">Ship To</span>
+                <p className="font-bold text-slate-900 dark:text-white text-sm">{activePackingSlip.shipping_address.name}</p>
+                <p className="text-slate-700 dark:text-neutral-300">{activePackingSlip.shipping_address.line1}</p>
+                <p className="text-slate-700 dark:text-neutral-300">
                   {activePackingSlip.shipping_address.city}, {activePackingSlip.shipping_address.state}{' '}
                   {activePackingSlip.shipping_address.postal}
                 </p>
-                <p className="text-neutral-400">{activePackingSlip.shipping_address.country}</p>
+                <p className="text-slate-500 dark:text-neutral-400">{activePackingSlip.shipping_address.country}</p>
               </div>
 
               {/* Items Snapshot */}
               <div className="space-y-3 mb-6">
-                <span className="font-semibold text-neutral-400 uppercase tracking-wider text-xs block">Line Items</span>
-                <div className="divide-y divide-neutral-800 rounded-xl border border-neutral-800 overflow-hidden">
+                <span className="font-semibold text-slate-500 dark:text-neutral-400 uppercase tracking-wider text-xs block">Line Items</span>
+                <div className="divide-y divide-slate-100 dark:divide-neutral-800 rounded-xl border border-slate-200 dark:border-neutral-800 overflow-hidden">
                   {activePackingSlip.items.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-3 bg-neutral-950/40 text-xs">
+                    <div key={idx} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-neutral-950/40 text-xs">
                       <div>
-                        <p className="font-semibold text-white">{item.title}</p>
-                        <p className="text-neutral-500 font-mono">{item.sku}</p>
+                        <p className="font-semibold text-slate-900 dark:text-white">{item.title}</p>
+                        <p className="text-slate-500 dark:text-neutral-500 font-mono">{item.sku}</p>
                       </div>
                       <div className="text-right">
-                        <span className="font-bold text-indigo-400">Qty: {item.quantity}</span>
+                        <span className="font-bold text-indigo-600 dark:text-indigo-400">Qty: {item.quantity}</span>
                       </div>
                     </div>
                   ))}
@@ -483,7 +483,7 @@ export default function AdminOrdersPage() {
               <div className="text-right">
                 <button
                   onClick={() => setActivePackingSlip(null)}
-                  className="px-4 py-2 bg-neutral-800 text-neutral-300 hover:text-white rounded-xl text-xs font-semibold"
+                  className="px-4 py-2 bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white rounded-xl text-xs font-semibold"
                 >
                   Close Preview
                 </button>
@@ -494,29 +494,29 @@ export default function AdminOrdersPage() {
 
         {/* Fulfillment Tracking Modal */}
         {activeFulfillmentOrder && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-neutral-100">
+          <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-slate-900 dark:text-neutral-100">
               <button
                 onClick={() => setActiveFulfillmentOrder(null)}
-                className="absolute top-5 right-5 text-neutral-400 hover:text-white"
+                className="absolute top-5 right-5 text-slate-400 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <h2 className="text-base font-bold text-white mb-1">Assign Tracking & Fulfill</h2>
-              <p className="text-xs text-neutral-400 mb-5">
-                Order: <span className="font-mono text-indigo-400">{activeFulfillmentOrder.order_number}</span>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">Assign Tracking & Fulfill</h2>
+              <p className="text-xs text-slate-500 dark:text-neutral-400 mb-5">
+                Order: <span className="font-mono text-indigo-600 dark:text-indigo-400">{activeFulfillmentOrder.order_number}</span>
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1.5">
                     Carrier
                   </label>
                   <select
                     value={carrierInput}
                     onChange={(e) => setCarrierInput(e.target.value)}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-200"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs text-slate-900 dark:text-neutral-200"
                   >
                     <option value="FedEx Express">FedEx Express</option>
                     <option value="UPS Ground">UPS Ground</option>
@@ -526,7 +526,7 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-1.5">
                     Tracking Number *
                   </label>
                   <input
@@ -535,7 +535,7 @@ export default function AdminOrdersPage() {
                     placeholder="e.g. 794938210394"
                     value={trackingNumberInput}
                     onChange={(e) => setTrackingNumberInput(e.target.value)}
-                    className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-100 placeholder-neutral-500 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 

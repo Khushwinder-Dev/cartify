@@ -168,25 +168,25 @@ export default function AdminSalesReportPage() {
   };
 
   return (
-    <div className="min-h-full bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
+    <div className="min-h-full bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20 transition-colors">
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <span className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
                 <BarChart3 className="w-4 h-4" />
               </span>
-              <h1 className="text-2xl font-bold tracking-tight text-white">Sales & Revenue Intelligence</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Sales & Revenue Intelligence</h1>
             </div>
-            <p className="text-xs text-neutral-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-neutral-400 mt-1">
               Executive commercial performance, channel profitability, and garment category sales.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Date Range Selector */}
-            <div className="flex items-center bg-neutral-900 border border-neutral-800 rounded-xl p-1 text-xs">
+            <div className="flex items-center bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl p-1 text-xs shadow-xs">
               {(['today', '7d', '30d', '90d', 'ytd'] as const).map((range) => (
                 <button
                   key={range}
@@ -194,7 +194,7 @@ export default function AdminSalesReportPage() {
                   className={`px-3 py-1.5 rounded-lg font-semibold capitalize transition cursor-pointer ${
                     dateRange === range
                       ? 'bg-indigo-600 text-white shadow'
-                      : 'text-neutral-400 hover:text-white'
+                      : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {range === 'ytd' ? 'YTD' : range}
@@ -206,9 +206,9 @@ export default function AdminSalesReportPage() {
             <button
               onClick={handleExportCSV}
               disabled={downloading}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-200 text-xs font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-slate-700 dark:text-neutral-200 text-xs font-semibold shadow-xs transition cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-indigo-400" />
+              <Download className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>{downloading ? 'Exporting...' : 'Export CSV'}</span>
             </button>
           </div>
@@ -219,25 +219,25 @@ export default function AdminSalesReportPage() {
           {metrics.map((metric, idx) => (
             <div
               key={idx}
-              className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl relative overflow-hidden"
+              className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl relative overflow-hidden transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-neutral-400">
                   {metric.title}
                 </span>
-                <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                   {idx === 0 ? <DollarSign className="w-4 h-4" /> : idx === 1 ? <ShoppingBag className="w-4 h-4" /> : idx === 2 ? <TrendingUp className="w-4 h-4" /> : <Percent className="w-4 h-4" />}
                 </div>
               </div>
-              <div className="text-3xl font-extrabold text-white tracking-tight">
+              <div className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {metric.value}
               </div>
               <div className="mt-2 flex items-center gap-1.5 text-xs">
-                <span className={`inline-flex items-center font-bold ${metric.isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
+                <span className={`inline-flex items-center font-bold ${metric.isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                   {metric.isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
                   {metric.change}
                 </span>
-                <span className="text-neutral-500">{metric.subtext}</span>
+                <span className="text-slate-400 dark:text-neutral-500">{metric.subtext}</span>
               </div>
             </div>
           ))}
@@ -246,53 +246,53 @@ export default function AdminSalesReportPage() {
         {/* Middle Section: Weekly Trend Graph & Sales by Category */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
           {/* Revenue Velocity Bar Chart */}
-          <div className="lg:col-span-7 bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+          <div className="lg:col-span-7 bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl flex flex-col justify-between transition-colors">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>Revenue Velocity & Trend</span>
                 </h3>
-                <p className="text-xs text-neutral-400 mt-0.5">Peak day: Saturday ($16,200.00)</p>
+                <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">Peak day: Saturday ($16,200.00)</p>
               </div>
-              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 +18.4% WoW
               </span>
             </div>
 
             {/* Visual Bars */}
-            <div className="h-56 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-neutral-800/60">
+            <div className="h-56 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-neutral-800/60">
               {weeklyTrends.map((col) => (
                 <div key={col.day} className="flex-1 flex flex-col items-center gap-2 group">
-                  <span className="text-[10px] font-mono text-neutral-500 opacity-0 group-hover:opacity-100 transition">
+                  <span className="text-[10px] font-mono text-slate-400 dark:text-neutral-500 opacity-0 group-hover:opacity-100 transition">
                     ${(col.revenue / 1000).toFixed(1)}k
                   </span>
                   <div
                     className="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg transition-all group-hover:from-indigo-500 group-hover:to-indigo-300 shadow-md group-hover:scale-105"
                     style={{ height: col.height }}
                   />
-                  <span className="text-xs font-semibold text-neutral-400 group-hover:text-white transition">
+                  <span className="text-xs font-semibold text-slate-600 dark:text-neutral-400 group-hover:text-slate-900 dark:group-hover:text-white transition">
                     {col.day}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="flex items-center justify-between text-xs text-neutral-500 pt-4">
+            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-neutral-500 pt-4">
               <span>Updated in real-time from MySQL transactions</span>
-              <span className="text-neutral-400 font-medium">Currency: USD ($)</span>
+              <span className="text-slate-600 dark:text-neutral-400 font-medium">Currency: USD ($)</span>
             </div>
           </div>
 
-          {/* Sales by Garment Category */}
-          <div className="lg:col-span-5 bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl">
+          {/* Right-Side Section: Sales by Garment Category */}
+          <div className="lg:col-span-5 bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl transition-colors">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <PieChart className="w-4 h-4 text-indigo-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <PieChart className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   <span>Category Revenue Share</span>
                 </h3>
-                <p className="text-xs text-neutral-400 mt-0.5">Apparel portfolio distribution</p>
+                <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">Apparel portfolio distribution</p>
               </div>
             </div>
 
@@ -301,16 +301,16 @@ export default function AdminSalesReportPage() {
               {categorySales.map((cat) => (
                 <div key={cat.name} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-neutral-200">{cat.name}</span>
-                    <span className="font-bold text-white">{cat.revenue} ({cat.share}%)</span>
+                    <span className="font-semibold text-slate-800 dark:text-neutral-200">{cat.name}</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{cat.revenue} ({cat.share}%)</span>
                   </div>
-                  <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
+                  <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-neutral-800 overflow-hidden">
                     <div
                       className={`h-full rounded-full ${cat.color}`}
                       style={{ width: `${cat.share}%` }}
                     />
                   </div>
-                  <div className="text-[11px] text-neutral-500">
+                  <div className="text-[11px] text-slate-500 dark:text-neutral-500">
                     {cat.units} units shipped
                   </div>
                 </div>
@@ -319,29 +319,29 @@ export default function AdminSalesReportPage() {
           </div>
         </div>
 
-        {/* Bottom Section: Payment Gateway Breakdown */}
-        <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl">
+        {/* Bottom Section: Payment Gateway Breakdown Listing */}
+        <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl transition-colors">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-indigo-400" />
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Payment Gateways Settlement Breakdown</span>
               </h3>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">
                 Net volume collected across active payment processors and merchant fees.
               </p>
             </div>
             <Link
               href="/payments"
-              className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 flex items-center gap-1"
             >
               Configure Gateways <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-neutral-800/80">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-neutral-800/80">
             <table className="w-full text-left text-xs">
-              <thead className="bg-neutral-950/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+              <thead className="bg-slate-50 dark:bg-neutral-950/80 text-slate-600 dark:text-neutral-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-neutral-800">
                 <tr>
                   <th className="py-3 px-4">Gateway</th>
                   <th className="py-3 px-4">Net Captured Revenue</th>
@@ -350,23 +350,23 @@ export default function AdminSalesReportPage() {
                   <th className="py-3 px-4 text-right">Settlement Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800/60 bg-neutral-950/40">
+              <tbody className="divide-y divide-slate-100 dark:divide-neutral-800/60 bg-white dark:bg-neutral-950/40">
                 {gatewayBreakdown.map((gw) => (
-                  <tr key={gw.name} className="hover:bg-neutral-900/50 transition">
-                    <td className="py-3.5 px-4 font-semibold text-white">
+                  <tr key={gw.name} className="hover:bg-slate-50/80 dark:hover:bg-neutral-900/50 transition">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
                       {gw.name}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-emerald-400 text-sm">
+                    <td className="py-3.5 px-4 font-bold text-emerald-600 dark:text-emerald-400 text-sm">
                       {gw.revenue}
                     </td>
-                    <td className="py-3.5 px-4 text-neutral-300 font-medium">
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-neutral-300 font-medium">
                       {gw.percentage}
                     </td>
-                    <td className="py-3.5 px-4 text-neutral-400 font-mono text-[11px]">
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-neutral-400 font-mono text-[11px]">
                       {gw.feeRate}
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-semibold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-semibold">
                         <CheckCircle className="w-3 h-3" /> Settled Daily
                       </span>
                     </td>

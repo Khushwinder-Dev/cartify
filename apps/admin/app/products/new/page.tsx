@@ -285,34 +285,34 @@ export default function NewProductMatrixPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-24">
+    <div className="min-h-full bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 selection:bg-indigo-500 selection:text-white pb-24 transition-colors">
       {/* Page Header Bar */}
       <div className="max-w-7xl mx-auto px-6 pt-6 pb-2">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-neutral-800">
           <div className="flex items-center gap-4">
             <Link
               href="/products"
-              className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 transition"
+              className="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-slate-700 dark:text-neutral-300 transition shadow-xs"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-white tracking-tight">
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                   Dynamic Variant Matrix Creator
                 </h1>
-                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono font-medium">
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 font-mono font-medium">
                   Cartesian Engine
                 </span>
               </div>
-              <p className="text-xs text-neutral-400 mt-1">Configure options, generate SKU permutations, and persist synchronized inventory.</p>
+              <p className="text-xs text-slate-500 dark:text-neutral-400 mt-1">Configure options, generate SKU permutations, and persist synchronized inventory.</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
               href="/products"
-              className="px-4 py-2 text-xs font-medium text-neutral-400 hover:text-white rounded-xl border border-neutral-800 hover:bg-neutral-900 transition"
+              className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white rounded-xl border border-slate-200 dark:border-neutral-800 hover:bg-slate-100 dark:hover:bg-neutral-900 transition"
             >
               Cancel
             </Link>
@@ -329,7 +329,7 @@ export default function NewProductMatrixPage() {
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  <span>Save & Sync Matrix</span>
+                  <span>Save &amp; Sync Matrix</span>
                 </>
               )}
             </button>
@@ -340,15 +340,15 @@ export default function NewProductMatrixPage() {
       {/* Form Content */}
       <main className="max-w-7xl mx-auto px-6 py-6">
         {successMsg && (
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-sm flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-sm flex items-center gap-3 shadow-xs">
+            <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-2xl bg-red-950/60 border border-red-800 text-red-300 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+          <div className="mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 text-sm flex items-center gap-3 shadow-xs">
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -357,12 +357,12 @@ export default function NewProductMatrixPage() {
           {/* Left Column: Product Details & Options Matrix */}
           <div className="lg:col-span-2 space-y-8">
             {/* 1. Core Product Meta */}
-            <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-5">
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider text-neutral-400">
+            <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl space-y-5 transition-colors">
+              <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                 1. Product Information
               </h2>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Product Title *
                 </label>
                 <input
@@ -371,12 +371,12 @@ export default function NewProductMatrixPage() {
                   placeholder="e.g. Japanese Selvedge Denim Jacket"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Description
                 </label>
                 <textarea
@@ -384,26 +384,26 @@ export default function NewProductMatrixPage() {
                   placeholder="Detailed material composition, fit guidance, and washing instructions..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none"
+                  className="w-full px-4 py-2.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none"
                 />
               </div>
             </div>
 
             {/* 2. Dynamic Option Dimensions */}
-            <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl space-y-6 transition-colors">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-bold text-white uppercase tracking-wider text-neutral-400">
+                  <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                     2. Option Dimensions (Shopify Model)
                   </h2>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-neutral-500 mt-0.5">
                     Define variants attributes (Size, Color, Material). Cartesian product calculates automatically.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={addOptionDimension}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600/30 transition cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Dimension</span>
@@ -411,11 +411,11 @@ export default function NewProductMatrixPage() {
               </div>
 
               <div className="space-y-4">
-                {options.map((opt, optIndex) => (
-                  <div key={opt.id} className="p-4 rounded-xl bg-neutral-950/80 border border-neutral-800/80 space-y-3">
+                {options.map((opt) => (
+                  <div key={opt.id} className="p-4 rounded-xl bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800/80 space-y-3">
                     <div className="flex items-center justify-between gap-4">
                       <div className="w-1/3">
-                        <label className="block text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-1">
+                        <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-500 mb-1">
                           Dimension Name
                         </label>
                         <input
@@ -428,12 +428,12 @@ export default function NewProductMatrixPage() {
                               prev.map((o) => (o.id === opt.id ? { ...o, name: val } : o))
                             );
                           }}
-                          className="w-full px-3 py-1.5 bg-neutral-900 border border-neutral-700/80 rounded-lg text-sm text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="w-full px-3 py-1.5 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700/80 rounded-lg text-sm text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         />
                       </div>
 
                       <div className="flex-1">
-                        <label className="block text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-1">
+                        <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-500 mb-1">
                           Add Option Value (Press Enter)
                         </label>
                         <input
@@ -452,14 +452,14 @@ export default function NewProductMatrixPage() {
                               addValueToOption(opt.id, opt.currentInput);
                             }
                           }}
-                          className="w-full px-3 py-1.5 bg-neutral-900 border border-neutral-700/80 rounded-lg text-sm text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="w-full px-3 py-1.5 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-700/80 rounded-lg text-sm text-slate-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         />
                       </div>
 
                       <button
                         type="button"
                         onClick={() => removeOptionDimension(opt.id)}
-                        className="mt-5 p-2 text-neutral-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition"
+                        className="mt-5 p-2 text-slate-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -471,13 +471,13 @@ export default function NewProductMatrixPage() {
                         {opt.values.map((v) => (
                           <span
                             key={v}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-800 text-neutral-200 text-xs font-medium border border-neutral-700"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-200 dark:bg-neutral-800 text-slate-800 dark:text-neutral-200 text-xs font-medium border border-slate-300 dark:border-neutral-700"
                           >
                             <span>{v}</span>
                             <button
                               type="button"
                               onClick={() => removeValueFromOption(opt.id, v)}
-                              className="text-neutral-400 hover:text-red-400 font-bold"
+                              className="text-slate-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 font-bold"
                             >
                               ×
                             </button>
@@ -493,7 +493,7 @@ export default function NewProductMatrixPage() {
                 <button
                   type="button"
                   onClick={generateMatrix}
-                  className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition cursor-pointer"
+                  className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-800 dark:text-white rounded-xl transition cursor-pointer"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                   <span>Recalculate Cartesian Matrix ({variants.length} combinations)</span>
@@ -502,14 +502,14 @@ export default function NewProductMatrixPage() {
             </div>
 
             {/* 3. Variant Matrix Table with Bulk Editing */}
-            <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl space-y-6 transition-colors">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-sm font-bold text-white uppercase tracking-wider text-neutral-400 flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-indigo-400" />
-                    <span>3. Variant Matrix & Inventory ({variants.length})</span>
+                  <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <span>3. Variant Matrix &amp; Inventory ({variants.length})</span>
                   </h2>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-neutral-500 mt-0.5">
                     Fast inline editing for prices, custom SKUs, and initial stock quantities.
                   </p>
                 </div>
@@ -523,12 +523,12 @@ export default function NewProductMatrixPage() {
                       placeholder="Bulk Price $"
                       value={bulkPrice}
                       onChange={(e) => setBulkPrice(e.target.value)}
-                      className="w-24 px-2.5 py-1.5 bg-neutral-950 border border-neutral-800 rounded-lg text-xs text-white"
+                      className="w-24 px-2.5 py-1.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-lg text-xs text-slate-900 dark:text-white"
                     />
                     <button
                       type="button"
                       onClick={applyBulkPrice}
-                      className="px-2.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-xs font-medium rounded-lg text-neutral-200 transition"
+                      className="px-2.5 py-1.5 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-xs font-medium rounded-lg text-slate-800 dark:text-neutral-200 transition cursor-pointer"
                     >
                       Apply
                     </button>
@@ -540,12 +540,12 @@ export default function NewProductMatrixPage() {
                       placeholder="Bulk Stock"
                       value={bulkStock}
                       onChange={(e) => setBulkStock(e.target.value)}
-                      className="w-24 px-2.5 py-1.5 bg-neutral-950 border border-neutral-800 rounded-lg text-xs text-white"
+                      className="w-24 px-2.5 py-1.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-lg text-xs text-slate-900 dark:text-white"
                     />
                     <button
                       type="button"
                       onClick={applyBulkStock}
-                      className="px-2.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-xs font-medium rounded-lg text-neutral-200 transition"
+                      className="px-2.5 py-1.5 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-xs font-medium rounded-lg text-slate-800 dark:text-neutral-200 transition cursor-pointer"
                     >
                       Apply
                     </button>
@@ -554,9 +554,9 @@ export default function NewProductMatrixPage() {
               </div>
 
               {/* Matrix Table */}
-              <div className="overflow-x-auto rounded-xl border border-neutral-800">
+              <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-neutral-800">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-neutral-950/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+                  <thead className="bg-slate-50 dark:bg-neutral-950/80 text-slate-600 dark:text-neutral-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-neutral-800">
                     <tr>
                       <th className="py-3 px-4">Variant</th>
                       <th className="py-3 px-4">SKU</th>
@@ -565,10 +565,10 @@ export default function NewProductMatrixPage() {
                       <th className="py-3 px-4">Stock</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-800/60 bg-neutral-950/40">
+                  <tbody className="divide-y divide-slate-100 dark:divide-neutral-800/60 bg-white dark:bg-neutral-950/40">
                     {variants.map((v, idx) => (
-                      <tr key={v.id} className="hover:bg-neutral-900/50 transition">
-                        <td className="py-3 px-4 font-medium text-white whitespace-nowrap">
+                      <tr key={v.id} className="hover:bg-slate-50/80 dark:hover:bg-neutral-900/50 transition">
+                        <td className="py-3 px-4 font-medium text-slate-900 dark:text-white whitespace-nowrap">
                           {v.title}
                         </td>
                         <td className="py-2 px-4">
@@ -576,7 +576,7 @@ export default function NewProductMatrixPage() {
                             type="text"
                             value={v.sku}
                             onChange={(e) => updateVariant(idx, 'sku', e.target.value)}
-                            className="w-36 px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded text-xs font-mono text-neutral-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-36 px-2.5 py-1 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded text-xs font-mono text-slate-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                         </td>
                         <td className="py-2 px-4">
@@ -585,7 +585,7 @@ export default function NewProductMatrixPage() {
                             step="0.01"
                             value={v.price}
                             onChange={(e) => updateVariant(idx, 'price', parseFloat(e.target.value) || 0)}
-                            className="w-24 px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded text-xs text-emerald-400 font-bold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-24 px-2.5 py-1 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded text-xs text-emerald-600 dark:text-emerald-400 font-bold focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                         </td>
                         <td className="py-2 px-4">
@@ -595,7 +595,7 @@ export default function NewProductMatrixPage() {
                             value={v.compare_at_price || ''}
                             onChange={(e) => updateVariant(idx, 'compare_at_price', e.target.value ? parseFloat(e.target.value) : null)}
                             placeholder="None"
-                            className="w-24 px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded text-xs text-neutral-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-24 px-2.5 py-1 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded text-xs text-slate-500 dark:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                         </td>
                         <td className="py-2 px-4">
@@ -603,14 +603,14 @@ export default function NewProductMatrixPage() {
                             type="number"
                             value={v.inventory_quantity}
                             onChange={(e) => updateVariant(idx, 'inventory_quantity', parseInt(e.target.value, 10) || 0)}
-                            className="w-20 px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded text-xs text-neutral-200 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-20 px-2.5 py-1 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded text-xs text-slate-800 dark:text-neutral-200 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                         </td>
                       </tr>
                     ))}
                     {variants.length === 0 && (
                       <tr>
-                        <td colSpan={5} className="py-8 text-center text-neutral-500">
+                        <td colSpan={5} className="py-8 text-center text-slate-500 dark:text-neutral-500">
                           Add option dimensions above to generate combinations.
                         </td>
                       </tr>
@@ -623,19 +623,19 @@ export default function NewProductMatrixPage() {
 
           {/* Right Column: Taxonomy & Publishing Meta */}
           <div className="space-y-6">
-            <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-5">
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider text-neutral-400">
-                Organization & Status
+            <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl space-y-5 transition-colors">
+              <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                Organization &amp; Status
               </h2>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as any)}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
                   <option value="active">Active (Visible on Storefront)</option>
                   <option value="draft">Draft (Back-office only)</option>
@@ -644,31 +644,31 @@ export default function NewProductMatrixPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Vendor / Brand
                 </label>
                 <input
                   type="text"
                   value={vendor}
                   onChange={(e) => setVendor(e.target.value)}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Product Type
                 </label>
                 <input
                   type="text"
                   value={productType}
                   onChange={(e) => setProductType(e.target.value)}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                   Tags (Press Enter)
                 </label>
                 <input
@@ -677,19 +677,19 @@ export default function NewProductMatrixPage() {
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={addTag}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
                 <div className="flex flex-wrap gap-2 mt-3">
                   {tags.map((t) => (
                     <span
                       key={t}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-800 text-neutral-300 text-xs font-medium border border-neutral-700/60"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 text-xs font-medium border border-slate-200 dark:border-neutral-700/60"
                     >
                       <span>{t}</span>
                       <button
                         type="button"
                         onClick={() => removeTag(t)}
-                        className="hover:text-red-400 font-bold"
+                        className="hover:text-red-600 dark:hover:text-red-400 font-bold"
                       >
                         ×
                       </button>
@@ -700,29 +700,29 @@ export default function NewProductMatrixPage() {
             </div>
 
             {/* Matrix Summary Stats */}
-            <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-6 shadow-xl space-y-4">
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider text-neutral-400 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-indigo-400" />
+            <div className="bg-white dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800/80 rounded-2xl p-6 shadow-xs dark:shadow-xl space-y-4 transition-colors">
+              <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Matrix Diagnostics</span>
               </h2>
-              <div className="space-y-2 text-xs text-neutral-400">
-                <div className="flex justify-between py-1 border-b border-neutral-800">
+              <div className="space-y-2 text-xs text-slate-600 dark:text-neutral-400">
+                <div className="flex justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
                   <span>Option Dimensions:</span>
-                  <span className="font-semibold text-white">{options.filter(o => o.values.length > 0).length}</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">{options.filter(o => o.values.length > 0).length}</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-neutral-800">
+                <div className="flex justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
                   <span>Total Variant SKUs:</span>
-                  <span className="font-semibold text-white">{variants.length}</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">{variants.length}</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-neutral-800">
+                <div className="flex justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
                   <span>Total Initial Units:</span>
-                  <span className="font-semibold text-white">
+                  <span className="font-semibold text-slate-900 dark:text-white">
                     {variants.reduce((acc, v) => acc + (v.inventory_quantity || 0), 0)}
                   </span>
                 </div>
                 <div className="flex justify-between py-1">
                   <span>Inventory Strategy:</span>
-                  <span className="font-semibold text-emerald-400">Strict LockForUpdate</span>
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">Strict LockForUpdate</span>
                 </div>
               </div>
             </div>

@@ -98,69 +98,69 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center p-6 selection:bg-indigo-500 selection:text-white relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 flex items-center justify-center p-6 selection:bg-indigo-500 selection:text-white relative overflow-hidden transition-colors">
       {/* Background Glow Accents */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 mb-4 shadow-lg shadow-indigo-500/10">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 mb-4 shadow-lg shadow-indigo-500/10">
             <ShieldCheck className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center justify-center gap-2">
             <span>Merchant Back-Office</span>
-            <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+            <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
               Admin
             </span>
           </h1>
-          <p className="text-sm text-neutral-400 mt-1">
+          <p className="text-sm text-slate-500 dark:text-neutral-400 mt-1">
             Authenticate via Laravel Sanctum multi-guard RBAC
           </p>
         </div>
 
-        <div className="bg-neutral-900/80 border border-neutral-800 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6">
+        <div className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 backdrop-blur-xl rounded-2xl p-8 shadow-xl space-y-6 transition-colors">
           {error && (
-            <div className="p-4 rounded-xl bg-red-950/50 border border-red-800/60 text-red-300 text-sm flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-400" />
+            <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-red-800 dark:text-red-300 text-sm flex items-start gap-3 shadow-xs">
+              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-600 dark:text-red-400" />
               <span>{error}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2">
                 Merchant Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-500" />
+                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 dark:text-neutral-500" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@admin.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400">
                   Password
                 </label>
-                <span className="text-[11px] text-neutral-500 font-mono">Min 8 chars</span>
+                <span className="text-[11px] text-slate-400 dark:text-neutral-500 font-mono">Min 8 chars</span>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-500" />
+                <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 dark:text-neutral-500" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition"
                 />
               </div>
             </div>
@@ -185,28 +185,28 @@ export default function AdminLoginPage() {
           </form>
 
           {/* Quick Demo Credentials */}
-          <div className="pt-4 border-t border-neutral-800">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 mb-2 flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+          <div className="pt-4 border-t border-slate-200 dark:border-neutral-800">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-neutral-400 mb-2 flex items-center gap-1.5">
+              <KeyRound className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
               <span>Quick Fill Verified Credentials</span>
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setDemoCredentials('admin@admin.com')}
-                className="px-3 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-left text-xs text-neutral-300 transition"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-left text-xs text-slate-700 dark:text-neutral-300 transition cursor-pointer"
               >
-                <div className="font-semibold text-white truncate">admin@admin.com</div>
-                <div className="text-[10px] text-neutral-500 font-mono">password123</div>
+                <div className="font-semibold text-slate-900 dark:text-white truncate">admin@admin.com</div>
+                <div className="text-[10px] text-slate-400 dark:text-neutral-500 font-mono">password123</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => setDemoCredentials('admin@shopify-clone.test')}
-                className="px-3 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-left text-xs text-neutral-300 transition"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-left text-xs text-slate-700 dark:text-neutral-300 transition cursor-pointer"
               >
-                <div className="font-semibold text-white truncate">admin@shopify-clone...</div>
-                <div className="text-[10px] text-neutral-500 font-mono">password123</div>
+                <div className="font-semibold text-slate-900 dark:text-white truncate">admin@shopify-clone...</div>
+                <div className="text-[10px] text-slate-400 dark:text-neutral-500 font-mono">password123</div>
               </button>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function AdminLoginPage() {
               href="http://localhost:3000"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-neutral-400 hover:text-white transition inline-flex items-center gap-1"
+              className="text-xs text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition inline-flex items-center gap-1"
             >
               <span>Switch to Customer Storefront (Port 3000)</span>
               <span>↗</span>
