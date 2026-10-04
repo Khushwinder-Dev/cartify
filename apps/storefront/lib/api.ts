@@ -1,12 +1,5 @@
 import { ApiResponse, Cart, Order, PricingCalculation, Product } from './types';
-
-const getApiBase = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
-  if (typeof window !== 'undefined') {
-    return `http://${window.location.hostname}:8000/api/v1`;
-  }
-  return 'http://127.0.0.1:8000/api/v1';
-};
+import { getApiBase } from './config';
 
 export class ApiError extends Error {
   errors?: any;
@@ -29,7 +22,6 @@ async function request<T>(
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-Admin-Access': 'true', // Enables seamless local admin preview
   };
 
   if (cartToken) {

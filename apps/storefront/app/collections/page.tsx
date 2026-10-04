@@ -13,6 +13,7 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import { Collection } from '@ecommerce/types';
+import { getApiBase } from '@/lib/config';
 
 const defaultCollections: Collection[] = [
   {
@@ -59,8 +60,7 @@ export default function CollectionsDirectoryPage() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || `http://${host}:8000/api/v1`;
+        const API_BASE = getApiBase();
         const res = await fetch(`${API_BASE}/collections`);
         if (res.ok) {
           const data = await res.json();

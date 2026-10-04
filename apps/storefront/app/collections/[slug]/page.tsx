@@ -13,6 +13,7 @@ import {
   Check
 } from 'lucide-react';
 import { useCart } from '../../../context/CartContext';
+import { getApiBase } from '@/lib/config';
 
 interface ProductItem {
   id: number;
@@ -44,8 +45,7 @@ export default function CollectionProductsPage({ params }: { params: Promise<{ s
     const fetchCollection = async () => {
       setLoading(true);
       try {
-        const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || `http://${host}:8000/api/v1`;
+        const API_BASE = getApiBase();
         const res = await fetch(`${API_BASE}/collections/${slug}`);
         if (res.ok) {
           const data = await res.json();

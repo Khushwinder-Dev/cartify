@@ -32,15 +32,7 @@ return [
         '#^https://.*\.vercel\.app$#',
     ],
 
-    'allowed_headers' => [
-        'Content-Type',
-        'X-Requested-With',
-        'Authorization',
-        'Accept',
-        'Origin',
-        'X-Cart-Token',
-        'X-Idempotency-Key',
-    ],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/lib/types';
+import { getApiBase } from '@/lib/config';
 
 interface RegisterData {
   name: string;
@@ -22,14 +23,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const getApiBase = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
-  if (typeof window !== 'undefined') {
-    return `http://${window.location.hostname}:8000/api/v1`;
-  }
-  return 'http://127.0.0.1:8000/api/v1';
-};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

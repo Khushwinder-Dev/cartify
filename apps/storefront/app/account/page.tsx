@@ -20,6 +20,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { getApiBase } from '@/lib/config';
 
 interface OrderItem {
   id: number;
@@ -58,7 +59,7 @@ export default function CustomerAccountPage() {
       if (!token) return;
       setLoadingOrders(true);
       try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
+        const API_BASE = getApiBase();
         const res = await fetch(`${API_BASE}/orders`, {
           headers: {
             'Content-Type': 'application/json',
