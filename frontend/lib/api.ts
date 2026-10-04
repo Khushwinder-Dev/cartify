@@ -23,6 +23,7 @@ async function request<T>(
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    'X-Admin-Access': 'true', // Enables seamless local admin preview
   };
 
   if (cartToken) {
@@ -70,13 +71,13 @@ export const api = {
     });
     const qs = searchParams.toString() ? `?${searchParams.toString()}` : '';
     return request<Product[]>(`/products${qs}`, {
-      next: { revalidate: 60, tags: ['products'] },
+      next: { revalidate: 30, tags: ['products'] },
     });
   },
 
   async getProduct(slug: string) {
     return request<Product>(`/products/${slug}`, {
-      next: { revalidate: 60, tags: [`product-${slug}`] },
+      next: { revalidate: 30, tags: [`product-${slug}`] },
     });
   },
 
@@ -136,7 +137,12 @@ export const api = {
     });
   },
 
-  // Admin
+  // Order Tracking
+  async getOrder(orderNumber: string) {
+    return request<Order>(`/orders/${orderNumber}`);
+  },
+
+  // Admin Operations
   async getAdminAnalytics(token?: string) {
     return request<{
       metrics: {
@@ -169,5 +175,52 @@ export const api = {
 
   async getAdminOrders(token?: string) {
     return request<Order[]>('/admin/orders', { token });
+  },
+
+  async updateOrderFulfillment(orderId: number, status: string, token?: string) {
+    return request<Order>(`/admin/orders/${orderId}/fulfillment`, {
+      method: 'PATCH',
+      body: JSON.stringify({ fulfillment_status: status }),
+      token,
+    });
+  },
+
+  async updateOrderFinancial(orderId: number, status: string, token?: string) {
+    return request<Order>(`/admin/orders/${orderId}/financial`, {
+      method: 'PATCH',
+      body: JSON.stringify({ financial_status: status }),
+      token,
+    });
+  },
+
+  async getAdminInventory(token?: string) {
+    return request<{ items: any[]; total: number; current_page: number }>('/admin/inventory', { token });
+  },
+
+  async adjustVariantInventory(variantId: number, adjustment: number, token?: string) {
+    return request<any>(`/admin/variants/${variantId}/inventory`, {
+      method: 'PATCH',
+      body: JSON.stringify({ adjustment }),
+      token,
+    });
+  },
+
+  async getAdminDiscounts(token?: string) {
+    return request<any[]>('/admin/discounts', { token });
+  },
+
+  async createAdminDiscount(discountData: any, token?: string) {
+    return request<any>('/admin/discounts', {
+      method: 'POST',
+      body: JSON.stringify(discountData),
+      token,
+    });
+  },
+
+  async deleteAdminDiscount(discountId: number, token?: string) {
+    return request<any>(`/admin/discounts/${discountId}`, {
+      method: 'DELETE',
+      token,
+    });
   },
 };

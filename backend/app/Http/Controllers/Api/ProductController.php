@@ -206,4 +206,41 @@ class ProductController extends BaseApiController
 
         return $this->success(null, 'Product deleted successfully');
     }
+
+    /**
+     * Admin: Get all variants for inventory management.
+     */
+    public function getInventory(Request $request): JsonResponse
+    {
+        $variants = \App\Models\ProductVariant::with(['product.primaryMedia', 'optionValues'])
+            ->latest('id')
+            ->paginate(50);
+
+        return $this->success([
+            'items' => $variants->items(),
+            'total' => $variants->total(),
+            'current_page' => $variants->currentPage(),
+        ]);
+    }
+
+    /**
+     * Admin: Quick inventory adjustment for a variant.
+     */
+    public function updateVariantInventory(Request $request, int $variantId): JsonResponse
+    {
+        $variant = \App\Models\ProductVariant::findOrFail($variantId);
+
+        $validated = $request->validate([
+            'inventory_quantity' => 'nullable|integer',
+            'adjustment' => 'nullable|integer',
+        ]);
+
+        if (isset($validated['adjustment'])) {
+            $variant->increment('inventory_quantity', $validated['adjustment']);
+        } elseif (isset($validated['inventory_quantity'])) {
+            $variant->update(['inventory_quantity' => $validated['inventory_quantity']]);
+        }
+
+        return $this->success($variant->fresh(['product']), 'Inventory adjusted successfully');
+    }
 }

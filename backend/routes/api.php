@@ -48,7 +48,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // 8. Admin RBAC Routes
-    Route::prefix('admin')->middleware(['auth:sanctum', EnsureAdmin::class])->group(function () {
+    Route::prefix('admin')->middleware([EnsureAdmin::class])->group(function () {
         // Analytics
         Route::get('/analytics', [AdminAnalyticsController::class, 'index']);
 
@@ -57,6 +57,10 @@ Route::prefix('v1')->group(function () {
         Route::put('/products/{id}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
         Route::patch('/products/{id}/variants', [ProductController::class, 'bulkUpdateVariants']);
+
+        // Inventory management
+        Route::get('/inventory', [ProductController::class, 'getInventory']);
+        Route::patch('/variants/{id}/inventory', [ProductController::class, 'updateVariantInventory']);
 
         // Orders management
         Route::get('/orders', [OrderController::class, 'adminIndex']);

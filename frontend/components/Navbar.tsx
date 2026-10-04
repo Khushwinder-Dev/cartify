@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, ShieldCheck, Compass, Sparkles } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Compass, Sparkles, Search, PackageCheck, Zap } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function Navbar() {
@@ -12,71 +12,102 @@ export default function Navbar() {
   const isAdmin = pathname.startsWith('/admin');
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-200 dark:border-neutral-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <div className="flex items-center space-x-6">
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-violet-500/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-bold tracking-tight text-lg text-neutral-900 dark:text-white block leading-none">
-                ATELIER
-              </span>
-              <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-semibold">
-                Shopify Headless LTS
-              </span>
-            </div>
-          </Link>
+    <>
+      {/* Top Promotional Ribbon */}
+      <div className="bg-gradient-to-r from-neutral-900 via-indigo-950 to-neutral-900 text-white text-[11px] font-semibold py-1.5 px-4 text-center border-b border-indigo-900/30 flex items-center justify-center space-x-2">
+        <span className="flex items-center gap-1 text-amber-400">
+          <Zap className="w-3 h-3 fill-current" />
+          <span>SS/26 CAPSULE EVENT:</span>
+        </span>
+        <span className="text-neutral-300">
+          Free Worldwide Express Delivery on Orders $100+ • Use Code <strong className="text-white bg-indigo-500/30 px-1.5 py-0.5 rounded font-mono">WELCOME10</strong> for 10% Off
+        </span>
+      </div>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 text-sm font-medium">
+      {/* Main Navigation Header */}
+      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/85 dark:bg-neutral-950/85 border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Brand */}
+          <div className="flex items-center space-x-8">
+            <Link href="/" className="flex items-center space-x-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-violet-500/20 group-hover:scale-105 transition-transform">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="font-black tracking-tight text-lg text-neutral-950 dark:text-white block leading-none">
+                  ATELIER
+                </span>
+                <span className="text-[10px] tracking-widest uppercase text-neutral-400 font-bold">
+                  Shopify Headless LTS
+                </span>
+              </div>
+            </Link>
+
+            {/* Nav Links */}
+            <nav className="hidden md:flex items-center space-x-1 text-xs font-bold uppercase tracking-wider">
+              <Link
+                href="/"
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  !isAdmin && pathname === '/'
+                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Storefront</span>
+              </Link>
+
+              <Link
+                href="/orders"
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  pathname.startsWith('/orders')
+                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                }`}
+              >
+                <PackageCheck className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Track Order</span>
+              </Link>
+            </nav>
+          </div>
+
+          {/* Action Controls */}
+          <div className="flex items-center space-x-3">
+            {/* Currency Pill */}
+            <span className="hidden sm:inline-block px-2.5 py-1 rounded-lg text-[11px] font-bold text-neutral-500 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+              USD ($)
+            </span>
+
+            {/* Admin Switch */}
             <Link
-              href="/"
-              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                !isAdmin
-                  ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+              href={isAdmin ? '/' : '/admin'}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 border transition-all ${
+                isAdmin
+                  ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-transparent shadow-sm'
+                  : 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
               }`}
             >
-              <Compass className="w-4 h-4" />
-              <span>Storefront</span>
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              <span>{isAdmin ? 'Storefront' : 'Admin Portal'}</span>
             </Link>
-          </nav>
-        </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center space-x-3">
-          {/* Admin Switch */}
-          <Link
-            href={isAdmin ? '/' : '/admin'}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-wide flex items-center space-x-1.5 border transition-all ${
-              isAdmin
-                ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-transparent shadow-sm'
-                : 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span>{isAdmin ? 'Back to Store' : 'Admin Portal'}</span>
-          </Link>
-
-          {/* Cart Trigger */}
-          <button
-            id="cart-drawer-trigger"
-            onClick={openCart}
-            aria-label="Shopping Cart"
-            className="relative p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors flex items-center justify-center text-neutral-800 dark:text-neutral-200"
-          >
-            <ShoppingBag className="w-5 h-5" />
-            {cart && cart.items_count > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-in zoom-in-50">
-                {cart.items_count}
-              </span>
-            )}
-          </button>
+            {/* Cart Trigger */}
+            <button
+              id="cart-drawer-trigger"
+              onClick={openCart}
+              aria-label="Shopping Cart"
+              className="relative p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors flex items-center justify-center text-neutral-800 dark:text-neutral-200"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {cart && cart.items_count > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-bounce">
+                  {cart.items_count}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
