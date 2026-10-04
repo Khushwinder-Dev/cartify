@@ -21,7 +21,9 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, cartItems, subtotal, cartToken, clearCart } = useCart();
+  const { cart, cartToken, refreshCart } = useCart();
+  const cartItems = cart?.items || [];
+  const subtotal = cart?.subtotal || 0;
 
   const [step, setStep] = useState<'shipping' | 'delivery' | 'payment'>('shipping');
   const [loading, setLoading] = useState(false);
@@ -106,7 +108,8 @@ export default function CheckoutPage() {
       }
 
       setOrderComplete(data.order || { order_number: 'ORD-' + Math.floor(Math.random() * 100000) });
-      clearCart();
+      localStorage.removeItem('cart_token');
+      await refreshCart();
     } catch (err: any) {
       setError(err.message || 'An error occurred during checkout processing.');
     } finally {
@@ -473,7 +476,7 @@ export default function CheckoutPage() {
               <h3 className="font-serif font-bold text-stone-900 text-base">Order Summary</h3>
 
               <div className="divide-y divide-stone-100 max-h-72 overflow-y-auto pr-1">
-                {cartItems.map((item) => (
+                {cartItems.map((item: any) => (
                   <div key={item.id} className="py-3 flex justify-between items-center text-xs">
                     <div>
                       <p className="font-semibold text-stone-900">{item.variant?.product?.title || 'Catalog Product'}</p>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Services\ProductVariantMatrixService;
 use App\Services\ProductVariantService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ use Illuminate\Support\Str;
 class ProductController extends BaseApiController
 {
     public function __construct(
-        protected ProductVariantService $variantService
+        protected ProductVariantService $variantService,
+        protected ProductVariantMatrixService $matrixService
     ) {}
 
     /**
@@ -135,12 +137,17 @@ class ProductController extends BaseApiController
 
         // Generate dynamic options and Cartesian variants
         $options = $validated['options'] ?? [];
-        $defaultVariantValues = [
-            'price' => $validated['base_price'] ?? 0.00,
-            'inventory_quantity' => $validated['base_inventory'] ?? 0,
-        ];
+        $customVariants = $request->input('variants', []);
 
-        $product = $this->variantService->generateVariantsFromOptions($product, $options, $defaultVariantValues);
+        if (!empty($customVariants)) {
+            $product = $this->matrixService->syncProductMatrix($product, $options, $customVariants);
+        } else {
+            $defaultVariantValues = [
+                'price' => $validated['base_price'] ?? 0.00,
+                'inventory_quantity' => $validated['base_inventory'] ?? 0,
+            ];
+            $product = $this->variantService->generateVariantsFromOptions($product, $options, $defaultVariantValues);
+        }
 
         return $this->success(new ProductResource($product), 'Product created successfully', [], 201);
     }
@@ -242,5 +249,32 @@ class ProductController extends BaseApiController
         }
 
         return $this->success($variant->fresh(['product']), 'Inventory adjusted successfully');
+    }
+
+    /**
+     * Admin: Preview Cartesian variant matrix without saving to DB.
+     */
+    public function previewMatrix(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'options' => 'required|array',
+            'base_sku' => 'nullable|string',
+            'price' => 'nullable|numeric',
+            'compare_at_price' => 'nullable|numeric',
+            'cost_price' => 'nullable|numeric',
+            'inventory_quantity' => 'nullable|integer',
+            'track_inventory' => 'nullable|boolean',
+            'weight' => 'nullable|numeric',
+        ]);
+
+        $matrix = $this->matrixService->generateCombinations(
+            $validated['options'],
+            $request->only(['base_sku', 'price', 'compare_at_price', 'cost_price', 'inventory_quantity', 'track_inventory', 'weight'])
+        );
+
+        return $this->success([
+            'count' => count($matrix),
+            'variants' => $matrix,
+        ], 'Variant matrix preview calculated');
     }
 }

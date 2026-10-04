@@ -46,9 +46,19 @@ class Product extends Model
         return $this->hasMany(ProductMedia::class)->orderBy('position');
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('position');
+    }
+
     public function primaryMedia(): HasOne
     {
         return $this->hasOne(ProductMedia::class)->where('is_primary', true);
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
     public function scopeActive(Builder $query): Builder

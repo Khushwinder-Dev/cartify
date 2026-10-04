@@ -58,9 +58,24 @@ export default function AdminHeader() {
               </span>
             </div>
             <p className="text-[11px] text-neutral-400">
-              Shopify-grade E-Commerce Management Platform
+              Enterprise Self-Hosted Architecture
             </p>
           </div>
+
+          <nav className="hidden lg:flex items-center space-x-1 pl-6 text-xs font-semibold text-neutral-400">
+            <Link href="/dashboard" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Dashboard
+            </Link>
+            <Link href="/products" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Products
+            </Link>
+            <Link href="/products/new" className="px-3 py-1.5 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-neutral-800 transition">
+              + New Matrix
+            </Link>
+            <Link href="/orders" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Orders
+            </Link>
+          </nav>
         </div>
 
         {/* Right Action: External link to customer storefront */}

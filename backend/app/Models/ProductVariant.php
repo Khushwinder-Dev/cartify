@@ -59,6 +59,21 @@ class ProductVariant extends Model
         return $this->hasMany(ProductMedia::class, 'product_variant_id');
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class, 'product_variant_id');
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class, 'product_variant_id');
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class, 'product_variant_id');
+    }
+
     public function isAvailable(): bool
     {
         if (!$this->track_quantity) {
