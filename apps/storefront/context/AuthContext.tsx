@@ -23,7 +23,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    return `http://${window.location.hostname}:8000/api/v1`;
+  }
+  return 'http://127.0.0.1:8000/api/v1';
+};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -44,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setToken(storedToken);
 
           // Verify token validity in background
-          const res = await fetch(`${API_BASE}/auth/me`, {
+          const res = await fetch(`${getApiBase()}/auth/me`, {
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json',
@@ -80,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const guestCartToken =
         typeof window !== 'undefined' ? localStorage.getItem('cart_token') : null;
 
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${getApiBase()}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,6 +123,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       localStorage.setItem('customer_token', authToken);
       localStorage.setItem('customer_user', JSON.stringify(loggedUser));
+    } catch (err: any) {
+      if (err.name === 'TypeError' || err.message?.includes('fetch')) {
+        throw new Error('Unable to connect to the backend server (http://localhost:8000). Please ensure the backend is running.');
+      }
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -125,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterData) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/register`, {
+      const res = await fetch(`${getApiBase()}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,6 +170,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       localStorage.setItem('customer_token', authToken);
       localStorage.setItem('customer_user', JSON.stringify(registeredUser));
+    } catch (err: any) {
+      if (err.name === 'TypeError' || err.message?.includes('fetch')) {
+        throw new Error('Unable to connect to the backend server (http://localhost:8000). Please ensure the backend is running.');
+      }
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -169,7 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (currentToken) {
       try {
-        await fetch(`${API_BASE}/auth/logout`, {
+        await fetch(`${getApiBase()}/auth/logout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -195,7 +211,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!currentToken) return;
 
     try {
-      const res = await fetch(`${API_BASE}/auth/me`, {
+      const res = await fetch(`${getApiBase()}/auth/me`, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',

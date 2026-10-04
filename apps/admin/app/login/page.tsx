@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ShieldCheck, Lock, Mail, ArrowRight, AlertCircle, Loader2, KeyRound, Check, Sparkles } from 'lucide-react';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    return `http://${window.location.hostname}:8000/api/v1`;
+  }
+  return 'http://127.0.0.1:8000/api/v1';
+};
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -36,7 +42,7 @@ export default function AdminLoginPage() {
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${getApiBase()}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +81,11 @@ export default function AdminLoginPage() {
       localStorage.setItem('admin_user', JSON.stringify(user));
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'An error occurred during authentication.');
+      if (err.name === 'TypeError' || err.message?.includes('fetch')) {
+        setError('Unable to connect to the backend server (http://localhost:8000). Please ensure the backend is running.');
+      } else {
+        setError(err.message || 'An error occurred during authentication.');
+      }
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,12 @@
 import { ApiResponse, Cart, Order, PricingCalculation, Product } from './types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
+const getApiBase = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    return `http://${window.location.hostname}:8000/api/v1`;
+  }
+  return 'http://127.0.0.1:8000/api/v1';
+};
 
 export class ApiError extends Error {
   errors?: any;
@@ -43,7 +49,7 @@ async function request<T>(
   };
 
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, config);
+    const res = await fetch(`${getApiBase()}${endpoint}`, config);
     const json = await res.json();
 
     if (!res.ok) {
