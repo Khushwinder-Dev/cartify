@@ -21,6 +21,13 @@ class PaymentGateway extends Model
         'position',
     ];
 
+    /**
+     * Always hide sensitive credentials from default serialization.
+     */
+    protected $hidden = [
+        'credentials',
+    ];
+
     protected $casts = [
         'is_active' => 'boolean',
         'is_test_mode' => 'boolean',
@@ -28,4 +35,25 @@ class PaymentGateway extends Model
         'credentials' => 'array',
         'position' => 'integer',
     ];
+
+    /**
+     * Expose only safe public credentials (e.g. publishable key, client ID).
+     */
+    public function getPublicCredentialsAttribute(): ?array
+    {
+        $creds = $this->credentials;
+        if (!is_array($creds)) {
+            return null;
+        }
+
+        return match ($this->code) {
+            'stripe' => array_filter([
+                'publishable_key' => $creds['publishable_key'] ?? null,
+            ]),
+            'paypal' => array_filter([
+                'client_id' => $creds['client_id'] ?? null,
+            ]),
+            default => null,
+        };
+    }
 }

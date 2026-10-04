@@ -18,9 +18,9 @@ use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    // 1. Authentication
-    Route::post('/auth/register', [AuthController::class, 'register']);
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    // 1. Authentication (Rate-limited against brute-force & credential stuffing)
+    Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
     // 2. Public Catalog & Collections
     Route::get('/products', [ProductController::class, 'index']);
@@ -28,9 +28,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/collections', [CollectionController::class, 'index']);
     Route::get('/collections/{slug}', [CollectionController::class, 'show']);
 
-    // 3. Product Reviews & Ratings
+    // 3. Product Reviews & Ratings (Rate-limited review submission)
     Route::get('/products/{productId}/reviews', [ReviewController::class, 'index']);
-    Route::post('/products/{productId}/reviews', [ReviewController::class, 'store']);
+    Route::post('/products/{productId}/reviews', [ReviewController::class, 'store'])->middleware('throttle:5,1');
 
     // 4. Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index']);
@@ -44,11 +44,11 @@ Route::prefix('v1')->group(function () {
     Route::delete('/cart/items/{id}', [CartController::class, 'removeItem']);
     Route::post('/cart/calculate', [CartController::class, 'calculate']);
 
-    // 6. Discounts / Coupon validation
-    Route::post('/discounts/validate', [DiscountController::class, 'validateCode']);
+    // 6. Discounts / Coupon validation (Rate-limited against dictionary attacks)
+    Route::post('/discounts/validate', [DiscountController::class, 'validateCode'])->middleware('throttle:15,1');
 
-    // 7. Checkout
-    Route::post('/checkout/process', [CheckoutController::class, 'process']);
+    // 7. Checkout (Rate-limited against automated carding)
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->middleware('throttle:10,1');
 
     // 8. Webhooks
     Route::post('/webhooks/payment', [WebhookController::class, 'handlePayment']);
@@ -68,8 +68,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/orders/{identifier}', [OrderController::class, 'show']);
     });
 
-    // 10. Admin RBAC Routes
-    Route::prefix('admin')->middleware([EnsureAdmin::class])->group(function () {
+    // 10. Admin RBAC Routes (Strict authentication and role verification)
+    Route::prefix('admin')->middleware(['auth:sanctum', EnsureAdmin::class])->group(function () {
         // Analytics
         Route::get('/analytics', [AdminAnalyticsController::class, 'index']);
 

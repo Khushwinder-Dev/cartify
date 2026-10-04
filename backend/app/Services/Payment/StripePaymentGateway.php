@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Models\Order;
+use Exception;
 use Illuminate\Support\Str;
 
 class StripePaymentGateway implements PaymentGatewayInterface
@@ -39,10 +40,57 @@ class StripePaymentGateway implements PaymentGatewayInterface
 
     public function verifyWebhook(string $payload, string $signature): array
     {
+        if (empty($payload)) {
+            throw new \InvalidArgumentException('Empty webhook payload.');
+        }
+
+        // If webhook secret is configured, enforce strict HMAC-SHA256 signature verification
+        if (!empty($this->webhookSecret)) {
+            if (empty($signature)) {
+                throw new \InvalidArgumentException('Missing Stripe signature header.');
+            }
+
+            $sigParts = [];
+            foreach (explode(',', $signature) as $item) {
+                $parts = explode('=', trim($item), 2);
+                if (count($parts) === 2) {
+                    $sigParts[$parts[0]][] = $parts[1];
+                }
+            }
+
+            if (!isset($sigParts['t']) || !isset($sigParts['v1'])) {
+                throw new \InvalidArgumentException('Malformed Stripe signature header.');
+            }
+
+            $timestamp = (int) $sigParts['t'][0];
+
+            // Replay attack protection (tolerance: 300 seconds / 5 minutes)
+            if (abs(time() - $timestamp) > 300) {
+                throw new \InvalidArgumentException('Webhook event timestamp expired (replay attack detected).');
+            }
+
+            $signedPayload = "{$timestamp}.{$payload}";
+            $expectedSignature = hash_hmac('sha256', $signedPayload, $this->webhookSecret);
+
+            $matched = false;
+            foreach ($sigParts['v1'] as $v1Sig) {
+                if (hash_equals($expectedSignature, $v1Sig)) {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if (!$matched) {
+                throw new \InvalidArgumentException('Invalid cryptographic signature.');
+            }
+        } elseif (app()->environment('production')) {
+            throw new Exception('Stripe webhook signing secret is not configured in production.');
+        }
+
         // Decode JSON payload
         $data = json_decode($payload, true);
         if (!$data || !isset($data['type'])) {
-            throw new \InvalidArgumentException('Invalid webhook payload.');
+            throw new \InvalidArgumentException('Invalid webhook payload structure.');
         }
 
         return $data;

@@ -54,10 +54,10 @@ class ReviewController extends BaseApiController
         $review = ProductReview::create([
             'product_id' => $productId,
             'user_id' => $user?->id,
-            'customer_name' => $validated['customer_name'],
+            'customer_name' => strip_tags(trim($validated['customer_name'])),
             'rating' => $validated['rating'],
-            'title' => $validated['title'] ?? null,
-            'comment' => $validated['comment'],
+            'title' => isset($validated['title']) ? strip_tags(trim($validated['title'])) : null,
+            'comment' => strip_tags(trim($validated['comment'])),
             'is_verified_purchase' => $isVerified,
             'status' => 'approved', // Auto-approve or queue for moderation
         ]);

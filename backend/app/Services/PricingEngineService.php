@@ -21,7 +21,8 @@ class PricingEngineService
 
         $subtotal = 0.00;
         foreach ($cart->items as $item) {
-            $subtotal += (float) $item->price * $item->quantity;
+            $unitPrice = $item->variant ? (float) $item->variant->price : (float) $item->price;
+            $subtotal += $unitPrice * $item->quantity;
         }
         $subtotal = round($subtotal, 2);
 

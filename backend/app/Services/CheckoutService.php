@@ -58,6 +58,19 @@ class CheckoutService
 
         // 3. Concurrency-Safe Stock Decrement and Order Creation Transaction
         return DB::transaction(function () use ($cart, $payload, $user, $idempotencyKey) {
+            // Pessimistic Locking: Acquire exclusive row lock on Discount if provided
+            $appliedDiscount = null;
+            if (!empty($payload['discount_code'])) {
+                $discountCode = strtoupper(trim($payload['discount_code']));
+                $appliedDiscount = Discount::where('code', $discountCode)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$appliedDiscount || !$appliedDiscount->isValid()) {
+                    throw new Exception("Discount code '{$discountCode}' is invalid, expired, or has reached its usage limit.");
+                }
+            }
+
             $pricing = $this->pricingEngine->calculate(
                 $cart,
                 $payload['discount_code'] ?? null,
@@ -102,9 +115,9 @@ class CheckoutService
                 }
             }
 
-            // Increment discount usage if applied
-            if (!empty($pricing['discount_code'])) {
-                Discount::where('code', $pricing['discount_code'])->increment('times_used');
+            // Increment discount usage atomically under lock
+            if ($appliedDiscount) {
+                $appliedDiscount->increment('times_used');
             }
 
             // 4. Create Immutable Order Snapshot
@@ -129,13 +142,15 @@ class CheckoutService
                 'notes' => $payload['notes'] ?? null,
             ]);
 
-            // 5. Create Immutable Order Items Snapshot
+            // 5. Create Immutable Order Items Snapshot with live variant price
             foreach ($cart->items as $cartItem) {
                 $variant = $lockedVariants->get($cartItem->product_variant_id);
                 $optionsSnapshot = $variant->optionValues->map(fn ($ov) => [
                     'option' => $ov->option?->name,
                     'value' => $ov->value,
                 ])->toArray();
+
+                $itemPrice = (float) $variant->price;
 
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -144,9 +159,9 @@ class CheckoutService
                     'product_title' => $variant->product->title,
                     'variant_title' => $variant->title,
                     'sku' => $variant->sku,
-                    'price' => $cartItem->price,
+                    'price' => $itemPrice,
                     'quantity' => $cartItem->quantity,
-                    'total' => round((float) $cartItem->price * $cartItem->quantity, 2),
+                    'total' => round($itemPrice * $cartItem->quantity, 2),
                     'options_snapshot' => $optionsSnapshot,
                 ]);
             }

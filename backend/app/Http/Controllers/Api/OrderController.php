@@ -30,16 +30,37 @@ class OrderController extends BaseApiController
     {
         $user = $request->user('sanctum');
 
-        $query = Order::where(function ($q) use ($identifier) {
-            $q->where('order_number', $identifier)
-                ->orWhere('id', $identifier);
-        })->with(['items.variant.product', 'items.product']);
+        // 1. Authenticated customer / admin lookup
+        if ($user) {
+            if ($user->isAdmin()) {
+                $order = Order::where(function ($q) use ($identifier) {
+                    $q->where('order_number', $identifier)->orWhere('id', $identifier);
+                })->with(['items.variant.product', 'items.product'])->firstOrFail();
+            } else {
+                $order = $user->orders()->where(function ($q) use ($identifier) {
+                    $q->where('order_number', $identifier)->orWhere('id', $identifier);
+                })->with(['items.variant.product', 'items.product'])->firstOrFail();
+            }
 
-        if ($user && !$user->isAdmin()) {
-            $query->where('user_id', $user->id);
+            return $this->success(new OrderResource($order));
         }
 
-        $order = $query->firstOrFail();
+        // 2. Guest order lookup: Requires matching order email and idempotency_key
+        $email = $request->input('email');
+        $idempotencyKey = $request->input('idempotency_key');
+
+        if (!$email || !$idempotencyKey) {
+            return $this->error('Authentication or guest verification credentials required to access order.', null, 401);
+        }
+
+        $order = Order::where(function ($q) use ($identifier) {
+            $q->where('order_number', $identifier)->orWhere('id', $identifier);
+        })
+            ->whereNull('user_id')
+            ->where('email', strtolower(trim($email)))
+            ->where('idempotency_key', $idempotencyKey)
+            ->with(['items.variant.product', 'items.product'])
+            ->firstOrFail();
 
         return $this->success(new OrderResource($order));
     }

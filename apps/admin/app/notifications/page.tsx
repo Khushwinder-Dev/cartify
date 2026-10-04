@@ -470,8 +470,11 @@ export default function AdminNotificationsPage() {
                       previewDevice === 'mobile' ? 'w-[320px] max-h-[480px]' : 'w-full max-h-[480px]'
                     } overflow-y-auto`}
                   >
-                    <div
-                      dangerouslySetInnerHTML={{ __html: editingTemplate.bodyHtml }}
+                    <iframe
+                      title="Notification Preview"
+                      srcDoc={editingTemplate.bodyHtml}
+                      sandbox=""
+                      className="w-full h-[460px] border-0"
                     />
                   </div>
                 </div>
