@@ -57,6 +57,28 @@ export default function Navbar() {
               </Link>
 
               <Link
+                href="/collections"
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  pathname.startsWith('/collections')
+                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Collections</span>
+              </Link>
+
+              <Link
+                href="/wishlist"
+                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                  pathname.startsWith('/wishlist')
+                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Wishlist</span>
+              </Link>
+
+              <Link
                 href="/orders"
                 className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
                   pathname.startsWith('/orders')

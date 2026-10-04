@@ -1,0 +1,238 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  LayoutDashboard,
+  Package,
+  Layers,
+  ShoppingBag,
+  FolderTree,
+  Boxes,
+  Tag,
+  Users,
+  MessageSquare,
+  ExternalLink,
+  LogOut,
+  ChevronDown,
+  Sparkles,
+  ShieldCheck,
+  Menu,
+  X,
+  Server,
+  Activity
+} from 'lucide-react';
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  badge?: string | number;
+  badgeColor?: string;
+}
+
+interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
+const navGroups: NavGroup[] = [
+  {
+    title: 'Overview',
+    items: [
+      { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    ],
+  },
+  {
+    title: 'Catalog',
+    items: [
+      { label: 'Products', href: '/products', icon: Package },
+      { label: 'Variant Matrix', href: '/products/new', icon: Layers, badge: 'New', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
+      { label: 'Categories', href: '/categories', icon: FolderTree },
+    ],
+  },
+  {
+    title: 'Operations',
+    items: [
+      { label: 'Orders', href: '/orders', icon: ShoppingBag, badge: 'Live', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
+      { label: 'Inventory', href: '/inventory', icon: Boxes, badge: 'Alerts', badgeColor: 'bg-amber-500/20 text-amber-400' },
+    ],
+  },
+  {
+    title: 'Marketing & Sales',
+    items: [
+      { label: 'Discounts', href: '/discounts', icon: Tag },
+      { label: 'Reviews', href: '/reviews', icon: MessageSquare },
+    ],
+  },
+  {
+    title: 'Audience',
+    items: [
+      { label: 'Customers CRM', href: '/customers', icon: Users },
+    ],
+  },
+];
+
+export default function AdminSidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // If on login page, do not render sidebar
+  if (pathname === '/login') {
+    return null;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    router.push('/login');
+  };
+
+  const NavContent = (
+    <div className="flex flex-col h-full bg-neutral-950 border-r border-neutral-800/80 text-neutral-300 w-64 select-none">
+      {/* Brand Header */}
+      <div className="p-5 border-b border-neutral-800/80 flex items-center justify-between">
+        <Link href="/dashboard" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold tracking-tight text-white text-base leading-none">
+                ATELIER
+              </span>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                PRO
+              </span>
+            </div>
+            <span className="text-[11px] text-neutral-500 font-medium">Merchant Studio</span>
+          </div>
+        </Link>
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="md:hidden text-neutral-400 hover:text-white"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Navigation Groups */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-neutral-800">
+        {navGroups.map((group) => (
+          <div key={group.title} className="space-y-1">
+            <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+              {group.title}
+            </p>
+            {group.items.map((item) => {
+              const Icon = item.icon;
+              const isActive =
+                item.href === '/dashboard'
+                  ? pathname === '/dashboard' || pathname === '/'
+                  : pathname.startsWith(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 font-semibold'
+                      : 'text-neutral-400 hover:text-white hover:bg-neutral-900/80'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-white' : 'text-neutral-500 group-hover:text-neutral-300'}`} />
+                    <span>{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
+                        isActive
+                          ? 'bg-white/20 text-white'
+                          : item.badgeColor || 'bg-neutral-800 text-neutral-400'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Footer Info & User */}
+      <div className="p-3 border-t border-neutral-800/80 bg-neutral-950/60 space-y-2">
+        {/* Switch to Storefront */}
+        <a
+          href="http://localhost:3000"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs text-neutral-400 hover:text-white bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-800/60 transition group"
+        >
+          <div className="flex items-center gap-2">
+            <Activity className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Storefront (Port 3000)</span>
+          </div>
+          <ExternalLink className="w-3 h-3 text-neutral-500 group-hover:text-white transition-colors" />
+        </a>
+
+        {/* User Card */}
+        <div className="flex items-center justify-between p-2 rounded-xl bg-neutral-900/40 border border-neutral-800/40">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow">
+              AD
+            </div>
+            <div className="text-left text-xs leading-tight">
+              <p className="font-semibold text-white">Merchant Admin</p>
+              <p className="text-[10px] text-neutral-500">Sanctum RBAC</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            title="Sign Out"
+            className="p-1.5 text-neutral-500 hover:text-rose-400 hover:bg-rose-950/30 rounded-lg transition"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Fixed Left Sidebar */}
+      <aside className="hidden md:flex flex-col fixed inset-y-0 left-0 z-40 w-64">
+        {NavContent}
+      </aside>
+
+      {/* Mobile Hamburger Trigger */}
+      <div className="md:hidden fixed top-3 left-3 z-50">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 rounded-xl bg-neutral-900 text-white border border-neutral-800 shadow-xl"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Mobile Slide-in Drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="relative z-10 w-64 h-full">
+            {NavContent}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

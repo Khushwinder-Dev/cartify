@@ -62,18 +62,33 @@ export default function AdminHeader() {
             </p>
           </div>
 
-          <nav className="hidden lg:flex items-center space-x-1 pl-6 text-xs font-semibold text-neutral-400">
-            <Link href="/dashboard" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+          <nav className="hidden xl:flex items-center space-x-1 pl-4 text-xs font-semibold text-neutral-400">
+            <Link href="/dashboard" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
               Dashboard
             </Link>
-            <Link href="/products" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+            <Link href="/products" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
               Products
             </Link>
-            <Link href="/products/new" className="px-3 py-1.5 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-neutral-800 transition">
-              + New Matrix
+            <Link href="/products/new" className="px-2.5 py-1.5 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-neutral-800 transition">
+              + Matrix
             </Link>
-            <Link href="/orders" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+            <Link href="/categories" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Categories
+            </Link>
+            <Link href="/inventory" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Inventory
+            </Link>
+            <Link href="/orders" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
               Orders
+            </Link>
+            <Link href="/discounts" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Discounts
+            </Link>
+            <Link href="/customers" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Customers
+            </Link>
+            <Link href="/reviews" className="px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800 transition">
+              Reviews
             </Link>
           </nav>
         </div>
