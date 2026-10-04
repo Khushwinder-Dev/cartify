@@ -423,13 +423,12 @@ export default function Navbar() {
                 >
                   <Link
                     href={cat.href}
-                    className={`relative py-7 text-sm font-semibold tracking-wide transition-colors ${
-                      cat.isAccent
-                        ? 'text-rose-600 hover:text-rose-700'
-                        : isActive
+                    className={`relative py-7 text-sm font-semibold tracking-wide transition-colors ${cat.isAccent
+                      ? 'text-rose-600 hover:text-rose-700'
+                      : isActive
                         ? 'text-neutral-950'
                         : 'text-neutral-700 hover:text-neutral-950'
-                    }`}
+                      }`}
                   >
                     <span>{cat.label}</span>
                     {/* Active Underline Highlight matching the reference image */}
@@ -482,7 +481,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link
-                href="/auth/login"
+                href="/login"
                 className="p-2 hover:text-black transition cursor-pointer text-neutral-700"
                 aria-label="Account Login"
                 title="Sign In"
@@ -659,9 +658,8 @@ export default function Navbar() {
                       </span>
                       {cat.megaMenu && (
                         <ChevronDown
-                          className={`w-4 h-4 text-neutral-400 transition-transform ${
-                            isExpanded ? 'rotate-180' : ''
-                          }`}
+                          className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''
+                            }`}
                         />
                       )}
                     </button>
@@ -762,7 +760,7 @@ export default function Navbar() {
                 </div>
               ) : (
                 <Link
-                  href="/auth/login"
+                  href="/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
                 >
