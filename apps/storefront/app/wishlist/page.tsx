@@ -12,6 +12,7 @@ import {
   Package
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { formatPrice } from '@/lib/currency';
 
 interface WishlistItem {
   id: number;
@@ -185,7 +186,7 @@ export default function WishlistPage() {
                       <p className="text-xs text-stone-500 mb-3">
                         {item.product.variants?.[0]?.title || 'Standard Edition'}
                       </p>
-                      <p className="text-sm font-bold text-stone-900">${price.toFixed(2)}</p>
+                      <p className="text-sm font-bold text-stone-900">{formatPrice(price)}</p>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-stone-100 flex gap-3">

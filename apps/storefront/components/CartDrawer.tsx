@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { X, Trash2, Plus, Minus, ArrowRight, Tag, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { api } from '@/lib/api';
+import { formatPrice } from '@/lib/currency';
 
 export default function CartDrawer() {
   const { cart, isCartOpen, closeCart, updateQuantity, removeItem, openCheckout } = useCart();
@@ -16,9 +17,9 @@ export default function CartDrawer() {
 
   const subtotal = cart?.subtotal || 0;
   const discountAmount = appliedDiscount?.amount || 0;
-  const freeShippingThreshold = 100;
+  const freeShippingThreshold = 999;
   const progressToFreeShipping = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
-  const estimatedShipping = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 10;
+  const estimatedShipping = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 99;
   const estimatedTotal = Math.max(0, subtotal - discountAmount + estimatedShipping);
 
   const handleApplyDiscount = async (e: React.FormEvent) => {
@@ -79,7 +80,7 @@ export default function CartDrawer() {
                   </span>
                 ) : (
                   <span>
-                    Add <strong className="text-neutral-900 dark:text-white">${(freeShippingThreshold - subtotal).toFixed(2)}</strong> more for Free Shipping
+                    Add <strong className="text-neutral-900 dark:text-white">{formatPrice(freeShippingThreshold - subtotal)}</strong> more for Free Shipping
                   </span>
                 )}
               </span>
@@ -160,7 +161,7 @@ export default function CartDrawer() {
 
                       <div className="flex items-center space-x-3">
                         <span className="text-sm font-bold text-neutral-900 dark:text-white">
-                          ${item.total.toFixed(2)}
+                          {formatPrice(item.total)}
                         </span>
                         <button
                           onClick={() => removeItem(item.id)}
@@ -206,7 +207,7 @@ export default function CartDrawer() {
                   <span className="flex items-center gap-1 font-semibold">
                     <Tag className="w-3.5 h-3.5" /> Coupon: {appliedDiscount.code}
                   </span>
-                  <span>-${appliedDiscount.amount.toFixed(2)}</span>
+                  <span>-{formatPrice(appliedDiscount.amount)}</span>
                 </div>
               )}
 
@@ -216,22 +217,22 @@ export default function CartDrawer() {
               <div className="space-y-1.5 text-xs text-neutral-600 dark:text-neutral-400">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                  <span className="font-semibold text-neutral-900 dark:text-white">{formatPrice(subtotal)}</span>
                 </div>
                 {appliedDiscount && (
                   <div className="flex justify-between text-emerald-600">
                     <span>Discount</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                    <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Estimated Shipping</span>
-                  <span>{estimatedShipping === 0 ? <strong className="text-emerald-600">FREE</strong> : `$${estimatedShipping.toFixed(2)}`}</span>
+                  <span>{estimatedShipping === 0 ? <strong className="text-emerald-600">FREE</strong> : formatPrice(estimatedShipping)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-neutral-950 dark:text-white pt-2 border-t border-neutral-200 dark:border-neutral-800">
                   <span>Estimated Total</span>
                   <span className="text-indigo-600 dark:text-indigo-400 text-base">
-                    ${estimatedTotal.toFixed(2)}
+                    {formatPrice(estimatedTotal)}
                   </span>
                 </div>
               </div>

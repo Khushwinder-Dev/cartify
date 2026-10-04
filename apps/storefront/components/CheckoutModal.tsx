@@ -5,19 +5,20 @@ import { X, CheckCircle2, Lock, CreditCard, Shield, Truck, Sparkles } from 'luci
 import { useCart } from '@/context/CartContext';
 import { api } from '@/lib/api';
 import { Order } from '@/lib/types';
+import { formatPrice } from '@/lib/currency';
 
 export default function CheckoutModal() {
   const { cart, isCheckoutOpen, closeCheckout, cartToken, refreshCart } = useCart();
 
   const [formData, setFormData] = useState({
-    email: 'eleanor.vance@example.com',
-    customer_name: 'Eleanor Vance',
-    phone: '+1 (555) 987-6543',
-    address_line1: '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'OR',
-    postal_code: '97477',
-    country: 'US',
+    email: 'khushwinder@example.com',
+    customer_name: 'Khushwinder Singh',
+    phone: '+91 98765 43210',
+    address_line1: 'B-402, Green Avenue, Sector 62',
+    city: 'Noida',
+    state: 'UP',
+    postal_code: '201301',
+    country: 'IN',
     shipping_rate: 'standard',
     discount_code: 'WELCOME10',
     card_number: '4242 •••• •••• 4242',
@@ -131,7 +132,7 @@ export default function CheckoutModal() {
                 <div className="flex justify-between text-xs pt-2 border-t border-neutral-200 dark:border-neutral-800 font-bold">
                   <span className="text-neutral-900 dark:text-white">Total Charged</span>
                   <span className="text-base text-neutral-900 dark:text-white">
-                    ${Number(completedOrder.grand_total).toFixed(2)} {completedOrder.currency}
+                    {formatPrice(completedOrder.grand_total)}
                   </span>
                 </div>
               </div>
@@ -287,7 +288,7 @@ export default function CheckoutModal() {
                     Executing Atomic Checkout...
                   </span>
                 ) : (
-                  <span>Complete Purchase • ${Number(cart?.subtotal || 0).toFixed(2)}</span>
+                  <span>Complete Purchase • {formatPrice(cart?.subtotal || 0)}</span>
                 )}
               </button>
             </form>

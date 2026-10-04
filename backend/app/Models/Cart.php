@@ -27,12 +27,12 @@ class Cart extends Model
         });
     }
 
-    public static function createWithToken(?int $userId = null, string $currency = 'USD'): self
+    public static function createWithToken(?int $userId = null, ?string $currency = null): self
     {
         return self::create([
             'token' => (string) Str::uuid(),
             'user_id' => $userId,
-            'currency' => $currency,
+            'currency' => $currency ?? config('app.currency', 'INR'),
         ]);
     }
 

@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Package
 } from 'lucide-react';
+import { formatPrice } from '@/lib/currency';
 
 interface OrderItem {
   id: string;
@@ -275,7 +276,7 @@ export default function AdminOrdersPage() {
                       </div>
                     </td>
                     <td className="py-3.5 px-4 font-bold text-white">
-                      ${order.grand_total.toFixed(2)}
+                      {formatPrice(order.grand_total)}
                       <span className="block text-[11px] text-neutral-500 font-normal">
                         {order.items_count} items
                       </span>

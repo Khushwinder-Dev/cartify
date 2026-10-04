@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { Product, ProductVariant } from '@/lib/types';
+import { formatPrice } from '@/lib/currency';
 import { useCart } from '@/context/CartContext';
 
 // Color map for realistic option color swatches
@@ -478,15 +479,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Price & Savings Pill */}
               <div className="mt-3 flex items-baseline space-x-3">
                 <span className="text-3xl font-black text-neutral-950 dark:text-white">
-                  ${currentPrice.toFixed(2)}
+                  {formatPrice(currentPrice)}
                 </span>
                 {compareAtPrice && compareAtPrice > currentPrice && (
                   <>
                     <span className="text-lg line-through text-neutral-400">
-                      ${compareAtPrice.toFixed(2)}
+                      {formatPrice(compareAtPrice)}
                     </span>
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400">
-                      Save ${savingsAmount.toFixed(2)} ({savingsPercent}% OFF)
+                      Save {formatPrice(savingsAmount)} ({savingsPercent}% OFF)
                     </span>
                   </>
                 )}
@@ -632,7 +633,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 className="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-600 text-white font-extrabold rounded-2xl shadow-xl shadow-indigo-600/25 hover:opacity-95 disabled:opacity-50 transition-all flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-current" />
-                <span>Instant Checkout • ${(currentPrice * quantity).toFixed(2)}</span>
+                <span>Instant Checkout • {formatPrice(currentPrice * quantity)}</span>
               </button>
 
               {/* Guarantee Value Props */}

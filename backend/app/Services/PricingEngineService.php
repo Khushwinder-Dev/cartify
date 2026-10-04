@@ -82,7 +82,7 @@ class PricingEngineService
             'tax_total' => $taxTotal,
             'shipping_total' => $shippingTotal,
             'grand_total' => $grandTotal,
-            'currency' => $cart->currency ?: 'USD',
+            'currency' => $cart->currency ?: config('app.currency', 'INR'),
         ];
     }
 }

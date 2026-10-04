@@ -24,20 +24,22 @@ class CartController extends BaseApiController
     {
         $user = $request->user('sanctum');
 
+        $currency = config('app.currency', 'INR');
+
         if ($user) {
             $cart = Cart::firstOrCreate(
                 ['user_id' => $user->id],
-                ['token' => (string) Str::uuid(), 'currency' => 'USD']
+                ['token' => (string) Str::uuid(), 'currency' => $currency]
             );
         } else {
             $token = $request->header('X-Cart-Token') ?? $request->input('cart_token');
             if ($token) {
                 $cart = Cart::firstOrCreate(
                     ['token' => $token],
-                    ['currency' => 'USD']
+                    ['currency' => $currency]
                 );
             } else {
-                $cart = Cart::createWithToken(null, 'USD');
+                $cart = Cart::createWithToken(null, $currency);
             }
         }
 
@@ -145,7 +147,7 @@ class CartController extends BaseApiController
             return $this->error('Guest cart not found', null, 404);
         }
 
-        $userCart = Cart::firstOrCreate(['user_id' => $user->id], ['currency' => 'USD']);
+        $userCart = Cart::firstOrCreate(['user_id' => $user->id], ['currency' => config('app.currency', 'INR')]);
         $userCart->mergeGuestCart($guestCart);
 
         return $this->success(

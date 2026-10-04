@@ -32,7 +32,7 @@ class AuthController extends BaseApiController
         $token = $user->createToken('auth-token')->plainTextToken;
 
         // Auto create cart for user
-        Cart::firstOrCreate(['user_id' => $user->id], ['currency' => 'USD']);
+        Cart::firstOrCreate(['user_id' => $user->id], ['currency' => config('app.currency', 'INR')]);
 
         return $this->success([
             'user' => new UserResource($user),
@@ -63,7 +63,7 @@ class AuthController extends BaseApiController
         if (!empty($validated['guest_cart_token'])) {
             $guestCart = Cart::where('token', $validated['guest_cart_token'])->first();
             if ($guestCart) {
-                $userCart = Cart::firstOrCreate(['user_id' => $user->id], ['currency' => 'USD']);
+                $userCart = Cart::firstOrCreate(['user_id' => $user->id], ['currency' => config('app.currency', 'INR')]);
                 $userCart->mergeGuestCart($guestCart);
             }
         }

@@ -40,7 +40,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-xs font-bold text-neutral-900 uppercase tracking-wider">Free Shipping</p>
-                <p className="text-[11px] text-neutral-500">On all orders over $75</p>
+                <p className="text-[11px] text-neutral-500">On all orders over ₹999</p>
               </div>
             </div>
 
@@ -244,7 +244,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-neutral-600 font-medium">USD ($)</span>
+            <span className="text-neutral-600 font-medium">India (INR ₹)</span>
             <span>•</span>
             <a
               href="https://cartify-dashboard.vercel.app"

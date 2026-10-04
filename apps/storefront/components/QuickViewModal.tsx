@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { X, ShoppingBag, Check, ArrowRight, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Product, ProductVariant } from '@/lib/types';
 import { useCart } from '@/context/CartContext';
+import { formatPrice } from '@/lib/currency';
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -113,11 +114,11 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
               <div className="mt-3 flex items-baseline space-x-3">
                 <span className="text-2xl font-black text-neutral-950 dark:text-white">
-                  ${currentPrice.toFixed(2)}
+                  {formatPrice(currentPrice)}
                 </span>
                 {compareAtPrice && compareAtPrice > currentPrice && (
                   <span className="text-sm line-through text-neutral-400">
-                    ${compareAtPrice.toFixed(2)}
+                    {formatPrice(compareAtPrice)}
                   </span>
                 )}
                 {isOutOfStock ? (
