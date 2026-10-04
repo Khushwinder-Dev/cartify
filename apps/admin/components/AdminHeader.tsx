@@ -51,7 +51,7 @@ export default function AdminHeader() {
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-extrabold tracking-tight text-lg text-white">
-                ATELIER
+                CARTIFY
               </span>
               <span className="text-[10px] font-black tracking-wider uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">
                 ADMIN STUDIO

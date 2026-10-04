@@ -27,6 +27,14 @@ class AdminAnalyticsController extends BaseApiController
 
         $recentOrders = Order::latest()->limit(5)->get();
 
+        $recentCustomers = User::where('role', 'customer')
+            ->withCount('orders')
+            ->withSum(['orders as lifetime_spend' => fn ($q) => $q->where('financial_status', 'paid')], 'grand_total')
+            ->with('defaultAddress')
+            ->latest('id')
+            ->limit(10)
+            ->get();
+
         return $this->success([
             'metrics' => [
                 'total_sales' => $totalSales,
@@ -37,6 +45,7 @@ class AdminAnalyticsController extends BaseApiController
             ],
             'low_stock_alerts' => $lowStockVariants,
             'recent_orders' => $recentOrders,
+            'recent_customers' => $recentCustomers,
         ]);
     }
 }

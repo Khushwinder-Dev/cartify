@@ -12,6 +12,7 @@ import {
   Boxes,
   Tag,
   Users,
+  UserPlus,
   MessageSquare,
   ExternalLink,
   LogOut,
@@ -47,18 +48,25 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    title: 'Customers',
+    items: [
+      { label: 'All Customers', href: '/customers', icon: Users, badge: 'CRM', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
+      { label: 'Add Customer', href: '/customers?action=new', icon: UserPlus },
+    ],
+  },
+  {
     title: 'Catalog',
     items: [
       { label: 'Products', href: '/products', icon: Package },
       { label: 'Variant Matrix', href: '/products/new', icon: Layers, badge: 'New', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
       { label: 'Categories', href: '/categories', icon: FolderTree },
+      { label: 'Inventory', href: '/inventory', icon: Boxes, badge: 'Alerts', badgeColor: 'bg-amber-500/20 text-amber-400' },
     ],
   },
   {
     title: 'Operations',
     items: [
       { label: 'Orders', href: '/orders', icon: ShoppingBag, badge: 'Live', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
-      { label: 'Inventory', href: '/inventory', icon: Boxes, badge: 'Alerts', badgeColor: 'bg-amber-500/20 text-amber-400' },
       { label: 'Shipping & Delivery', href: '/shipping', icon: Truck },
       { label: 'Payment Gateways', href: '/payments', icon: CreditCard },
     ],
@@ -68,12 +76,6 @@ const navGroups: NavGroup[] = [
     items: [
       { label: 'Discounts', href: '/discounts', icon: Tag },
       { label: 'Reviews', href: '/reviews', icon: MessageSquare },
-    ],
-  },
-  {
-    title: 'Audience',
-    items: [
-      { label: 'Customers CRM', href: '/customers', icon: Users },
     ],
   },
 ];
@@ -170,16 +172,23 @@ export default function AdminSidebar() {
             </p>
             {group.items.map((item) => {
               const Icon = item.icon;
-              const isActive =
-                item.href === '/dashboard'
-                  ? pathname === '/dashboard' || pathname === '/'
-                  : pathname.startsWith(item.href);
+              const isDashboard = item.href === '/dashboard';
+              const basePath = item.href.split('?')[0];
+              const isActionNew = item.href.includes('action=new');
+              const isActive = isDashboard
+                ? pathname === '/dashboard' || pathname === '/'
+                : !isActionNew && pathname === basePath;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    if (isActionNew && typeof window !== 'undefined') {
+                      window.dispatchEvent(new CustomEvent('open-add-customer'));
+                    }
+                  }}
                   className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group ${
                     isActive
                       ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 font-semibold'

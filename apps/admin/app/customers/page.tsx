@@ -99,10 +99,6 @@ export default function AdminCustomersPage() {
     }
   };
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
   const handleOpenAdd = () => {
     setEditingCustomer(null);
     setFormData({
@@ -118,6 +114,30 @@ export default function AdminCustomersPage() {
     });
     setIsAddModalOpen(true);
   };
+
+  const handleCloseModal = () => {
+    setIsAddModalOpen(false);
+    if (typeof window !== 'undefined' && window.location.search.includes('action=new')) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('action');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('action') === 'new') {
+        handleOpenAdd();
+      }
+      const handleCustomOpen = () => handleOpenAdd();
+      window.addEventListener('open-add-customer', handleCustomOpen);
+      return () => {
+        window.removeEventListener('open-add-customer', handleCustomOpen);
+      };
+    }
+  }, []);
 
   const handleOpenEdit = (c: Customer) => {
     setEditingCustomer(c);
@@ -187,7 +207,7 @@ export default function AdminCustomersPage() {
 
       setSuccessMsg(editingCustomer ? 'Customer profile updated' : 'Customer created successfully');
       setTimeout(() => setSuccessMsg(null), 3000);
-      setIsAddModalOpen(false);
+      handleCloseModal();
       fetchCustomers();
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to save customer');
@@ -398,7 +418,7 @@ export default function AdminCustomersPage() {
                 <span>{editingCustomer ? 'Edit Customer Profile' : 'New Customer Account'}</span>
               </h3>
               <button
-                onClick={() => setIsAddModalOpen(false)}
+                onClick={handleCloseModal}
                 className="p-1.5 rounded-lg hover:bg-neutral-800 text-neutral-400 hover:text-white transition"
               >
                 <X className="w-4 h-4" />
@@ -510,7 +530,7 @@ export default function AdminCustomersPage() {
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-800">
                 <button
                   type="button"
-                  onClick={() => setIsAddModalOpen(false)}
+                  onClick={handleCloseModal}
                   className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-semibold transition"
                 >
                   Cancel
