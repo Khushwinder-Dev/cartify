@@ -123,40 +123,7 @@ export default function AdminReviewsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
-      <header className="border-b border-neutral-800 bg-neutral-900/60 backdrop-blur sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2.5 font-bold tracking-tight text-white text-lg">
-              <span className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm font-black shadow-md shadow-indigo-500/20">
-                EP
-              </span>
-              <span>Merchant Admin</span>
-            </div>
-            <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-neutral-400">
-              <Link href="/dashboard" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition">
-                Dashboard
-              </Link>
-              <Link href="/products" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition">
-                Products
-              </Link>
-              <Link href="/orders" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition">
-                Orders
-              </Link>
-              <Link href="/discounts" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition">
-                Discounts
-              </Link>
-              <Link href="/inventory" className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition">
-                Inventory
-              </Link>
-              <Link href="/reviews" className="px-3 py-1.5 rounded-lg text-white bg-neutral-800">
-                Reviews
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-full bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-20">
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
