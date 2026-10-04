@@ -137,7 +137,7 @@ export default function LuxuryStorefrontHomePage() {
   const categories = ['All', 'Tops', 'Outerwear', 'Bottoms', 'Knitwear', 'Accessories'];
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 selection:bg-neutral-950 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-[#09090b] text-neutral-900 dark:text-neutral-100 selection:bg-neutral-950 dark:selection:bg-white selection:text-white dark:selection:text-neutral-950 transition-colors duration-200">
       {/* 1. Full-Bleed Editorial Hero Carousel */}
       <HeroCarousel />
 
@@ -148,26 +148,26 @@ export default function LuxuryStorefrontHomePage() {
       <section id="catalog" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-neutral-500 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-neutral-950" />
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-neutral-500 dark:text-zinc-400 mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-neutral-950 dark:text-white" />
               <span>Curated Selection</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 tracking-tight font-serif">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight font-serif">
               Seasonal Releases &amp; Drops
             </h2>
-            <p className="text-sm text-neutral-500 mt-1 max-w-xl">
+            <p className="text-sm text-neutral-500 dark:text-zinc-400 mt-1 max-w-xl">
               Precision-cut tailoring, high-density cotton fleece, and Japanese selvedge denim built to withstand daily rotation.
             </p>
           </div>
 
           {/* Luxury Tabbed Switcher */}
-          <div className="inline-flex p-1.5 rounded-2xl bg-neutral-100 border border-neutral-200/80 self-start md:self-auto">
+          <div className="inline-flex p-1.5 rounded-2xl bg-neutral-100 dark:bg-zinc-900 border border-neutral-200/80 dark:border-zinc-800 self-start md:self-auto">
             <button
               onClick={() => setActiveTab('trending')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'trending'
-                  ? 'bg-neutral-950 text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-950'
+                  ? 'bg-neutral-950 text-white dark:bg-zinc-100 dark:text-zinc-950 shadow-sm'
+                  : 'text-neutral-600 dark:text-zinc-400 hover:text-neutral-950 dark:hover:text-white'
               }`}
             >
               <Flame className="w-3.5 h-3.5" />
@@ -178,8 +178,8 @@ export default function LuxuryStorefrontHomePage() {
               onClick={() => setActiveTab('new')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'new'
-                  ? 'bg-neutral-950 text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-950'
+                  ? 'bg-neutral-950 text-white dark:bg-zinc-100 dark:text-zinc-950 shadow-sm'
+                  : 'text-neutral-600 dark:text-zinc-400 hover:text-neutral-950 dark:hover:text-white'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -190,8 +190,8 @@ export default function LuxuryStorefrontHomePage() {
               onClick={() => setActiveTab('essentials')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'essentials'
-                  ? 'bg-neutral-950 text-white shadow-sm'
-                  : 'text-neutral-600 hover:text-neutral-950'
+                  ? 'bg-neutral-950 text-white dark:bg-zinc-100 dark:text-zinc-950 shadow-sm'
+                  : 'text-neutral-600 dark:text-zinc-400 hover:text-neutral-950 dark:hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -208,14 +208,14 @@ export default function LuxuryStorefrontHomePage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-neutral-950 text-white shadow-xs'
-                  : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700'
+                  ? 'bg-neutral-950 text-white dark:bg-zinc-100 dark:text-zinc-950 shadow-xs'
+                  : 'bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-zinc-800 text-neutral-700 dark:text-zinc-300'
               }`}
             >
               {cat}
             </button>
           ))}
-          <span className="text-xs text-neutral-400 ml-auto hidden sm:block">
+          <span className="text-xs text-neutral-400 dark:text-zinc-500 ml-auto hidden sm:block">
             Showing {filteredItems.length} curated pieces
           </span>
         </div>

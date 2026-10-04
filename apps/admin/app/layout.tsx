@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
 import AdminShell from '@/components/AdminShell';
 
@@ -25,11 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}>
-      <body className="min-h-full bg-neutral-950 text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white">
-        <AdminAuthGuard>
-          <AdminShell>{children}</AdminShell>
-        </AdminAuthGuard>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+        <ThemeProvider>
+          <AdminAuthGuard>
+            <AdminShell>{children}</AdminShell>
+          </AdminAuthGuard>
+        </ThemeProvider>
       </body>
     </html>
   );

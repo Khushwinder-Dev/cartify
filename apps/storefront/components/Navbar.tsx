@@ -22,6 +22,7 @@ import {
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import SearchDialog from './SearchDialog';
+import ThemeToggle from './ThemeToggle';
 
 interface MegaMenuLink {
   label: string;
@@ -474,9 +475,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* 2. Main Navigation Bar (Clean Crisp White Sticky Header) */}
+      {/* 2. Main Navigation Bar (Clean Crisp White Sticky Header with Dark Mode) */}
       <header
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-neutral-200/90 shadow-xs transition-colors"
+        className="sticky top-0 z-40 w-full bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-b border-neutral-200/90 dark:border-zinc-800/80 shadow-xs transition-colors"
         onMouseLeave={handleMouseLeave}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
@@ -484,14 +485,14 @@ export default function Navbar() {
           <div className="flex items-center gap-6 lg:gap-10 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-neutral-900 hover:text-black cursor-pointer"
+              className="lg:hidden p-2 text-neutral-900 dark:text-zinc-100 hover:text-black dark:hover:text-white cursor-pointer"
               aria-label="Open mobile menu"
             >
               <Menu className="w-6 h-6" />
             </button>
 
             <Link href="/" className="flex items-center group shrink-0">
-              <span className="font-extrabold tracking-[0.22em] text-xl sm:text-2xl text-neutral-950 font-sans uppercase">
+              <span className="font-extrabold tracking-[0.22em] text-xl sm:text-2xl text-neutral-950 dark:text-white font-sans uppercase">
                 CARTIFY
               </span>
             </Link>
@@ -513,14 +514,14 @@ export default function Navbar() {
                       cat.isAccent
                         ? 'text-rose-600 hover:text-rose-700 font-semibold'
                         : isActive
-                        ? 'text-neutral-950 font-semibold'
-                        : 'text-neutral-700 hover:text-neutral-950 font-medium'
+                        ? 'text-neutral-950 dark:text-white font-semibold'
+                        : 'text-neutral-700 dark:text-zinc-300 hover:text-neutral-950 dark:hover:text-white font-medium'
                     }`}
                   >
                     <span>{cat.label}</span>
                     {/* Active Underline Pill */}
                     {isActive && (
-                      <span className="absolute bottom-0 inset-x-0 h-[2px] bg-neutral-950 animate-in fade-in duration-150" />
+                      <span className="absolute bottom-0 inset-x-0 h-[2px] bg-neutral-950 dark:bg-white animate-in fade-in duration-150" />
                     )}
                   </Link>
                 </div>
@@ -529,9 +530,9 @@ export default function Navbar() {
           </nav>
 
           {/* Right: Utility Links & Icons */}
-          <div className="flex items-center gap-3 sm:gap-3.5 text-neutral-800 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 text-neutral-800 dark:text-zinc-200 shrink-0">
             {/* Region / Currency Pill */}
-            <div className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-neutral-100/90 border border-neutral-200/80 text-neutral-800 whitespace-nowrap shrink-0 shadow-2xs">
+            <div className="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-neutral-100/90 dark:bg-zinc-900 border border-neutral-200/80 dark:border-zinc-800 text-neutral-800 dark:text-zinc-200 whitespace-nowrap shrink-0 shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span className="whitespace-nowrap">India (₹)</span>
             </div>
@@ -539,20 +540,23 @@ export default function Navbar() {
             {/* Live Search Trigger (Cmd+K) */}
             <button
               onClick={() => setIsSearchDialogOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-neutral-600 bg-neutral-100 hover:bg-neutral-200 transition cursor-pointer whitespace-nowrap shrink-0"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-neutral-600 dark:text-zinc-400 bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-zinc-800 border border-transparent dark:border-zinc-800 transition cursor-pointer whitespace-nowrap shrink-0"
               aria-label="Search Catalog"
             >
-              <Search className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
+              <Search className="w-3.5 h-3.5 text-neutral-500 dark:text-zinc-400 shrink-0" />
               <span className="hidden sm:inline font-medium">Search...</span>
-              <kbd className="hidden lg:inline text-[10px] font-mono px-1 rounded bg-white text-neutral-400 border border-neutral-200 shadow-2xs">
+              <kbd className="hidden lg:inline text-[10px] font-mono px-1 rounded bg-white dark:bg-zinc-800 text-neutral-400 dark:text-zinc-400 border border-neutral-200 dark:border-zinc-700 shadow-2xs">
                 ⌘K
               </kbd>
             </button>
 
+            {/* Theme Toggle (Light / Dark / System) */}
+            <ThemeToggle />
+
             {/* Wishlist Link */}
             <Link
               href="/wishlist"
-              className="p-2 hover:text-black transition cursor-pointer text-neutral-700 relative"
+              className="p-2 hover:text-black dark:hover:text-white transition cursor-pointer text-neutral-700 dark:text-zinc-300 relative"
               aria-label="View Wishlist"
               title="Saved Items"
             >
@@ -564,9 +568,9 @@ export default function Navbar() {
               <div className="relative group">
                 <Link
                   href="/account"
-                  className="flex items-center gap-1.5 p-1 text-xs font-semibold text-neutral-800 hover:text-black"
+                  className="flex items-center gap-1.5 p-1 text-xs font-semibold text-neutral-800 dark:text-zinc-200 hover:text-black dark:hover:text-white"
                 >
-                  <div className="w-7 h-7 rounded-full bg-neutral-950 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  <div className="w-7 h-7 rounded-full bg-neutral-950 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center text-[10px] font-bold shadow-xs">
                     {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                 </Link>
@@ -574,7 +578,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="p-2 hover:text-black transition cursor-pointer text-neutral-700"
+                className="p-2 hover:text-black dark:hover:text-white transition cursor-pointer text-neutral-700 dark:text-zinc-300"
                 aria-label="Account Login"
                 title="Sign In"
               >
@@ -585,13 +589,13 @@ export default function Navbar() {
             {/* Shopping Bag Icon with Count Badge */}
             <button
               onClick={openCart}
-              className="relative p-2 hover:text-black transition cursor-pointer text-neutral-700"
+              className="relative p-2 hover:text-black dark:hover:text-white transition cursor-pointer text-neutral-700 dark:text-zinc-300"
               aria-label="Cart Bag"
               title="View Cart"
             >
               <ShoppingBag className="w-5 h-5 stroke-[1.75]" />
               {cart && cart.items_count > 0 && (
-                <span className="absolute top-0 right-0 bg-neutral-950 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute top-0 right-0 bg-neutral-950 dark:bg-white text-white dark:text-zinc-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {cart.items_count}
                 </span>
               )}
@@ -602,7 +606,7 @@ export default function Navbar() {
         {/* 3. Ultra-Premium Full-Width Mega Menu Dropdown */}
         {activeCategory?.megaMenu && (
           <div
-            className="hidden lg:block absolute left-0 right-0 top-full bg-white/98 backdrop-blur-2xl border-b border-neutral-200 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.12)] z-40 transition-all duration-300 animate-in fade-in-0 slide-in-from-top-1.5"
+            className="hidden lg:block absolute left-0 right-0 top-full bg-white/98 dark:bg-zinc-950/98 backdrop-blur-2xl border-b border-neutral-200 dark:border-zinc-800 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.12)] z-40 transition-all duration-300 animate-in fade-in-0 slide-in-from-top-1.5"
             onMouseEnter={() => {
               if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
             }}
@@ -610,20 +614,20 @@ export default function Navbar() {
           >
             <div className="max-w-7xl mx-auto px-8 py-10">
               {/* Category Header Strip */}
-              <div className="flex items-center justify-between pb-6 mb-8 border-b border-neutral-100">
+              <div className="flex items-center justify-between pb-6 mb-8 border-b border-neutral-100 dark:border-zinc-800/80">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400">
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400 dark:text-zinc-500">
                     {activeCategory.megaMenu.eyebrow || 'CARTIFY ATELIER'}
                   </span>
-                  <span className="text-neutral-300">•</span>
-                  <h3 className="text-lg font-bold text-neutral-950 tracking-tight">
+                  <span className="text-neutral-300 dark:text-zinc-700">•</span>
+                  <h3 className="text-lg font-bold text-neutral-950 dark:text-white tracking-tight">
                     {activeCategory.megaMenu.mainHeading}
                   </h3>
                 </div>
 
                 <Link
                   href={activeCategory.megaMenu.mainLinkHref}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-900 hover:text-neutral-600 transition group"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-zinc-200 hover:text-neutral-600 dark:hover:text-white transition group"
                 >
                   <span>{activeCategory.megaMenu.mainLinkText}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -636,10 +640,10 @@ export default function Navbar() {
                 <div className="col-span-7 grid grid-cols-3 gap-8">
                   {activeCategory.megaMenu.columns.map((col, idx) => (
                     <div key={idx} className="space-y-4">
-                      <div className="pb-2 border-b border-neutral-200">
+                      <div className="pb-2 border-b border-neutral-200 dark:border-zinc-800">
                         <Link
                           href={col.href}
-                          className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-950 hover:text-neutral-600 transition block"
+                          className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-950 dark:text-white hover:text-neutral-600 dark:hover:text-zinc-300 transition block"
                         >
                           {col.title}
                         </Link>
@@ -650,7 +654,7 @@ export default function Navbar() {
                           <li key={lIdx}>
                             <Link
                               href={link.href}
-                              className="group flex items-center justify-between text-xs text-neutral-600 hover:text-neutral-950 transition-all py-0.5"
+                              className="group flex items-center justify-between text-xs text-neutral-600 dark:text-zinc-400 hover:text-neutral-950 dark:hover:text-white transition-all py-0.5"
                             >
                               <span className="font-medium group-hover:translate-x-1 transition-transform duration-200">
                                 {link.label}
@@ -659,12 +663,12 @@ export default function Navbar() {
                                 <span
                                   className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full shadow-2xs ${
                                     link.badge === 'NEW'
-                                      ? 'bg-neutral-950 text-white'
+                                      ? 'bg-neutral-950 text-white dark:bg-zinc-100 dark:text-zinc-950'
                                       : link.badge === 'LIMITED'
                                       ? 'bg-rose-600 text-white'
                                       : link.badge === 'ICON'
-                                      ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                                      : 'bg-neutral-100 text-neutral-700'
+                                      ? 'bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/40'
+                                      : 'bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-zinc-300'
                                   }`}
                                 >
                                   {link.badge}
@@ -684,7 +688,7 @@ export default function Navbar() {
                     <Link
                       key={fIdx}
                       href={feature.href}
-                      className="group relative flex flex-col rounded-2xl overflow-hidden bg-neutral-950 border border-neutral-200/80 shadow-md hover:shadow-xl transition-all duration-300"
+                      className="group relative flex flex-col rounded-2xl overflow-hidden bg-neutral-950 border border-neutral-200/80 dark:border-zinc-800 shadow-md hover:shadow-xl transition-all duration-300"
                     >
                       {/* 4:5 Aspect Ratio Editorial Photo */}
                       <div className="aspect-[4/5] relative w-full overflow-hidden">
@@ -728,40 +732,40 @@ export default function Navbar() {
               </div>
 
               {/* Bottom Atelier Micro-Trust Strip inside the Mega Menu */}
-              <div className="mt-8 pt-6 border-t border-neutral-100 grid grid-cols-3 gap-6 text-xs text-neutral-500">
+              <div className="mt-8 pt-6 border-t border-neutral-100 dark:border-zinc-800/80 grid grid-cols-3 gap-6 text-xs text-neutral-500 dark:text-zinc-400">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-900 dark:text-zinc-100 shrink-0 border border-transparent dark:border-zinc-800">
                     <Truck className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                    <p className="font-bold text-neutral-900 dark:text-white text-[11px] uppercase tracking-wider">
                       Complimentary Pan-India Shipping
                     </p>
-                    <p className="text-[10px] text-neutral-400">On all orders over ₹999</p>
+                    <p className="text-[10px] text-neutral-400 dark:text-zinc-500">On all orders over ₹999</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-900 dark:text-zinc-100 shrink-0 border border-transparent dark:border-zinc-800">
                     <Scissors className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                    <p className="font-bold text-neutral-900 dark:text-white text-[11px] uppercase tracking-wider">
                       Complimentary Atelier Hemming
                     </p>
-                    <p className="text-[10px] text-neutral-400">Custom inseam lengths upon checkout</p>
+                    <p className="text-[10px] text-neutral-400 dark:text-zinc-500">Custom inseam lengths upon checkout</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-900 dark:text-zinc-100 shrink-0 border border-transparent dark:border-zinc-800">
                     <RotateCcw className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                    <p className="font-bold text-neutral-900 dark:text-white text-[11px] uppercase tracking-wider">
                       30-Day Effortless Returns
                     </p>
-                    <p className="text-[10px] text-neutral-400">Prepaid domestic return consignment</p>
+                    <p className="text-[10px] text-neutral-400 dark:text-zinc-500">Prepaid domestic return consignment</p>
                   </div>
                 </div>
               </div>
@@ -786,19 +790,22 @@ export default function Navbar() {
           />
 
           {/* Drawer Body */}
-          <div className="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col justify-between z-10 animate-in slide-in-from-left duration-300">
+          <div className="relative w-full max-w-sm bg-white dark:bg-zinc-950 text-neutral-950 dark:text-zinc-100 h-full shadow-2xl flex flex-col justify-between z-10 animate-in slide-in-from-left duration-300 border-r border-neutral-200 dark:border-zinc-800">
             {/* Drawer Header */}
-            <div className="p-5 flex items-center justify-between border-b border-neutral-200">
-              <span className="font-extrabold tracking-[0.2em] text-lg text-neutral-950 uppercase">
+            <div className="p-5 flex items-center justify-between border-b border-neutral-200 dark:border-zinc-800">
+              <span className="font-extrabold tracking-[0.2em] text-lg text-neutral-950 dark:text-white uppercase">
                 CARTIFY
               </span>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-1.5 text-neutral-500 hover:text-black rounded-lg transition"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 text-neutral-500 dark:text-zinc-400 hover:text-black dark:hover:text-white rounded-lg transition"
+                  aria-label="Close menu"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Drawer Categories List */}
@@ -806,19 +813,19 @@ export default function Navbar() {
               {navCategories.map((cat) => {
                 const isExpanded = expandedMobileCategory === cat.id;
                 return (
-                  <div key={cat.id} className="border-b border-neutral-100 pb-3">
+                  <div key={cat.id} className="border-b border-neutral-100 dark:border-zinc-800/80 pb-3">
                     <button
                       onClick={() =>
                         setExpandedMobileCategory(isExpanded ? null : cat.id)
                       }
-                      className="w-full flex items-center justify-between py-2 text-left text-xs font-bold tracking-[0.16em] text-neutral-950 uppercase"
+                      className="w-full flex items-center justify-between py-2 text-left text-xs font-bold tracking-[0.16em] text-neutral-950 dark:text-zinc-100 uppercase"
                     >
-                      <span className={cat.isAccent ? 'text-rose-600' : ''}>
+                      <span className={cat.isAccent ? 'text-rose-600 dark:text-rose-400' : ''}>
                         {cat.label}
                       </span>
                       {cat.megaMenu && (
                         <ChevronDown
-                          className={`w-4 h-4 text-neutral-400 transition-transform ${
+                          className={`w-4 h-4 text-neutral-400 dark:text-zinc-500 transition-transform ${
                             isExpanded ? 'rotate-180' : ''
                           }`}
                         />
@@ -831,7 +838,7 @@ export default function Navbar() {
                         <Link
                           href={cat.megaMenu.mainLinkHref}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-950 uppercase tracking-wider"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-950 dark:text-zinc-200 uppercase tracking-wider"
                         >
                           <span>{cat.megaMenu.mainLinkText}</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -839,7 +846,7 @@ export default function Navbar() {
 
                         {cat.megaMenu.columns.map((col, cIdx) => (
                           <div key={cIdx} className="space-y-2">
-                            <span className="block text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                            <span className="block text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">
                               {col.title}
                             </span>
                             <ul className="space-y-1.5 pl-2">
@@ -848,11 +855,11 @@ export default function Navbar() {
                                   <Link
                                     href={link.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="flex items-center justify-between text-xs text-neutral-700 hover:text-black py-0.5"
+                                    className="flex items-center justify-between text-xs text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white py-0.5"
                                   >
                                     <span>{link.label}</span>
                                     {link.badge && (
-                                      <span className="text-[8px] font-black uppercase px-1.5 py-0.2 rounded bg-neutral-100 text-neutral-700">
+                                      <span className="text-[8px] font-black uppercase px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-zinc-300">
                                         {link.badge}
                                       </span>
                                     )}
@@ -872,14 +879,14 @@ export default function Navbar() {
                               onClick={() => setMobileMenuOpen(false)}
                               className="group block text-center"
                             >
-                              <div className="aspect-[4/5] bg-neutral-100 overflow-hidden rounded-xl">
+                              <div className="aspect-[4/5] bg-neutral-100 dark:bg-zinc-900 overflow-hidden rounded-xl border border-transparent dark:border-zinc-800">
                                 <img
                                   src={f.image}
                                   alt={f.alt}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                                 />
                               </div>
-                              <span className="text-[10px] font-bold tracking-wider uppercase text-neutral-900 mt-1.5 block line-clamp-1">
+                              <span className="text-[10px] font-bold tracking-wider uppercase text-neutral-900 dark:text-zinc-200 mt-1.5 block line-clamp-1">
                                 {f.title}
                               </span>
                             </Link>
@@ -893,16 +900,16 @@ export default function Navbar() {
             </div>
 
             {/* Footer Links in Drawer */}
-            <div className="p-5 border-t border-neutral-200 bg-neutral-50/80 space-y-3 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
-                <span className="text-neutral-500 font-medium">Currency</span>
-                <span className="font-bold text-neutral-900">India (₹ INR)</span>
+            <div className="p-5 border-t border-neutral-200 dark:border-zinc-800 bg-neutral-50/80 dark:bg-zinc-900/60 space-y-3 text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-zinc-800">
+                <span className="text-neutral-500 dark:text-zinc-400 font-medium">Currency</span>
+                <span className="font-bold text-neutral-900 dark:text-zinc-100">India (₹ INR)</span>
               </div>
 
               <Link
                 href="/orders"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
+                className="flex items-center gap-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white py-1 font-semibold"
               >
                 <Truck className="w-4 h-4" />
                 <span>Track Orders</span>
@@ -910,14 +917,14 @@ export default function Navbar() {
               <Link
                 href="/wishlist"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
+                className="flex items-center gap-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white py-1 font-semibold"
               >
                 <Heart className="w-4 h-4" />
                 <span>My Wishlist</span>
               </Link>
               {user ? (
-                <div className="flex items-center justify-between pt-2 border-t border-neutral-200">
-                  <span className="font-semibold text-neutral-900 truncate">
+                <div className="flex items-center justify-between pt-2 border-t border-neutral-200 dark:border-zinc-800">
+                  <span className="font-semibold text-neutral-900 dark:text-zinc-100 truncate">
                     {user.name}
                   </span>
                   <button
@@ -925,7 +932,7 @@ export default function Navbar() {
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-rose-600 hover:underline font-bold cursor-pointer"
+                    className="text-rose-600 dark:text-rose-400 hover:underline font-bold cursor-pointer"
                   >
                     Sign Out
                   </button>
@@ -934,7 +941,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
+                  className="flex items-center gap-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white py-1 font-semibold"
                 >
                   <UserIcon className="w-4 h-4" />
                   <span>Sign In / Member Access</span>
