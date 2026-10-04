@@ -152,3 +152,13 @@ export interface Discount {
   usage_limit: number | null;
   times_used: number;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'customer' | 'admin';
+  phone?: string | null;
+  created_at?: string;
+}
+

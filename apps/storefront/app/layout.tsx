@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { AuthProvider } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
 import Navbar from '@/components/Navbar';
 import CartDrawer from '@/components/CartDrawer';
@@ -29,12 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-neutral-50 dark:bg-neutral-950 font-sans">
-        <CartProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <CartDrawer />
-          <CheckoutModal />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <CartDrawer />
+            <CheckoutModal />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

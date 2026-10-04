@@ -3,12 +3,23 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, ShieldCheck, Compass, Sparkles, Search, PackageCheck, Zap } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Compass, Sparkles, Search, PackageCheck, Zap, User as UserIcon, LogOut } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const { cart, openCart } = useCart();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
+
+  const userInitials = user?.name
+    ? user.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : 'CU';
 
   return (
     <>
@@ -98,17 +109,42 @@ export default function Navbar() {
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
-                <span>My Account</span>
+                <span>Account</span>
               </Link>
             </nav>
           </div>
 
           {/* Action Controls */}
           <div className="flex items-center space-x-3">
-            {/* Currency Pill */}
-            <span className="hidden sm:inline-block px-2.5 py-1 rounded-lg text-[11px] font-bold text-neutral-500 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
-              USD ($)
-            </span>
+            {/* Customer Authentication State */}
+            {user ? (
+              <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-1">
+                <Link
+                  href="/account"
+                  className="flex items-center gap-2 px-2.5 py-1 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                >
+                  <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
+                    {userInitials}
+                  </div>
+                  <span className="hidden sm:inline max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
+                </Link>
+                <button
+                  onClick={() => logout()}
+                  title="Sign Out"
+                  className="p-1.5 text-neutral-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 transition"
+              >
+                <UserIcon className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </Link>
+            )}
 
             {/* Admin Back-Office Switch */}
             <a
@@ -116,10 +152,10 @@ export default function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               title="Open Isolated Admin Back-Office (Port 3001)"
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all shadow-sm"
+              className="hidden lg:flex px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide items-center space-x-1.5 border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all shadow-sm"
             >
               <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              <span>Admin Studio (3001)</span>
+              <span>Admin Studio</span>
               <span className="text-[10px] bg-indigo-200/60 dark:bg-indigo-800/60 px-1 py-0.2 rounded font-mono">↗</span>
             </a>
 
