@@ -25,6 +25,10 @@ import {
   Activity,
   Truck,
   CreditCard,
+  BarChart3,
+  RotateCcw,
+  ShoppingCart,
+  Mail,
 } from 'lucide-react';
 
 interface NavItem {
@@ -42,9 +46,10 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    title: 'Overview',
+    title: 'Overview & Analytics',
     items: [
       { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+      { label: 'Sales Report', href: '/sales', icon: BarChart3, badge: 'Insights', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
     ],
   },
   {
@@ -67,13 +72,16 @@ const navGroups: NavGroup[] = [
     title: 'Operations',
     items: [
       { label: 'Orders', href: '/orders', icon: ShoppingBag, badge: 'Live', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
+      { label: 'Return Orders', href: '/returns', icon: RotateCcw, badge: 'RMA', badgeColor: 'bg-purple-500/20 text-purple-400' },
+      { label: 'Abandoned Carts', href: '/abandoned-carts', icon: ShoppingCart, badge: 'Recovery', badgeColor: 'bg-amber-500/20 text-amber-400' },
       { label: 'Shipping & Delivery', href: '/shipping', icon: Truck },
       { label: 'Payment Gateways', href: '/payments', icon: CreditCard },
     ],
   },
   {
-    title: 'Marketing & Sales',
+    title: 'Marketing & Comms',
     items: [
+      { label: 'Email Notifications', href: '/notifications', icon: Mail, badge: 'Templates', badgeColor: 'bg-indigo-500/20 text-indigo-400' },
       { label: 'Discounts', href: '/discounts', icon: Tag },
       { label: 'Reviews', href: '/reviews', icon: MessageSquare },
     ],
