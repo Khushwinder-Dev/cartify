@@ -620,7 +620,7 @@ export default function Navbar() {
                     {activeCategory.megaMenu.eyebrow || 'CARTIFY ATELIER'}
                   </span>
                   <span className="text-neutral-300 dark:text-zinc-700">•</span>
-                  <h3 className="text-lg font-bold text-neutral-950 dark:text-white tracking-tight">
+                  <h3 className="text-lg font-serif font-bold text-neutral-950 dark:text-white tracking-tight">
                     {activeCategory.megaMenu.mainHeading}
                   </h3>
                 </div>

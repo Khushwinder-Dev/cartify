@@ -106,7 +106,7 @@ export default function SocialProofSection() {
                 <InstagramIcon className="w-4 h-4" />
                 <span>#CartifyStudio Community</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-black tracking-tight">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-tight">
                 STYLED ACROSS THE GLOBE
               </h3>
             </div>

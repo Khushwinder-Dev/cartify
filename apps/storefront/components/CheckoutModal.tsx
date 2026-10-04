@@ -78,7 +78,7 @@ export default function CheckoutModal() {
         <div className="p-6 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-neutral-50/50 dark:bg-neutral-950/50">
           <div className="flex items-center space-x-2">
             <Lock className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <h3 className="font-bold text-lg text-neutral-900 dark:text-white">
+            <h3 className="font-serif font-bold text-lg text-neutral-900 dark:text-white tracking-tight">
               {completedOrder ? 'Order Confirmed' : 'Idempotent Secure Checkout'}
             </h3>
           </div>
@@ -100,7 +100,7 @@ export default function CheckoutModal() {
               </div>
 
               <div>
-                <h4 className="text-2xl font-bold text-neutral-950 dark:text-white">
+                <h4 className="text-2xl font-serif font-bold text-neutral-950 dark:text-white tracking-tight">
                   Thank you for your order!
                 </h4>
                 <p className="text-sm text-neutral-500 mt-1">
@@ -131,7 +131,7 @@ export default function CheckoutModal() {
                 </div>
                 <div className="flex justify-between text-xs pt-2 border-t border-neutral-200 dark:border-neutral-800 font-bold">
                   <span className="text-neutral-900 dark:text-white">Total Charged</span>
-                  <span className="text-base text-neutral-900 dark:text-white">
+                  <span className="text-base tabular-nums text-neutral-900 dark:text-white">
                     {formatPrice(completedOrder.grand_total)}
                   </span>
                 </div>

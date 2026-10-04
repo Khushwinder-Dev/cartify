@@ -57,8 +57,8 @@ export default function CartDrawer() {
           <div className="p-6 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <ShoppingBag className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <h2 className="text-lg font-bold text-neutral-950 dark:text-white">Your Shopping Cart</h2>
-              <span className="text-xs bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full font-semibold text-neutral-600 dark:text-neutral-400">
+              <h2 className="text-lg font-serif font-bold tracking-tight text-neutral-950 dark:text-white">Your Shopping Cart</h2>
+              <span className="text-xs bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full font-semibold text-neutral-600 dark:text-neutral-400 tabular-nums">
                 {cart?.items_count || 0}
               </span>
             </div>
@@ -217,21 +217,21 @@ export default function CartDrawer() {
               <div className="space-y-1.5 text-xs text-neutral-600 dark:text-neutral-400">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-neutral-900 dark:text-white">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold tabular-nums text-neutral-900 dark:text-white">{formatPrice(subtotal)}</span>
                 </div>
                 {appliedDiscount && (
                   <div className="flex justify-between text-emerald-600">
                     <span>Discount</span>
-                    <span>-{formatPrice(discountAmount)}</span>
+                    <span className="tabular-nums">-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Estimated Shipping</span>
-                  <span>{estimatedShipping === 0 ? <strong className="text-emerald-600">FREE</strong> : formatPrice(estimatedShipping)}</span>
+                  <span className="tabular-nums">{estimatedShipping === 0 ? <strong className="text-emerald-600">FREE</strong> : formatPrice(estimatedShipping)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-neutral-950 dark:text-white pt-2 border-t border-neutral-200 dark:border-neutral-800">
                   <span>Estimated Total</span>
-                  <span className="text-indigo-600 dark:text-indigo-400 text-base">
+                  <span className="text-indigo-600 dark:text-indigo-400 text-base tabular-nums">
                     {formatPrice(estimatedTotal)}
                   </span>
                 </div>

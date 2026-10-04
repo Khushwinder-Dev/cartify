@@ -472,21 +472,21 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 <span className="text-xs font-semibold text-neutral-500 ml-1">5.0 (48 verified reviews)</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-neutral-950 dark:text-white">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight text-neutral-950 dark:text-white">
                 {product.title}
               </h1>
 
               {/* Price & Savings Pill */}
               <div className="mt-3 flex items-baseline space-x-3">
-                <span className="text-3xl font-black text-neutral-950 dark:text-white">
+                <span className="text-3xl sm:text-4xl font-bold tabular-nums tracking-tight text-neutral-950 dark:text-white">
                   {formatPrice(currentPrice)}
                 </span>
                 {compareAtPrice && compareAtPrice > currentPrice && (
                   <>
-                    <span className="text-lg line-through text-neutral-400">
+                    <span className="text-lg line-through tabular-nums text-neutral-400">
                       {formatPrice(compareAtPrice)}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold tabular-nums bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-400">
                       Save {formatPrice(savingsAmount)} ({savingsPercent}% OFF)
                     </span>
                   </>
@@ -706,7 +706,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         {/* Related Products Carousel */}
         {relatedProducts.length > 0 && (
           <div className="mt-24 pt-12 border-t border-neutral-200 dark:border-neutral-800">
-            <h3 className="text-xl font-black text-neutral-950 dark:text-white mb-6">
+            <h3 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-neutral-950 dark:text-white mb-6">
               You Might Also Admire
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -723,10 +723,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <h4 className="font-bold text-sm text-neutral-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                  <h4 className="font-semibold text-sm text-neutral-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 transition-colors">
                     {rel.title}
                   </h4>
-                  <span className="text-sm font-extrabold text-neutral-900 dark:text-white mt-1 block">
+                  <span className="text-sm font-bold tabular-nums text-neutral-900 dark:text-white mt-1 block">
                     ${rel.min_price?.toFixed(2)}
                   </span>
                 </Link>

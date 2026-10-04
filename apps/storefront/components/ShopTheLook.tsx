@@ -63,7 +63,7 @@ export default function ShopTheLook() {
             <Sparkles className="w-3.5 h-3.5" />
             <span>Editorial Lookbook</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight text-white">
             SHOP THE LOOK
           </h2>
           <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed">
@@ -160,7 +160,7 @@ export default function ShopTheLook() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-white">
+                  <h3 className="text-xl font-serif font-bold text-white tracking-tight">
                     {activeHotspot.product.title}
                   </h3>
                   <p className="text-xs text-neutral-400 leading-relaxed">
@@ -173,13 +173,13 @@ export default function ShopTheLook() {
 
                 <div className="flex items-center justify-between pt-2">
                   <div className="space-y-0.5">
-                    <span className="text-xs text-neutral-400 block">Price</span>
+                    <span className="text-xs text-neutral-400 block font-medium">Price</span>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xl font-black text-white">
+                      <span className="text-xl sm:text-2xl font-bold tabular-nums text-white">
                         {formatPrice(activeHotspot.product.price)}
                       </span>
                       {activeHotspot.product.compare_at_price && (
-                        <span className="text-xs line-through text-neutral-500">
+                        <span className="text-xs line-through tabular-nums text-neutral-500">
                           {formatPrice(activeHotspot.product.compare_at_price)}
                         </span>
                       )}

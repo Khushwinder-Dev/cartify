@@ -160,12 +160,12 @@ export default function HeroCarousel() {
                 </div>
 
                 {/* Big Headline */}
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] font-sans drop-shadow-sm">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] font-serif drop-shadow-sm">
                   {slide.headline}
                 </h1>
 
                 {/* Subtext */}
-                <p className="text-sm sm:text-base text-neutral-300 font-normal leading-relaxed max-w-xl">
+                <p className="text-sm sm:text-base text-neutral-300 font-normal leading-relaxed max-w-xl font-sans">
                   {slide.subtext}
                 </p>
 

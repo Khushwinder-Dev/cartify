@@ -63,15 +63,15 @@ export default function BentoCategoryGrid() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">
+            <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2 font-sans">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Curated Dimensions</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-              DISCOVER BY CATEGORY
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white font-serif">
+              Discover by Category
             </h2>
           </div>
-          <p className="text-neutral-400 text-xs sm:text-sm max-w-md leading-relaxed">
+          <p className="text-neutral-400 text-xs sm:text-sm max-w-md leading-relaxed font-sans">
             Every garment begins with custom textile development. Explore our permanent silhouettes and limited seasonal drops.
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function BentoCategoryGrid() {
 
               {/* Top Badge */}
               <div className="absolute top-5 left-5 z-10">
-                <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-black/50 backdrop-blur-md border border-white/20 text-white">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-black/50 backdrop-blur-md border border-white/20 text-white font-sans">
                   {item.badge}
                 </span>
               </div>
@@ -104,10 +104,10 @@ export default function BentoCategoryGrid() {
               {/* Bottom Content & Floating CTA */}
               <div className="relative z-10 space-y-2 flex items-end justify-between gap-4">
                 <div className="max-w-md">
-                  <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-indigo-300 transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors font-serif">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-neutral-300 font-normal leading-relaxed line-clamp-2">
+                  <p className="text-xs text-neutral-300 font-normal leading-relaxed line-clamp-2 font-sans">
                     {item.subtitle}
                   </p>
                 </div>

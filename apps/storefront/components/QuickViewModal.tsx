@@ -108,16 +108,16 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
               <span className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">
                 {product.product_type || 'Curated Design'}
               </span>
-              <h2 className="text-xl font-black text-neutral-950 dark:text-white mt-1">
+              <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-neutral-950 dark:text-white mt-1">
                 {product.title}
               </h2>
 
               <div className="mt-3 flex items-baseline space-x-3">
-                <span className="text-2xl font-black text-neutral-950 dark:text-white">
+                <span className="text-2xl font-bold tabular-nums text-neutral-950 dark:text-white">
                   {formatPrice(currentPrice)}
                 </span>
                 {compareAtPrice && compareAtPrice > currentPrice && (
-                  <span className="text-sm line-through text-neutral-400">
+                  <span className="text-sm line-through tabular-nums text-neutral-400">
                     {formatPrice(compareAtPrice)}
                   </span>
                 )}

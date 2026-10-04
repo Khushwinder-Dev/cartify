@@ -237,7 +237,7 @@ export default function LuxuryStorefrontHomePage() {
             <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-400">
               Limited Archive Release
             </span>
-            <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-serif font-bold tracking-tight">
               Looking for custom sizing or bespoke atelier fabrics?
             </h3>
             <p className="text-xs text-neutral-400 max-w-xl">

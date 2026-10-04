@@ -178,7 +178,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           </div>
 
           {/* Title */}
-          <h3 className="text-sm font-bold text-neutral-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 className="text-sm font-semibold tracking-normal text-neutral-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
             <Link href={`/products/${product.slug}`}>{product.title}</Link>
           </h3>
 
@@ -190,17 +190,17 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
         {/* Pricing */}
         <div className="flex items-baseline justify-between pt-1 border-t border-neutral-100 dark:border-neutral-800">
           <div className="flex items-baseline gap-2">
-            <span className="text-base font-black text-neutral-950 dark:text-white">
+            <span className="text-base font-bold tabular-nums tracking-tight text-neutral-950 dark:text-white">
               {formatPrice(product.price)}
             </span>
             {product.compare_at_price && (
-              <span className="text-xs line-through text-neutral-400">
+              <span className="text-xs line-through tabular-nums text-neutral-400">
                 {formatPrice(product.compare_at_price)}
               </span>
             )}
           </div>
 
-          <span className="text-[10px] font-semibold text-neutral-400 font-mono">
+          <span className="text-[10px] font-medium text-neutral-400 tabular-nums">
             ★ {product.rating} ({product.reviews_count})
           </span>
         </div>
