@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   ShoppingBag,
@@ -13,28 +12,37 @@ import {
   ChevronDown,
   Menu,
   X,
-  LogOut,
-  Package,
   Heart,
-  HelpCircle,
-  Info,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  Truck,
+  RotateCcw,
+  Scissors
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import SearchDialog from './SearchDialog';
 
+interface MegaMenuLink {
+  label: string;
+  href: string;
+  badge?: 'NEW' | 'ICON' | 'CORE' | 'LIMITED';
+}
+
 interface MegaMenuColumn {
   title: string;
   href: string;
-  links: { label: string; href: string }[];
+  links: MegaMenuLink[];
 }
 
 interface MegaMenuFeature {
   title: string;
+  subtitle?: string;
+  tag?: string;
   image: string;
   href: string;
   alt: string;
+  ctaText?: string;
 }
 
 interface NavCategory {
@@ -43,6 +51,7 @@ interface NavCategory {
   href: string;
   isAccent?: boolean;
   megaMenu?: {
+    eyebrow?: string;
     mainHeading: string;
     mainLinkText: string;
     mainLinkHref: string;
@@ -57,137 +66,128 @@ const navCategories: NavCategory[] = [
     label: 'New & Featured',
     href: '/#catalog',
     megaMenu: {
-      mainHeading: 'New & Featured',
-      mainLinkText: 'All New Arrivals',
+      eyebrow: 'SPRING / SUMMER 2026 DROP',
+      mainHeading: 'New & Featured Arrivals',
+      mainLinkText: 'Explore Entire Collection',
       mainLinkHref: '/#catalog',
       columns: [
         {
           title: 'Curated Drops',
           href: '/#catalog',
           links: [
-            { label: 'The Spring Capsule', href: '/#catalog' },
-            { label: 'Core Foundation', href: '/#catalog' },
-            { label: 'Best Sellers', href: '/#catalog' },
-            { label: 'Heavyweight Basics', href: '/#catalog' },
+            { label: 'The Foundation Capsule', href: '/#catalog', badge: 'NEW' },
+            { label: 'Heavyweight Loopback Fleece', href: '/#catalog', badge: 'ICON' },
+            { label: 'Selvedge Denim Drop', href: '/#catalog', badge: 'LIMITED' },
+            { label: 'Spring Linen Overalls', href: '/#catalog' },
+            { label: 'Best Seller Archive', href: '/#catalog' },
           ],
         },
         {
-          title: 'Fabrics & Craft',
+          title: 'Apparel Categories',
           href: '/#catalog',
           links: [
-            { label: 'Organic Combed Cotton', href: '/#catalog' },
-            { label: '480gsm French Terry', href: '/#catalog' },
-            { label: 'Japanese Melton Wool', href: '/#catalog' },
-            { label: 'Normandy Flax Linen', href: '/#catalog' },
+            { label: 'Overshirts & Jackets', href: '/#catalog' },
+            { label: 'French Terry Hoodies', href: '/#catalog' },
+            { label: 'Heavyweight Crewnecks', href: '/#catalog' },
+            { label: 'Tailored Wide Trousers', href: '/#catalog' },
+            { label: '280 GSM Relaxed Tees', href: '/#catalog' },
+          ],
+        },
+        {
+          title: 'Craft & Fabric Origin',
+          href: '/#catalog',
+          links: [
+            { label: 'Japanese Melton Wool (420 GSM)', href: '/#catalog', badge: 'CORE' },
+            { label: 'Portuguese Organic Cotton', href: '/#catalog' },
+            { label: '14.5oz Kurabo Shuttle Loom', href: '/#catalog' },
+            { label: 'GOTS Organic Certifications', href: '/about' },
+            { label: 'Our Atelier Production', href: '/about' },
           ],
         },
       ],
       features: [
         {
-          title: 'THE FOUNDATION TEE',
-          image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=700&q=80',
+          title: 'THE FOUNDATION HOODIE',
+          subtitle: '500 GSM Portuguese Loopback Terry',
+          tag: 'LIMITED DROP',
+          image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Heavyweight organic cotton tee',
+          alt: 'Heavyweight loopback terry hoodie',
+          ctaText: 'Shop the Look',
         },
         {
-          title: 'THE FRENCH TERRY HOODIE',
-          image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=700&q=80',
+          title: 'RAW SELVEDGE CAPSULE',
+          subtitle: '14.5oz Shuttle Loom Kurabo Denim',
+          tag: 'EXCLUSIVE',
+          image: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Loopback terry hoodie',
+          alt: 'Raw selvedge denim collection',
+          ctaText: 'Explore Denim',
         },
       ],
     },
   },
   {
-    id: 'shirts-sweaters',
-    label: 'Shirts & Sweaters',
+    id: 'tops-knitwear',
+    label: 'Tops & Knitwear',
     href: '/#catalog',
     megaMenu: {
-      mainHeading: 'Shirts & Sweaters',
-      mainLinkText: 'All Shirts & Sweaters',
+      eyebrow: 'Milled Everyday Silhouettes',
+      mainHeading: 'Artisanal Tops & Knitwear',
+      mainLinkText: 'View All Tops',
       mainLinkHref: '/#catalog',
       columns: [
         {
-          title: 'All Shirts & Button Downs',
+          title: 'T-Shirts & Base Layers',
           href: '/#catalog',
           links: [
-            { label: 'Long Sleeves', href: '/#catalog' },
-            { label: 'Oxfords', href: '/#catalog' },
-            { label: 'Flannels', href: '/#catalog' },
-            { label: 'Camp Collar Shirts', href: '/#catalog' },
-            { label: 'Chambray Workshirts', href: '/#catalog' },
+            { label: '280 GSM Boxy Heavyweight Tee', href: '/#catalog', badge: 'ICON' },
+            { label: 'Waffle-Knit Thermal Henleys', href: '/#catalog' },
+            { label: 'Classic Crewneck Essentials', href: '/#catalog', badge: 'CORE' },
+            { label: 'Drop-Shoulder Long Sleeves', href: '/#catalog' },
+            { label: 'Fine Gauge Merino Polos', href: '/#catalog' },
           ],
         },
         {
-          title: 'All Tees & Sweaters',
+          title: 'Sweats & Knitwear',
           href: '/#catalog',
           links: [
-            { label: 'Tees & Polos', href: '/#catalog' },
-            { label: 'Sweaters', href: '/#catalog' },
-            { label: 'Sweatshirts & Hoodies', href: '/#catalog' },
-            { label: 'Waffle Henleys', href: '/#catalog' },
-            { label: 'Cashmere Knitwear', href: '/#catalog' },
+            { label: 'Heavy French Terry Hoodies', href: '/#catalog', badge: 'NEW' },
+            { label: 'Ribbed Crewneck Sweatshirts', href: '/#catalog' },
+            { label: 'Pure Mongolian Cashmere Knits', href: '/#catalog', badge: 'LIMITED' },
+            { label: 'Half-Zip Milano Stitch Sweaters', href: '/#catalog' },
+            { label: 'Cardigans with Horn Buttons', href: '/#catalog' },
+          ],
+        },
+        {
+          title: 'Button-Downs & Overshirts',
+          href: '/#catalog',
+          links: [
+            { label: 'Japanese Chambray Workshirts', href: '/#catalog' },
+            { label: 'Heavy Oxford Cloth Button Downs', href: '/#catalog' },
+            { label: 'Camp Collar Tencel Shirts', href: '/#catalog' },
+            { label: 'Flannel Overshirts', href: '/#catalog' },
           ],
         },
       ],
       features: [
         {
-          title: 'THE JACK',
-          image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=700&q=80',
+          title: 'THE 280GSM RELAXED TEE',
+          subtitle: 'Double-needle bound collar that never curls',
+          tag: 'CORE ICON',
+          image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Tailored everyday button-down oxford shirt',
+          alt: 'Relaxed cotton heavyweight t-shirt',
+          ctaText: 'Discover Tees',
         },
         {
-          title: 'THE CRAWFORD COLLECTION',
-          image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=700&q=80',
+          title: 'THE CRAWFORD CASHMERE',
+          subtitle: 'Grade-A 2-ply Mongolian Cashmere',
+          tag: 'PRIVATE ATELIER',
+          image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Pure Mongolian Cashmere ribbed crewneck',
-        },
-      ],
-    },
-  },
-  {
-    id: 'bottoms',
-    label: 'Bottoms',
-    href: '/#catalog',
-    megaMenu: {
-      mainHeading: 'Bottoms',
-      mainLinkText: 'All Pants & Shorts',
-      mainLinkHref: '/#catalog',
-      columns: [
-        {
-          title: 'Trousers & Chinos',
-          href: '/#catalog',
-          links: [
-            { label: 'Relaxed Pleated Trousers', href: '/#catalog' },
-            { label: 'Everyday Cotton Chinos', href: '/#catalog' },
-            { label: 'Normandy Linen Pants', href: '/#catalog' },
-            { label: 'Camp Fatigue Pants', href: '/#catalog' },
-          ],
-        },
-        {
-          title: 'Denim & Shorts',
-          href: '/#catalog',
-          links: [
-            { label: 'Japanese Selvedge Denim', href: '/#catalog' },
-            { label: 'Raw Indigo Jeans', href: '/#catalog' },
-            { label: 'Linen Trail Shorts', href: '/#catalog' },
-            { label: 'Washed Twill Shorts', href: '/#catalog' },
-          ],
-        },
-      ],
-      features: [
-        {
-          title: 'THE CHORE TROUSER',
-          image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=700&q=80',
-          href: '/#catalog',
-          alt: 'Linen pleated trousers',
-        },
-        {
-          title: 'SELVEDGE DENIM',
-          image: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=700&q=80',
-          href: '/#catalog',
-          alt: 'Raw Japanese selvedge denim',
+          alt: 'Pure cashmere ribbed sweater',
+          ctaText: 'Shop Knitwear',
         },
       ],
     },
@@ -197,43 +197,121 @@ const navCategories: NavCategory[] = [
     label: 'Outerwear',
     href: '/#catalog',
     megaMenu: {
-      mainHeading: 'Outerwear',
-      mainLinkText: 'All Jackets & Coats',
+      eyebrow: 'Architectural Layering',
+      mainHeading: 'Jackets & Tailored Outerwear',
+      mainLinkText: 'All Outerwear & Coats',
       mainLinkHref: '/#catalog',
       columns: [
         {
           title: 'Jackets & Overshirts',
           href: '/#catalog',
           links: [
-            { label: 'Japanese Melton Wool Overshirt', href: '/#catalog' },
-            { label: 'Cotton Twill Chore Jackets', href: '/#catalog' },
-            { label: 'Dry Wax Field Jackets', href: '/#catalog' },
-            { label: 'Classic Harrington Jackets', href: '/#catalog' },
+            { label: 'Japanese Melton Wool Overshirt', href: '/#catalog', badge: 'ICON' },
+            { label: 'Heavy Cotton Twill Chore Coats', href: '/#catalog' },
+            { label: 'Waxed Canvas Field Jackets', href: '/#catalog', badge: 'NEW' },
+            { label: 'Unlined Linen Studio Jackets', href: '/#catalog' },
           ],
         },
         {
-          title: 'Coats & Stormwear',
+          title: 'Overcoats & Trenchwear',
           href: '/#catalog',
           links: [
-            { label: 'Structured Gabardine Trench', href: '/#catalog' },
-            { label: 'Double Breasted Peacoats', href: '/#catalog' },
-            { label: 'Heavy Wool Topcoats', href: '/#catalog' },
-            { label: 'Waterproof Parkas', href: '/#catalog' },
+            { label: 'Gabardine Double-Breasted Trench', href: '/#catalog', badge: 'LIMITED' },
+            { label: 'Heavyweight Melton Wool Topcoats', href: '/#catalog' },
+            { label: 'Primaloft Insulated Utility Parkas', href: '/#catalog' },
+            { label: 'Classic Peacoats', href: '/#catalog' },
+          ],
+        },
+        {
+          title: 'Technical Sourcing',
+          href: '/#catalog',
+          links: [
+            { label: 'Water-Repellent Dry-Wax Finish', href: '/#catalog' },
+            { label: 'Recycled Primaloft Insulation', href: '/#catalog' },
+            { label: 'Custom Horn & Corozo Buttons', href: '/#catalog' },
           ],
         },
       ],
       features: [
         {
-          title: 'THE WOOL OVERSHIRT',
-          image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=700&q=80',
+          title: 'THE MELTON OVERSHIRT',
+          subtitle: '420 GSM Double-Faced Japanese Wool',
+          tag: 'BEST SELLER',
+          image: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Minimalist Japanese wool overshirt',
+          alt: 'Japanese wool overshirt jacket',
+          ctaText: 'Explore Jacket',
         },
         {
-          title: 'THE STORM TRENCH',
-          image: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=700&q=80',
+          title: 'THE GABARDINE TRENCH',
+          subtitle: 'Waterproof tight-weave cotton stormwear',
+          tag: 'NEW ARRIVAL',
+          image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Structured cotton gabardine trench coat',
+          alt: 'Trench coat outerwear',
+          ctaText: 'View Trench',
+        },
+      ],
+    },
+  },
+  {
+    id: 'bottoms',
+    label: 'Bottoms',
+    href: '/#catalog',
+    megaMenu: {
+      eyebrow: 'Precision Cut Tailoring',
+      mainHeading: 'Pants, Denim & Trousers',
+      mainLinkText: 'Explore All Bottoms',
+      mainLinkHref: '/#catalog',
+      columns: [
+        {
+          title: 'Denim & Selvedge',
+          href: '/#catalog',
+          links: [
+            { label: '14.5oz Kurabo Selvedge Denim', href: '/#catalog', badge: 'ICON' },
+            { label: 'Relaxed Taper Raw Indigo Jeans', href: '/#catalog' },
+            { label: 'Vintage Washed Stone Denim', href: '/#catalog' },
+            { label: 'Straight-Leg Ecru Denim', href: '/#catalog', badge: 'NEW' },
+          ],
+        },
+        {
+          title: 'Trousers & Chinos',
+          href: '/#catalog',
+          links: [
+            { label: 'Relaxed Single-Pleat Trousers', href: '/#catalog', badge: 'CORE' },
+            { label: 'Heavy Cotton Twill Camp Fatigue', href: '/#catalog' },
+            { label: 'Normandy Linen Studio Pants', href: '/#catalog' },
+            { label: 'Everyday Tailored Chinos', href: '/#catalog' },
+          ],
+        },
+        {
+          title: 'Tailoring & Sizing',
+          href: '/#catalog',
+          links: [
+            { label: 'Complimentary Atelier Hemming', href: '/contact' },
+            { label: 'Inseam & Rise Measurement Guide', href: '/policy' },
+            { label: 'Selvedge Shrink-to-Fit Manual', href: '/policy' },
+          ],
+        },
+      ],
+      features: [
+        {
+          title: 'THE SINGLE-PLEAT TROUSER',
+          subtitle: 'Tropical wool blend with relaxed drape',
+          tag: 'STUDIO ESSENTIAL',
+          image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=80',
+          href: '/#catalog',
+          alt: 'Pleated trousers',
+          ctaText: 'Shop Trousers',
+        },
+        {
+          title: '14.5OZ SHUTTLE DENIM',
+          subtitle: 'Red-line selvedge ID woven on vintage Toyoda looms',
+          tag: 'HERITAGE CRAFT',
+          image: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=800&q=80',
+          href: '/#catalog',
+          alt: 'Raw selvedge denim jeans',
+          ctaText: 'Shop Selvedge',
         },
       ],
     },
@@ -243,58 +321,74 @@ const navCategories: NavCategory[] = [
     label: 'Accessories',
     href: '/#catalog',
     megaMenu: {
-      mainHeading: 'Accessories',
+      eyebrow: 'Everyday Leather & Goods',
+      mainHeading: 'Curated Accessories',
       mainLinkText: 'All Everyday Carry',
       mainLinkHref: '/#catalog',
       columns: [
         {
-          title: 'Leather Goods',
+          title: 'Vegetable-Tanned Leather',
           href: '/#catalog',
           links: [
-            { label: 'English Bridle Leather Belts', href: '/#catalog' },
-            { label: 'Bifold Card Wallets', href: '/#catalog' },
-            { label: 'Key Fobs & Lanyards', href: '/#catalog' },
+            { label: 'English Bridle Leather Belts', href: '/#catalog', badge: 'ICON' },
+            { label: 'Minimalist Bifold Card Cases', href: '/#catalog', badge: 'NEW' },
+            { label: 'Solid Brass Key Fobs', href: '/#catalog' },
+            { label: 'Waxed Canvas Carryall Duffel', href: '/#catalog' },
           ],
         },
         {
           title: 'Knit & Headwear',
           href: '/#catalog',
           links: [
-            { label: 'Cashmere Ribbed Beanies', href: '/#catalog' },
-            { label: 'Heavy Twill 6-Panel Caps', href: '/#catalog' },
-            { label: 'Merino Wool Scarves', href: '/#catalog' },
-            { label: 'Canvas Field Bags', href: '/#catalog' },
+            { label: '7-Gauge Cashmere Ribbed Beanie', href: '/#catalog' },
+            { label: 'Heavy Twill Unstructured Caps', href: '/#catalog' },
+            { label: 'Italian Merino Wool Scarves', href: '/#catalog' },
+            { label: 'Organic Combed Cotton Socks (3-Pack)', href: '/#catalog', badge: 'CORE' },
+          ],
+        },
+        {
+          title: 'Atelier Care',
+          href: '/#catalog',
+          links: [
+            { label: 'Natural Beeswax Leather Dressing', href: '/#catalog' },
+            { label: 'Cashmere Comb & Cedar Blocks', href: '/#catalog' },
           ],
         },
       ],
       features: [
         {
-          title: 'THE CARD WALLET',
-          image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80',
+          title: 'BRIDLE LEATHER BELTS',
+          subtitle: 'Hand-burnished edges with solid brass buckles',
+          tag: 'LEATHER GOODS',
+          image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Leather card case',
+          alt: 'Handmade leather belt',
+          ctaText: 'View Leather Goods',
         },
         {
-          title: 'CASHMERE ESSENTIALS',
-          image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=700&q=80',
+          title: 'CASHMERE HEADWEAR',
+          subtitle: 'Ultra-soft Scottish spun cashmere yarns',
+          tag: 'WARMTH',
+          image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=800&q=80',
           href: '/#catalog',
-          alt: 'Cashmere knit beanie and scarf',
+          alt: 'Cashmere beanie and accessories',
+          ctaText: 'Shop Hats & Scarves',
         },
       ],
     },
   },
   {
     id: 'last-call',
-    label: 'Last Call',
+    label: 'Archive / Sale',
     href: '/#catalog',
     isAccent: true,
   },
 ];
 
 const announcements = [
-  'FREE SHIPPING ON ALL ORDERS OVER ₹999',
-  'TAKE 10% OFF YOUR FIRST ORDER WITH CODE: CARTIFY10',
-  'COMPLIMENTARY GIFT PACKAGING ON ORDERS OVER ₹1,999',
+  'COMPLIMENTARY PAN-INDIA EXPRESS SHIPPING ON ORDERS OVER ₹999',
+  'SPRING / SUMMER 2026 DROP LIVE • PRIVATE ATELIER ACCESS OPEN',
+  'USE CODE CARTIFY10 FOR 10% OFF YOUR FIRST ORDER',
 ];
 
 export default function Navbar() {
@@ -315,7 +409,7 @@ export default function Navbar() {
 
   // Mobile drawer state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>('shirts-sweaters');
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>('new-featured');
 
   // Rotate announcement automatically
   useEffect(() => {
@@ -351,23 +445,22 @@ export default function Navbar() {
     }, 200);
   };
 
-
   const activeCategory = navCategories.find((c) => c.id === activeMenuId);
 
   return (
     <>
-      {/* 1. Top Announcement Bar (Taylor Stitch Style) */}
-      <div className="bg-black text-white py-2 px-4 select-none relative z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      {/* 1. Top Announcement Bar (Editorial Minimalist Ticker) */}
+      <div className="bg-neutral-950 text-white py-2.5 px-4 select-none relative z-50 border-b border-neutral-800">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs">
           <button
             onClick={handlePrevAnnouncement}
             className="p-1 text-neutral-400 hover:text-white transition cursor-pointer"
             aria-label="Previous announcement"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5" />
           </button>
 
-          <div className="text-center font-bold tracking-[0.16em] uppercase text-[11px] sm:text-xs text-neutral-100 font-sans transition-all duration-300">
+          <div className="text-center font-bold tracking-[0.2em] uppercase text-[10.5px] sm:text-[11.5px] text-neutral-200 font-sans transition-all duration-300">
             {announcements[announcementIndex]}
           </div>
 
@@ -376,14 +469,14 @@ export default function Navbar() {
             className="p-1 text-neutral-400 hover:text-white transition cursor-pointer"
             aria-label="Next announcement"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* 2. Main Navigation Bar (Clean Crisp White) */}
+      {/* 2. Main Navigation Bar (Clean Crisp White Sticky Header) */}
       <header
-        className="sticky top-0 z-40 w-full bg-white border-b border-neutral-200 shadow-sm"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-neutral-200/90 shadow-xs transition-colors"
         onMouseLeave={handleMouseLeave}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -391,21 +484,21 @@ export default function Navbar() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-neutral-800 hover:text-black cursor-pointer"
+              className="lg:hidden p-2 text-neutral-900 hover:text-black cursor-pointer"
               aria-label="Open mobile menu"
             >
               <Menu className="w-6 h-6" />
             </button>
 
             <Link href="/" className="flex items-center group">
-              <span className="font-extrabold tracking-[0.22em] text-2xl text-neutral-900 font-sans uppercase">
+              <span className="font-extrabold tracking-[0.25em] text-2xl text-neutral-950 font-sans uppercase">
                 CARTIFY
               </span>
             </Link>
           </div>
 
           {/* Center: Desktop Navigation Categories */}
-          <nav className="hidden lg:flex items-center space-x-7 h-full">
+          <nav className="hidden lg:flex items-center space-x-8 h-full">
             {navCategories.map((cat) => {
               const isActive = activeMenuId === cat.id;
               return (
@@ -416,17 +509,18 @@ export default function Navbar() {
                 >
                   <Link
                     href={cat.href}
-                    className={`relative py-7 text-sm font-semibold tracking-wide transition-colors ${cat.isAccent
-                      ? 'text-rose-600 hover:text-rose-700'
-                      : isActive
+                    className={`relative py-7 text-xs font-bold uppercase tracking-[0.16em] transition-all duration-200 ${
+                      cat.isAccent
+                        ? 'text-rose-600 hover:text-rose-700'
+                        : isActive
                         ? 'text-neutral-950'
-                        : 'text-neutral-700 hover:text-neutral-950'
-                      }`}
+                        : 'text-neutral-600 hover:text-neutral-950'
+                    }`}
                   >
                     <span>{cat.label}</span>
-                    {/* Active Underline Highlight matching the reference image */}
+                    {/* Active Underline Pill */}
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-900" />
+                      <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-neutral-950 rounded-full animate-in fade-in duration-200" />
                     )}
                   </Link>
                 </div>
@@ -437,32 +531,32 @@ export default function Navbar() {
           {/* Right: Utility Links & Icons */}
           <div className="flex items-center gap-3 sm:gap-4 text-neutral-800">
             {/* Region / Currency Pill */}
-            <div className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-neutral-100 border border-neutral-200 text-neutral-800">
+            <div className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-neutral-100 border border-neutral-200 text-neutral-800 shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               <span>India (₹)</span>
             </div>
 
-            {/* Search Trigger */}
+            {/* Live Search Trigger (Cmd+K) */}
             <button
               onClick={() => setIsSearchDialogOpen(true)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-neutral-600 bg-neutral-100 hover:bg-neutral-200 transition cursor-pointer"
               aria-label="Search Catalog"
             >
               <Search className="w-3.5 h-3.5 text-neutral-500" />
-              <span className="hidden sm:inline">Search...</span>
-              <kbd className="hidden lg:inline text-[10px] font-mono px-1 rounded bg-white text-neutral-400 border border-neutral-200">
+              <span className="hidden sm:inline font-medium">Search...</span>
+              <kbd className="hidden lg:inline text-[10px] font-mono px-1 rounded bg-white text-neutral-400 border border-neutral-200 shadow-2xs">
                 ⌘K
               </kbd>
             </button>
 
-            {/* Wishlist Link with Badge */}
+            {/* Wishlist Link */}
             <Link
               href="/wishlist"
               className="p-2 hover:text-black transition cursor-pointer text-neutral-700 relative"
               aria-label="View Wishlist"
               title="Saved Items"
             >
-              <Heart className="w-5 h-5 stroke-[1.8]" />
+              <Heart className="w-5 h-5 stroke-[1.75]" />
             </Link>
 
             {/* Account Icon */}
@@ -472,7 +566,7 @@ export default function Navbar() {
                   href="/account"
                   className="flex items-center gap-1.5 p-1 text-xs font-semibold text-neutral-800 hover:text-black"
                 >
-                  <div className="w-7 h-7 rounded-full bg-neutral-900 text-white flex items-center justify-center text-[10px] font-bold">
+                  <div className="w-7 h-7 rounded-full bg-neutral-950 text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
                     {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                 </Link>
@@ -484,7 +578,7 @@ export default function Navbar() {
                 aria-label="Account Login"
                 title="Sign In"
               >
-                <UserIcon className="w-5 h-5 stroke-[1.8]" />
+                <UserIcon className="w-5 h-5 stroke-[1.75]" />
               </Link>
             )}
 
@@ -495,9 +589,9 @@ export default function Navbar() {
               aria-label="Cart Bag"
               title="View Cart"
             >
-              <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
+              <ShoppingBag className="w-5 h-5 stroke-[1.75]" />
               {cart && cart.items_count > 0 && (
-                <span className="absolute top-0 right-0 bg-neutral-900 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-neutral-950 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {cart.items_count}
                 </span>
               )}
@@ -505,86 +599,170 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* 3. Dropdown Mega Menu (Full-Width Taylor Stitch Layout) */}
+        {/* 3. Ultra-Premium Full-Width Mega Menu Dropdown */}
         {activeCategory?.megaMenu && (
           <div
-            className="hidden lg:block absolute left-0 right-0 top-full bg-white border-b border-neutral-200 shadow-2xl transition-all duration-200 z-40 animate-fade-in"
+            className="hidden lg:block absolute left-0 right-0 top-full bg-white/98 backdrop-blur-2xl border-b border-neutral-200 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.12)] z-40 transition-all duration-300 animate-in fade-in-0 slide-in-from-top-1.5"
             onMouseEnter={() => {
               if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
             }}
             onMouseLeave={handleMouseLeave}
           >
             <div className="max-w-7xl mx-auto px-8 py-10">
-              <div className="grid grid-cols-12 gap-10">
-                {/* Left 6 Columns: Category Heading & Subcategory Text Links */}
-                <div className="col-span-6 flex flex-col justify-between pr-4">
-                  {/* Category Main Heading & Overview Link */}
-                  <div className="mb-6">
-                    <h2 className="font-serif text-3xl font-medium text-neutral-900 tracking-tight">
-                      {activeCategory.megaMenu.mainHeading}
-                    </h2>
-                    <Link
-                      href={activeCategory.megaMenu.mainLinkHref}
-                      className="inline-block text-sm font-semibold text-sky-700 hover:text-sky-900 transition mt-1.5"
-                    >
-                      {activeCategory.megaMenu.mainLinkText}
-                    </Link>
-                  </div>
+              {/* Category Header Strip */}
+              <div className="flex items-center justify-between pb-6 mb-8 border-b border-neutral-100">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400">
+                    {activeCategory.megaMenu.eyebrow || 'CARTIFY ATELIER'}
+                  </span>
+                  <span className="text-neutral-300">•</span>
+                  <h3 className="text-lg font-bold text-neutral-950 tracking-tight">
+                    {activeCategory.megaMenu.mainHeading}
+                  </h3>
+                </div>
 
-                  {/* Two Sub-columns of links (matching screenshot layout) */}
-                  <div className="grid grid-cols-2 gap-8 pt-2">
-                    {activeCategory.megaMenu.columns.map((col, idx) => (
-                      <div key={idx} className="space-y-3">
+                <Link
+                  href={activeCategory.megaMenu.mainLinkHref}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-900 hover:text-neutral-600 transition group"
+                >
+                  <span>{activeCategory.megaMenu.mainLinkText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+
+              {/* Grid: 3 Editorial Text Link Columns (7 Cols) + 2 Editorial Visual Cards (5 Cols) */}
+              <div className="grid grid-cols-12 gap-10">
+                {/* Left 7 Columns: 3 Structured Text Columns */}
+                <div className="col-span-7 grid grid-cols-3 gap-8">
+                  {activeCategory.megaMenu.columns.map((col, idx) => (
+                    <div key={idx} className="space-y-4">
+                      <div className="pb-2 border-b border-neutral-200">
                         <Link
                           href={col.href}
-                          className="font-semibold text-sm text-sky-700 hover:text-sky-900 transition block mb-2"
+                          className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-950 hover:text-neutral-600 transition block"
                         >
                           {col.title}
                         </Link>
-                        <ul className="space-y-2 text-sm text-neutral-700">
-                          {col.links.map((link, lIdx) => (
-                            <li key={lIdx}>
-                              <Link
-                                href={link.href}
-                                className="hover:text-black transition-colors block text-[13px] leading-relaxed"
-                              >
-                                {link.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
                       </div>
-                    ))}
-                  </div>
+
+                      <ul className="space-y-3">
+                        {col.links.map((link, lIdx) => (
+                          <li key={lIdx}>
+                            <Link
+                              href={link.href}
+                              className="group flex items-center justify-between text-xs text-neutral-600 hover:text-neutral-950 transition-all py-0.5"
+                            >
+                              <span className="font-medium group-hover:translate-x-1 transition-transform duration-200">
+                                {link.label}
+                              </span>
+                              {link.badge && (
+                                <span
+                                  className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full shadow-2xs ${
+                                    link.badge === 'NEW'
+                                      ? 'bg-neutral-950 text-white'
+                                      : link.badge === 'LIMITED'
+                                      ? 'bg-rose-600 text-white'
+                                      : link.badge === 'ICON'
+                                      ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                                      : 'bg-neutral-100 text-neutral-700'
+                                  }`}
+                                >
+                                  {link.badge}
+                                </span>
+                              )}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Right 6 Columns: 2 Featured Image Cards */}
-                <div className="col-span-6 grid grid-cols-2 gap-6">
+                {/* Right 5 Columns: 2 Curated Fashion Editorial Spotlight Cards */}
+                <div className="col-span-5 grid grid-cols-2 gap-5">
                   {activeCategory.megaMenu.features.map((feature, fIdx) => (
                     <Link
                       key={fIdx}
                       href={feature.href}
-                      className="group flex flex-col items-center relative rounded-2xl overflow-hidden"
+                      className="group relative flex flex-col rounded-2xl overflow-hidden bg-neutral-950 border border-neutral-200/80 shadow-md hover:shadow-xl transition-all duration-300"
                     >
-                      <div className="w-full aspect-[4/5] relative bg-neutral-100 overflow-hidden shadow-sm rounded-2xl">
+                      {/* 4:5 Aspect Ratio Editorial Photo */}
+                      <div className="aspect-[4/5] relative w-full overflow-hidden">
                         <img
                           src={feature.image}
                           alt={feature.alt}
-                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                        <div className="absolute bottom-4 inset-x-4 flex flex-col items-center gap-2">
-                          <span className="text-xs font-extrabold tracking-[0.16em] uppercase text-white text-center font-sans">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                        {/* Top Tag Pill */}
+                        {feature.tag && (
+                          <div className="absolute top-3 left-3">
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-white/20 backdrop-blur-md text-white border border-white/20">
+                              {feature.tag}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Bottom Text Content & Action Pill */}
+                        <div className="absolute bottom-3 inset-x-3 space-y-1.5 text-white">
+                          <h4 className="text-xs font-bold uppercase tracking-wider leading-snug">
                             {feature.title}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white text-neutral-950 shadow-md group-hover:bg-indigo-50 transition">
-                            <span>Shop the Look</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </span>
+                          </h4>
+                          {feature.subtitle && (
+                            <p className="text-[10px] text-neutral-300 font-light line-clamp-1">
+                              {feature.subtitle}
+                            </p>
+                          )}
+                          <div className="pt-1">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-white group-hover:text-amber-300 transition-colors">
+                              <span>{feature.ctaText || 'Shop Collection'}</span>
+                              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </Link>
                   ))}
+                </div>
+              </div>
+
+              {/* Bottom Atelier Micro-Trust Strip inside the Mega Menu */}
+              <div className="mt-8 pt-6 border-t border-neutral-100 grid grid-cols-3 gap-6 text-xs text-neutral-500">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                    <Truck className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                      Complimentary Pan-India Shipping
+                    </p>
+                    <p className="text-[10px] text-neutral-400">On all orders over ₹999</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                    <Scissors className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                      Complimentary Atelier Hemming
+                    </p>
+                    <p className="text-[10px] text-neutral-400">Custom inseam lengths upon checkout</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900 shrink-0">
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">
+                      30-Day Effortless Returns
+                    </p>
+                    <p className="text-[10px] text-neutral-400">Prepaid domestic return consignment</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -596,11 +774,9 @@ export default function Navbar() {
           isOpen={isSearchDialogOpen}
           onClose={() => setIsSearchDialogOpen(false)}
         />
-
-
       </header>
 
-      {/* 5. Mobile Drawer Navigation */}
+      {/* 4. Luxury Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           {/* Backdrop */}
@@ -609,69 +785,77 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
           />
 
-          {/* Drawer Panel */}
-          <div className="relative w-full max-w-sm bg-white h-full flex flex-col shadow-2xl z-10 animate-slide-in">
-            {/* Header */}
-            <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
-              <span className="font-extrabold tracking-[0.2em] text-xl text-neutral-900 font-sans uppercase">
+          {/* Drawer Body */}
+          <div className="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col justify-between z-10 animate-in slide-in-from-left duration-300">
+            {/* Drawer Header */}
+            <div className="p-5 flex items-center justify-between border-b border-neutral-200">
+              <span className="font-extrabold tracking-[0.2em] text-lg text-neutral-950 uppercase">
                 CARTIFY
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 text-neutral-700 hover:text-black"
+                className="p-1.5 text-neutral-500 hover:text-black rounded-lg transition"
+                aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Scrollable Categories Accordion */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {/* Drawer Categories List */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4">
               {navCategories.map((cat) => {
                 const isExpanded = expandedMobileCategory === cat.id;
                 return (
-                  <div key={cat.id} className="border-b border-neutral-100 pb-2">
+                  <div key={cat.id} className="border-b border-neutral-100 pb-3">
                     <button
                       onClick={() =>
                         setExpandedMobileCategory(isExpanded ? null : cat.id)
                       }
-                      className="w-full flex items-center justify-between py-2 text-left text-sm font-bold tracking-wide text-neutral-900 uppercase"
+                      className="w-full flex items-center justify-between py-2 text-left text-xs font-bold tracking-[0.16em] text-neutral-950 uppercase"
                     >
                       <span className={cat.isAccent ? 'text-rose-600' : ''}>
                         {cat.label}
                       </span>
                       {cat.megaMenu && (
                         <ChevronDown
-                          className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''
-                            }`}
+                          className={`w-4 h-4 text-neutral-400 transition-transform ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`}
                         />
                       )}
                     </button>
 
                     {/* Accordion Content */}
                     {cat.megaMenu && isExpanded && (
-                      <div className="pl-3 pt-2 pb-4 space-y-4">
+                      <div className="pl-3 pt-2 pb-3 space-y-4">
                         <Link
                           href={cat.megaMenu.mainLinkHref}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="block text-xs font-bold text-sky-700 uppercase tracking-wider"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-950 uppercase tracking-wider"
                         >
-                          {cat.megaMenu.mainLinkText} &rarr;
+                          <span>{cat.megaMenu.mainLinkText}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
 
                         {cat.megaMenu.columns.map((col, cIdx) => (
-                          <div key={cIdx} className="space-y-1.5">
-                            <span className="block text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                          <div key={cIdx} className="space-y-2">
+                            <span className="block text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
                               {col.title}
                             </span>
-                            <ul className="space-y-1 pl-2">
+                            <ul className="space-y-1.5 pl-2">
                               {col.links.map((link, lIdx) => (
                                 <li key={lIdx}>
                                   <Link
                                     href={link.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="text-xs text-neutral-700 hover:text-black block py-0.5"
+                                    className="flex items-center justify-between text-xs text-neutral-700 hover:text-black py-0.5"
                                   >
-                                    {link.label}
+                                    <span>{link.label}</span>
+                                    {link.badge && (
+                                      <span className="text-[8px] font-black uppercase px-1.5 py-0.2 rounded bg-neutral-100 text-neutral-700">
+                                        {link.badge}
+                                      </span>
+                                    )}
                                   </Link>
                                 </li>
                               ))}
@@ -686,16 +870,16 @@ export default function Navbar() {
                               key={fIdx}
                               href={f.href}
                               onClick={() => setMobileMenuOpen(false)}
-                              className="block text-center"
+                              className="group block text-center"
                             >
-                              <div className="aspect-[4/5] bg-neutral-100 overflow-hidden rounded">
+                              <div className="aspect-[4/5] bg-neutral-100 overflow-hidden rounded-xl">
                                 <img
                                   src={f.image}
                                   alt={f.alt}
-                                  className="w-full h-full object-cover"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                                 />
                               </div>
-                              <span className="text-[10px] font-bold tracking-wider uppercase text-neutral-800 mt-1 block">
+                              <span className="text-[10px] font-bold tracking-wider uppercase text-neutral-900 mt-1.5 block line-clamp-1">
                                 {f.title}
                               </span>
                             </Link>
@@ -709,13 +893,18 @@ export default function Navbar() {
             </div>
 
             {/* Footer Links in Drawer */}
-            <div className="p-4 border-t border-neutral-200 bg-neutral-50 space-y-2 text-xs">
+            <div className="p-5 border-t border-neutral-200 bg-neutral-50/80 space-y-3 text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
+                <span className="text-neutral-500 font-medium">Currency</span>
+                <span className="font-bold text-neutral-900">India (₹ INR)</span>
+              </div>
+
               <Link
                 href="/orders"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
               >
-                <Package className="w-4 h-4" />
+                <Truck className="w-4 h-4" />
                 <span>Track Orders</span>
               </Link>
               <Link
@@ -736,7 +925,7 @@ export default function Navbar() {
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-rose-600 hover:underline font-bold"
+                    className="text-rose-600 hover:underline font-bold cursor-pointer"
                   >
                     Sign Out
                   </button>
@@ -748,7 +937,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 text-neutral-700 hover:text-black py-1 font-semibold"
                 >
                   <UserIcon className="w-4 h-4" />
-                  <span>Sign In / Register</span>
+                  <span>Sign In / Member Access</span>
                 </Link>
               )}
             </div>
