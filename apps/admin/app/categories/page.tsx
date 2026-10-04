@@ -169,11 +169,6 @@ export default function AdminCategoriesPage() {
             <span>New Category</span>
           </button>
         </div>
-            <p className="text-sm text-neutral-400 mt-1">
-              Curate seasonal storefront collections, navigation groups, and featured campaign landing pages
-            </p>
-          </div>
-        </div>
 
         {/* Search */}
         <div className="bg-neutral-900/70 border border-neutral-800/80 rounded-2xl p-4 mb-6 shadow-xl max-w-md">

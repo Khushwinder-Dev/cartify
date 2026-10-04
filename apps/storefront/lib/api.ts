@@ -223,4 +223,43 @@ export const api = {
       token,
     });
   },
+
+  // Reviews & Ratings
+  async getProductReviews(productId: number) {
+    return request<{ reviews: any[]; stats: { average_rating: number; total_reviews: number; rating_breakdown: Record<string, number> } }>(
+      `/products/${productId}/reviews`,
+      { cache: 'no-store' }
+    );
+  },
+
+  async submitProductReview(productId: number, data: { rating: number; title: string; body: string; author_name: string; author_email: string }, token?: string) {
+    return request<any>(`/products/${productId}/reviews`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      token,
+    });
+  },
+
+  // Collections
+  async getCollections() {
+    return request<any[]>('/collections', { next: { revalidate: 60 } });
+  },
+
+  async getCollection(slug: string) {
+    return request<{ collection: any; products: Product[] }>(`/collections/${slug}`, { next: { revalidate: 60 } });
+  },
+
+  // Wishlist
+  async getWishlist(token?: string) {
+    return request<any[]>('/wishlist', { token, cache: 'no-store' });
+  },
+
+  async toggleWishlist(productId: number, token?: string) {
+    return request<{ in_wishlist: boolean; message: string }>('/wishlist/toggle', {
+      method: 'POST',
+      body: JSON.stringify({ product_id: productId }),
+      token,
+    });
+  },
 };
+

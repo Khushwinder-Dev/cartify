@@ -286,27 +286,36 @@ export default function NewProductMatrixPage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-indigo-500 selection:text-white pb-24">
-      {/* Top Bar */}
-      <header className="border-b border-neutral-800 bg-neutral-900/60 backdrop-blur sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      {/* Page Header Bar */}
+      <div className="max-w-7xl mx-auto px-6 pt-6 pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-800">
           <div className="flex items-center gap-4">
             <Link
               href="/products"
-              className="p-2 rounded-xl bg-neutral-800/80 hover:bg-neutral-800 text-neutral-300 transition"
+              className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-neutral-300 transition"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
-              <h1 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
-                <span>Shopify-Style Dynamic Variant Matrix Creator</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono">
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-bold text-white tracking-tight">
+                  Dynamic Variant Matrix Creator
+                </h1>
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono font-medium">
                   Cartesian Engine
                 </span>
-              </h1>
+              </div>
+              <p className="text-xs text-neutral-400 mt-1">Configure options, generate SKU permutations, and persist synchronized inventory.</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/products"
+              className="px-4 py-2 text-xs font-medium text-neutral-400 hover:text-white rounded-xl border border-neutral-800 hover:bg-neutral-900 transition"
+            >
+              Cancel
+            </Link>
             <button
               onClick={handleSubmit}
               disabled={saving}
@@ -320,16 +329,16 @@ export default function NewProductMatrixPage() {
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  <span>Save & Sync Variants</span>
+                  <span>Save & Sync Matrix</span>
                 </>
               )}
             </button>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Form Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-6">
         {successMsg && (
           <div className="mb-6 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-sm flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
