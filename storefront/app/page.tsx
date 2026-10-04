@@ -135,13 +135,15 @@ export default function HomePage() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
 
-                <Link
-                  href="/admin"
-                  className="px-6 py-3.5 rounded-xl border border-neutral-300 dark:border-neutral-700 font-bold text-xs uppercase tracking-wider text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-all flex items-center space-x-2"
+                <a
+                  href="http://localhost:3001"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3.5 rounded-xl border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/40 dark:bg-indigo-950/20 font-bold text-xs uppercase tracking-wider text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-all flex items-center space-x-2"
                 >
-                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  <span>Launch Admin Portal</span>
-                </Link>
+                  <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>Admin Studio (:3001) ↗</span>
+                </a>
               </div>
 
               {/* Architecture Highlights Chips */}

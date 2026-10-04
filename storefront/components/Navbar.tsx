@@ -9,7 +9,6 @@ import { useCart } from '@/context/CartContext';
 export default function Navbar() {
   const { cart, openCart } = useCart();
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith('/admin');
 
   return (
     <>
@@ -48,7 +47,7 @@ export default function Navbar() {
               <Link
                 href="/"
                 className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  !isAdmin && pathname === '/'
+                  pathname === '/'
                     ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
                 }`}
@@ -78,18 +77,18 @@ export default function Navbar() {
               USD ($)
             </span>
 
-            {/* Admin Switch */}
-            <Link
-              href={isAdmin ? '/' : '/admin'}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 border transition-all ${
-                isAdmin
-                  ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-transparent shadow-sm'
-                  : 'border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-              }`}
+            {/* Admin Back-Office Switch */}
+            <a
+              href="http://localhost:3001"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open Isolated Admin Back-Office (Port 3001)"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all shadow-sm"
             >
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span>{isAdmin ? 'Storefront' : 'Admin Portal'}</span>
-            </Link>
+              <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>Admin Studio (3001)</span>
+              <span className="text-[10px] bg-indigo-200/60 dark:bg-indigo-800/60 px-1 py-0.2 rounded font-mono">↗</span>
+            </a>
 
             {/* Cart Trigger */}
             <button
