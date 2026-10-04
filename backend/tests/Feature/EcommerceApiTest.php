@@ -153,12 +153,13 @@ class EcommerceApiTest extends TestCase
 
     public function test_payment_webhook_updates_order_status(): void
     {
+        $piId = 'pi_test_' . Str::random(12);
         $order = \App\Models\Order::create([
             'order_number' => \App\Models\Order::generateOrderNumber(),
             'email' => 'webhook@test.com',
             'subtotal' => 100.00,
             'grand_total' => 108.00,
-            'payment_intent_id' => 'pi_test_webhook_123',
+            'payment_intent_id' => $piId,
             'financial_status' => 'pending',
         ]);
 
@@ -166,7 +167,7 @@ class EcommerceApiTest extends TestCase
             'type' => 'payment_intent.succeeded',
             'data' => [
                 'object' => [
-                    'id' => 'pi_test_webhook_123',
+                    'id' => $piId,
                 ]
             ]
         ];
