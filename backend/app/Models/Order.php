@@ -30,6 +30,9 @@ class Order extends Model
         'idempotency_key',
         'payment_method',
         'payment_intent_id',
+        'carrier',
+        'tracking_number',
+        'shipped_at',
         'shipping_address',
         'billing_address',
         'notes',
@@ -45,6 +48,7 @@ class Order extends Model
             'grand_total' => 'decimal:2',
             'shipping_address' => 'array',
             'billing_address' => 'array',
+            'shipped_at' => 'datetime',
         ];
     }
 

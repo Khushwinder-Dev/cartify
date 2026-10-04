@@ -77,7 +77,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const guestCartToken =
-        typeof window !== 'undefined' ? localStorage.getItem('cart_token') : null;
+        typeof window !== 'undefined'
+          ? localStorage.getItem('cartify_cart_token') || localStorage.getItem('shopify_cart_token') || localStorage.getItem('cart_token')
+          : null;
 
       const res = await fetch(`${getApiBase()}/auth/login`, {
         method: 'POST',

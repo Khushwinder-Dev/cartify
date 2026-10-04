@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AdminAnalyticsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
@@ -66,12 +67,21 @@ Route::prefix('v1')->group(function () {
         // Orders
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/{identifier}', [OrderController::class, 'show']);
+
+        // Customer Address Book
+        Route::get('/addresses', [AddressController::class, 'index']);
+        Route::post('/addresses', [AddressController::class, 'store']);
+        Route::put('/addresses/{id}', [AddressController::class, 'update']);
+        Route::patch('/addresses/{id}/default', [AddressController::class, 'setDefault']);
+        Route::delete('/addresses/{id}', [AddressController::class, 'destroy']);
     });
 
     // 10. Admin RBAC Routes (Strict authentication and role verification)
     Route::prefix('admin')->middleware(['auth:sanctum', EnsureAdmin::class])->group(function () {
         // Analytics
         Route::get('/analytics', [AdminAnalyticsController::class, 'index']);
+        Route::get('/analytics/sales-report', [AdminAnalyticsController::class, 'salesReport']);
+        Route::get('/abandoned-carts', [AdminAnalyticsController::class, 'abandonedCarts']);
 
         // Products management
         Route::post('/products', [ProductController::class, 'store']);

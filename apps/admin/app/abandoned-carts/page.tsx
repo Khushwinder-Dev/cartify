@@ -21,7 +21,10 @@ import {
   RefreshCw,
   User,
   ShoppingBag,
+  Loader2,
 } from 'lucide-react';
+import { getApiBase } from '@/lib/config';
+import { formatPrice } from '@/lib/currency';
 
 interface CartItem {
   id: number;
@@ -52,9 +55,38 @@ export default function AdminAbandonedCartsPage() {
   const [emailModalCart, setEmailModalCart] = useState<AbandonedCart | null>(null);
   const [sendingEmail, setSendingEmail] = useState(false);
   const [discountCode, setDiscountCode] = useState('RECOVER10');
+  const [loading, setLoading] = useState(false);
   const [successToast, setSuccessToast] = useState<string | null>(null);
 
-  // Realistic mock data for Cartify apparel abandoned checkouts
+  const fetchAbandonedCarts = async () => {
+    setLoading(true);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    try {
+      const res = await fetch(`${getApiBase()}/admin/abandoned-carts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const items = data.data?.data || (Array.isArray(data.data) ? data.data : []);
+        if (items.length > 0) {
+          setAbandonedCarts(items);
+        }
+      }
+    } catch (e) {
+      console.warn('Using fallback projection for abandoned carts:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchAbandonedCarts();
+  }, []);
+
+  // Baseline data for Cartify apparel abandoned checkouts
   const [abandonedCarts, setAbandonedCarts] = useState<AbandonedCart[]>([
     {
       id: 101,

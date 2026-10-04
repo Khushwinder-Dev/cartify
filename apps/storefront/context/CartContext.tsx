@@ -34,11 +34,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize cart token from localStorage
   useEffect(() => {
-    let token = localStorage.getItem('shopify_cart_token');
+    let token = localStorage.getItem('cartify_cart_token') || localStorage.getItem('shopify_cart_token') || localStorage.getItem('cart_token');
     if (!token) {
       token = crypto.randomUUID();
-      localStorage.setItem('shopify_cart_token', token);
     }
+    localStorage.setItem('cartify_cart_token', token);
     setCartToken(token);
     fetchCart(token);
   }, []);

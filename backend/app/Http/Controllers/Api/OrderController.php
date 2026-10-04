@@ -99,12 +99,27 @@ class OrderController extends BaseApiController
     {
         $validated = $request->validate([
             'fulfillment_status' => 'required|in:unfulfilled,partially_fulfilled,fulfilled,cancelled',
+            'carrier' => 'nullable|string|max:100',
+            'tracking_number' => 'nullable|string|max:150',
         ]);
 
         $order = Order::findOrFail($id);
-        $order->update(['fulfillment_status' => $validated['fulfillment_status']]);
 
-        return $this->success(new OrderResource($order->fresh('items')), 'Order fulfillment status updated');
+        $updateData = ['fulfillment_status' => $validated['fulfillment_status']];
+
+        if (array_key_exists('carrier', $validated)) {
+            $updateData['carrier'] = $validated['carrier'];
+        }
+        if (array_key_exists('tracking_number', $validated)) {
+            $updateData['tracking_number'] = $validated['tracking_number'];
+        }
+        if ($validated['fulfillment_status'] === 'fulfilled' && !$order->shipped_at) {
+            $updateData['shipped_at'] = now();
+        }
+
+        $order->update($updateData);
+
+        return $this->success(new OrderResource($order->fresh(['items.variant', 'user'])), 'Order fulfillment status updated');
     }
 
     /**

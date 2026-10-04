@@ -14,9 +14,12 @@ import {
   X,
   ExternalLink,
   ShieldCheck,
-  Package
+  Package,
+  Loader2,
+  RefreshCw
 } from 'lucide-react';
 import { formatPrice } from '@/lib/currency';
+import { getApiBase } from '@/lib/config';
 
 interface OrderItem {
   id: string;
@@ -115,6 +118,8 @@ const mockOrders: OrderItem[] = [
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<OrderItem[]>(mockOrders);
+  const [loading, setLoading] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [filterFinancial, setFilterFinancial] = useState<string>('all');
   const [filterFulfillment, setFilterFulfillment] = useState<string>('all');
   const [search, setSearch] = useState('');
@@ -126,6 +131,62 @@ export default function AdminOrdersPage() {
   const [activeFulfillmentOrder, setActiveFulfillmentOrder] = useState<OrderItem | null>(null);
   const [trackingNumberInput, setTrackingNumberInput] = useState('');
   const [carrierInput, setCarrierInput] = useState('FedEx Express');
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    try {
+      const res = await fetch(`${getApiBase()}/admin/orders`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const items = Array.isArray(data.data) ? data.data : [];
+        if (items.length > 0) {
+          setOrders(
+            items.map((o: any) => ({
+              id: String(o.id),
+              order_number: o.order_number,
+              customer_name: o.customer_name || 'Guest Customer',
+              email: o.email,
+              financial_status: o.financial_status,
+              fulfillment_status: o.fulfillment_status,
+              grand_total: Number(o.grand_total),
+              items_count: o.items?.length || 1,
+              carrier: o.carrier || undefined,
+              tracking_number: o.tracking_number || undefined,
+              date: o.created_at ? new Date(o.created_at).toISOString().split('T')[0] : 'Today',
+              items: (o.items || []).map((it: any) => ({
+                id: it.id,
+                title: it.product_title || 'Item',
+                variant: it.variant_title || '',
+                quantity: it.quantity,
+                price: Number(it.price),
+              })),
+              shipping_address: o.shipping_address || {
+                street: 'Primary Address',
+                city: 'Delhi',
+                state: 'DL',
+                postal: '110001',
+                country: 'IN',
+              },
+            }))
+          );
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch admin orders:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const filteredOrders = useMemo(() => {
     return orders.filter((o) => {
@@ -141,25 +202,70 @@ export default function AdminOrdersPage() {
     });
   }, [orders, search, filterFinancial, filterFulfillment]);
 
-  // Handle Tracking Assignment & Fulfillment Update
-  const assignTracking = (orderId: string) => {
+  // Handle Tracking Assignment & Fulfillment Update via Live API
+  const assignTracking = async (orderId: string) => {
     if (!trackingNumberInput.trim()) return;
+    setUpdatingId(orderId);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
 
-    setOrders((prev) =>
-      prev.map((o) =>
-        o.id === orderId
-          ? {
-              ...o,
-              fulfillment_status: 'fulfilled',
-              tracking_number: trackingNumberInput.trim(),
-              carrier: carrierInput,
-            }
-          : o
-      )
-    );
+    try {
+      const res = await fetch(`${getApiBase()}/admin/orders/${orderId}/fulfillment`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          fulfillment_status: 'fulfilled',
+          tracking_number: trackingNumberInput.trim(),
+          carrier: carrierInput,
+        }),
+      });
 
-    setActiveFulfillmentOrder(null);
-    setTrackingNumberInput('');
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  fulfillment_status: 'fulfilled',
+                  tracking_number: trackingNumberInput.trim(),
+                  carrier: carrierInput,
+                }
+              : o
+          )
+        );
+      }
+    } catch (e) {
+      console.error('Error assigning tracking:', e);
+    } finally {
+      setUpdatingId(null);
+      setActiveFulfillmentOrder(null);
+      setTrackingNumberInput('');
+    }
+  };
+
+  const updateFinancialStatus = async (orderId: string, status: 'paid' | 'pending' | 'refunded') => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    try {
+      const res = await fetch(`${getApiBase()}/admin/orders/${orderId}/financial`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ financial_status: status }),
+      });
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, financial_status: status } : o))
+        );
+      }
+    } catch (e) {
+      console.error('Error updating financial status:', e);
+    }
   };
 
   return (
@@ -173,6 +279,14 @@ export default function AdminOrdersPage() {
               Live transactional lifecycle, automated packing slips, and tracking assignments
             </p>
           </div>
+          <button
+            onClick={fetchOrders}
+            disabled={loading}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-xs font-semibold text-neutral-200 hover:text-white hover:border-neutral-700 transition cursor-pointer"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>{loading ? 'Refreshing...' : 'Refresh Orders'}</span>
+          </button>
         </div>
 
         {/* Filter Controls Bar */}

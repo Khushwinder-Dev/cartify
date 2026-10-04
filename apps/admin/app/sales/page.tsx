@@ -21,6 +21,8 @@ import {
   Percent,
   CheckCircle,
 } from 'lucide-react';
+import { getApiBase } from '@/lib/config';
+import { formatPrice } from '@/lib/currency';
 
 interface SalesMetric {
   title: string;
@@ -35,41 +37,91 @@ export default function AdminSalesReportPage() {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
+  const [liveMetrics, setLiveMetrics] = useState<SalesMetric[] | null>(null);
+  const [liveCategories, setLiveCategories] = useState<any[] | null>(null);
+
   // Dynamic Sales Metrics based on range
   const metricsData: Record<string, SalesMetric[]> = {
     today: [
-      { title: 'Gross Revenue', value: '$2,840.00', change: '+14.2%', isPositive: true, subtext: 'vs. yesterday ($2,480)' },
-      { title: 'Total Orders', value: '18', change: '+20.0%', isPositive: true, subtext: 'Avg. $157.77 / order' },
-      { title: 'Average Order Value (AOV)', value: '$157.77', change: '+4.8%', isPositive: true, subtext: 'Target: $145.00' },
-      { title: 'Return / Refund Rate', value: '0.0%', change: '-100%', isPositive: true, subtext: '$0.00 refunded today' },
+      { title: 'Gross Revenue', value: '₹2,840.00', change: '+14.2%', isPositive: true, subtext: 'vs. yesterday (₹2,480)' },
+      { title: 'Total Orders', value: '18', change: '+20.0%', isPositive: true, subtext: 'Avg. ₹157.77 / order' },
+      { title: 'Average Order Value (AOV)', value: '₹157.77', change: '+4.8%', isPositive: true, subtext: 'Target: ₹145.00' },
+      { title: 'Return / Refund Rate', value: '0.0%', change: '-100%', isPositive: true, subtext: '₹0.00 refunded today' },
     ],
     '7d': [
-      { title: 'Gross Revenue', value: '$18,450.00', change: '+11.8%', isPositive: true, subtext: 'vs. previous 7 days' },
+      { title: 'Gross Revenue', value: '₹18,450.00', change: '+11.8%', isPositive: true, subtext: 'vs. previous 7 days' },
       { title: 'Total Orders', value: '104', change: '+8.3%', isPositive: true, subtext: 'Avg. 14.8 orders/day' },
-      { title: 'Average Order Value (AOV)', value: '$177.40', change: '+3.2%', isPositive: true, subtext: 'Target: $160.00' },
+      { title: 'Average Order Value (AOV)', value: '₹177.40', change: '+3.2%', isPositive: true, subtext: 'Target: ₹160.00' },
       { title: 'Return / Refund Rate', value: '1.9%', change: '-0.4%', isPositive: true, subtext: '2 items returned' },
     ],
     '30d': [
-      { title: 'Gross Revenue', value: '$74,890.00', change: '+18.4%', isPositive: true, subtext: 'vs. previous 30 days' },
+      { title: 'Gross Revenue', value: '₹74,890.00', change: '+18.4%', isPositive: true, subtext: 'vs. previous 30 days' },
       { title: 'Total Orders', value: '412', change: '+15.2%', isPositive: true, subtext: '98.8% fulfillment rate' },
-      { title: 'Average Order Value (AOV)', value: '$181.77', change: '+5.6%', isPositive: true, subtext: 'Up from $172.10' },
+      { title: 'Average Order Value (AOV)', value: '₹181.77', change: '+5.6%', isPositive: true, subtext: 'Up from ₹172.10' },
       { title: 'Return / Refund Rate', value: '2.1%', change: '-0.8%', isPositive: true, subtext: 'Industry benchmark: 4.5%' },
     ],
     '90d': [
-      { title: 'Gross Revenue', value: '$218,400.00', change: '+24.1%', isPositive: true, subtext: 'Quarterly run-rate' },
+      { title: 'Gross Revenue', value: '₹218,400.00', change: '+24.1%', isPositive: true, subtext: 'Quarterly run-rate' },
       { title: 'Total Orders', value: '1,220', change: '+19.6%', isPositive: true, subtext: 'Strong seasonal lift' },
-      { title: 'Average Order Value (AOV)', value: '$179.01', change: '+4.1%', isPositive: true, subtext: 'Consistent margin' },
+      { title: 'Average Order Value (AOV)', value: '₹179.01', change: '+4.1%', isPositive: true, subtext: 'Consistent margin' },
       { title: 'Return / Refund Rate', value: '2.3%', change: '-0.5%', isPositive: true, subtext: 'Low return friction' },
     ],
     ytd: [
-      { title: 'Gross Revenue', value: '$586,300.00', change: '+31.5%', isPositive: true, subtext: 'Year-to-date total' },
-      { title: 'Total Orders', value: '3,280', change: '+27.0%', isPositive: true, subtext: '12 active countries' },
-      { title: 'Average Order Value (AOV)', value: '$178.75', change: '+6.2%', isPositive: true, subtext: 'Annual average' },
+      { title: 'Gross Revenue', value: '₹586,300.00', change: '+31.5%', isPositive: true, subtext: 'Year-to-date total' },
+      { title: 'Total Orders', value: '3,280', change: '+27.0%', isPositive: true, subtext: '12 active regions' },
+      { title: 'Average Order Value (AOV)', value: '₹178.75', change: '+6.2%', isPositive: true, subtext: 'Annual average' },
       { title: 'Return / Refund Rate', value: '2.2%', change: '-0.6%', isPositive: true, subtext: 'Top tier garment durability' },
     ],
   };
 
-  const metrics = metricsData[dateRange];
+  const fetchSalesReport = async (range: string) => {
+    setLoading(true);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    try {
+      const res = await fetch(`${getApiBase()}/admin/analytics/sales-report?range=${range}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.data?.metrics && Array.isArray(data.data.metrics)) {
+          setLiveMetrics(
+            data.data.metrics.map((m: any) => ({
+              title: m.title,
+              value: m.raw_value !== undefined ? formatPrice(m.raw_value) : m.value,
+              change: m.change,
+              isPositive: m.isPositive,
+              subtext: m.subtext,
+            }))
+          );
+        }
+        if (data.data?.categories && Array.isArray(data.data.categories) && data.data.categories.length > 0) {
+          const totalRev = data.data.categories.reduce((acc: number, c: any) => acc + Number(c.revenue || 0), 0);
+          setLiveCategories(
+            data.data.categories.map((c: any, idx: number) => ({
+              name: c.category,
+              revenue: formatPrice(c.revenue),
+              share: totalRev > 0 ? Math.round((Number(c.revenue) / totalRev) * 100) : 25,
+              units: Number(c.units),
+              color: ['bg-indigo-500', 'bg-violet-500', 'bg-amber-500', 'bg-emerald-500'][idx % 4],
+            }))
+          );
+        }
+      }
+    } catch (e) {
+      console.warn('Using baseline projection while fetching sales reports:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSalesReport(dateRange);
+  }, [dateRange]);
+
+  const metrics = liveMetrics || metricsData[dateRange];
 
   // Sales by Category
   const categorySales = [

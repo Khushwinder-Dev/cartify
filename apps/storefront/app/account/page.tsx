@@ -32,18 +32,20 @@ interface OrderItem {
   items_count: number;
 }
 
-const mockAddresses = [
-  {
-    id: 1,
-    type: 'shipping',
-    address_line1: '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'OR',
-    postal_code: '97477',
-    country: 'United States',
-    is_default: true,
-  },
-];
+interface CustomerAddress {
+  id: number;
+  first_name: string;
+  last_name: string;
+  company?: string;
+  address_line1: string;
+  address_line2?: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  phone?: string;
+  is_default: boolean;
+}
 
 export default function CustomerAccountPage() {
   const router = useRouter();
@@ -51,6 +53,22 @@ export default function CustomerAccountPage() {
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'profile'>('orders');
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [addresses, setAddresses] = useState<CustomerAddress[]>([]);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
+  const [showAddAddressModal, setShowAddAddressModal] = useState(false);
+  const [savingAddress, setSavingAddress] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    first_name: '',
+    last_name: '',
+    address_line1: '',
+    address_line2: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    country: 'India',
+    phone: '',
+    is_default: false,
+  });
   const [demoLoggingIn, setDemoLoggingIn] = useState(false);
 
   // Fetch real customer orders if available
@@ -79,10 +97,120 @@ export default function CustomerAccountPage() {
       }
     }
 
+    async function loadCustomerAddresses() {
+      if (!token) return;
+      setLoadingAddresses(true);
+      try {
+        const API_BASE = getApiBase();
+        const res = await fetch(`${API_BASE}/addresses`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAddresses(Array.isArray(data.data) ? data.data : []);
+        }
+      } catch (err) {
+        console.error('Error fetching addresses:', err);
+      } finally {
+        setLoadingAddresses(false);
+      }
+    }
+
     if (user && token) {
       loadCustomerOrders();
+      loadCustomerAddresses();
     }
   }, [user, token]);
+
+  const handleCreateAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token) return;
+    setSavingAddress(true);
+    try {
+      const API_BASE = getApiBase();
+      const res = await fetch(`${API_BASE}/addresses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(addressForm),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAddresses((prev) => {
+          if (addressForm.is_default) {
+            return [data.data, ...prev.map((a) => ({ ...a, is_default: false }))];
+          }
+          return [data.data, ...prev];
+        });
+        setShowAddAddressModal(false);
+        setAddressForm({
+          first_name: '',
+          last_name: '',
+          address_line1: '',
+          address_line2: '',
+          city: '',
+          state: '',
+          postal_code: '',
+          country: 'India',
+          phone: '',
+          is_default: false,
+        });
+      }
+    } catch (err) {
+      console.error('Error creating address:', err);
+    } finally {
+      setSavingAddress(false);
+    }
+  };
+
+  const handleSetDefaultAddress = async (id: number) => {
+    if (!token) return;
+    try {
+      const API_BASE = getApiBase();
+      const res = await fetch(`${API_BASE}/addresses/${id}/default`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        setAddresses((prev) =>
+          prev.map((a) => ({ ...a, is_default: a.id === id }))
+        );
+      }
+    } catch (err) {
+      console.error('Error updating default address:', err);
+    }
+  };
+
+  const handleDeleteAddress = async (id: number) => {
+    if (!token) return;
+    try {
+      const API_BASE = getApiBase();
+      const res = await fetch(`${API_BASE}/addresses/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        setAddresses((prev) => prev.filter((a) => a.id !== id));
+      }
+    } catch (err) {
+      console.error('Error deleting address:', err);
+    }
+  };
 
   const handleQuickDemoLogin = async () => {
     setDemoLoggingIn(true);
@@ -315,34 +443,218 @@ export default function CustomerAccountPage() {
             {activeTab === 'addresses' && (
               <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 sm:p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-serif font-bold text-neutral-900 dark:text-white">Shipping Addresses</h2>
+                  <div>
+                    <h2 className="text-lg font-serif font-bold text-neutral-900 dark:text-white">Shipping Addresses</h2>
+                    <p className="text-xs text-neutral-500 mt-0.5">Manage delivery addresses for faster checkout</p>
+                  </div>
+                  <button
+                    onClick={() => setShowAddAddressModal(true)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-xs font-bold hover:opacity-90 transition cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Address</span>
+                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockAddresses.map((addr) => (
-                    <div
-                      key={addr.id}
-                      className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 relative space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
-                          Primary Delivery
-                        </span>
-                        {addr.is_default && (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
-                            Default
+                {loadingAddresses ? (
+                  <div className="py-12 flex justify-center items-center">
+                    <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+                  </div>
+                ) : addresses.length === 0 ? (
+                  <div className="py-12 text-center border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+                    <MapPin className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
+                    <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">No saved addresses yet</p>
+                    <p className="text-xs text-neutral-500 mt-1">Add your shipping details for seamless one-click checkout.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {addresses.map((addr) => (
+                      <div
+                        key={addr.id}
+                        className={`p-5 rounded-2xl border transition relative space-y-3 ${
+                          addr.is_default
+                            ? 'border-indigo-500/50 bg-indigo-50/20 dark:bg-indigo-950/20'
+                            : 'border-neutral-200 dark:border-neutral-800'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                            {addr.first_name} {addr.last_name}
                           </span>
-                        )}
+                          {addr.is_default ? (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                              Default
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => handleSetDefaultAddress(addr.id)}
+                              className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold cursor-pointer"
+                            >
+                              Set as Default
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-mono">
+                          {addr.address_line1} {addr.address_line2 ? `, ${addr.address_line2}` : ''}<br />
+                          {addr.city}, {addr.state} {addr.postal_code}<br />
+                          {addr.country} {addr.phone ? `• ${addr.phone}` : ''}
+                        </p>
+                        <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800/60 flex justify-end">
+                          <button
+                            onClick={() => handleDeleteAddress(addr.id)}
+                            className="text-[11px] text-rose-500 hover:text-rose-700 font-semibold cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-white">{user.name}</p>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                        {addr.address_line1} <br />
-                        {addr.city}, {addr.state} {addr.postal_code} <br />
-                        {addr.country}
-                      </p>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add Address Modal */}
+                {showAddAddressModal && (
+                  <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-base font-bold text-neutral-950 dark:text-white">Add Delivery Address</h3>
+                        <button
+                          onClick={() => setShowAddAddressModal(false)}
+                          className="p-1 rounded-full text-neutral-400 hover:text-neutral-950 dark:hover:text-white cursor-pointer"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      <form onSubmit={handleCreateAddress} className="space-y-4 text-xs">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">First Name *</label>
+                            <input
+                              required
+                              type="text"
+                              value={addressForm.first_name}
+                              onChange={(e) => setAddressForm({ ...addressForm, first_name: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="e.g. Khushwinder"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">Last Name *</label>
+                            <input
+                              required
+                              type="text"
+                              value={addressForm.last_name}
+                              onChange={(e) => setAddressForm({ ...addressForm, last_name: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="e.g. Singh"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-neutral-500 font-bold mb-1">Address Line 1 *</label>
+                          <input
+                            required
+                            type="text"
+                            value={addressForm.address_line1}
+                            onChange={(e) => setAddressForm({ ...addressForm, address_line1: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Flat/House No., Street, Area"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">City *</label>
+                            <input
+                              required
+                              type="text"
+                              value={addressForm.city}
+                              onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="e.g. Noida"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">State *</label>
+                            <input
+                              required
+                              type="text"
+                              value={addressForm.state}
+                              onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="e.g. UP"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">Postal Code *</label>
+                            <input
+                              required
+                              type="text"
+                              value={addressForm.postal_code}
+                              onChange={(e) => setAddressForm({ ...addressForm, postal_code: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="e.g. 201301"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">Country</label>
+                            <input
+                              type="text"
+                              value={addressForm.country}
+                              onChange={(e) => setAddressForm({ ...addressForm, country: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-neutral-500 font-bold mb-1">Phone</label>
+                            <input
+                              type="text"
+                              value={addressForm.phone}
+                              onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="+91 98765 43210"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-2">
+                          <input
+                            type="checkbox"
+                            id="is_default"
+                            checked={addressForm.is_default}
+                            onChange={(e) => setAddressForm({ ...addressForm, is_default: e.target.checked })}
+                            className="rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
+                          />
+                          <label htmlFor="is_default" className="text-xs text-neutral-600 dark:text-neutral-400 font-medium cursor-pointer">
+                            Set as default shipping address
+                          </label>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-3">
+                          <button
+                            type="button"
+                            onClick={() => setShowAddAddressModal(false)}
+                            className="px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 font-semibold cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={savingAddress}
+                            className="px-5 py-2 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:opacity-50 transition cursor-pointer"
+                          >
+                            {savingAddress ? 'Saving...' : 'Save Address'}
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
               </div>
             )}
 
