@@ -1,25 +1,28 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Plus_Jakarta_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
 import Navbar from '@/components/Navbar';
 import CartDrawer from '@/components/CartDrawer';
 import CheckoutModal from '@/components/CheckoutModal';
+import Footer from '@/components/Footer';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const sansFont = Plus_Jakarta_Sans({
+  variable: '--font-sans',
   subsets: ['latin'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const serifFont = Playfair_Display({
+  variable: '--font-serif',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'Atelier | Headless Shopify E-Commerce',
-  description: 'Full-featured Headless Shopify-like platform with Cartesian Variant Matrix, atomic stock decrementing, and idempotent checkout.',
+  title: 'ATELIER & CO. | Luxury Engineered Goods & Living',
+  description: 'Ultra-refined e-commerce platform crafted with Cartesian variant matrices, pessimistic concurrency, and bespoke global fulfillment.',
 };
 
 export default function RootLayout({
@@ -28,12 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-neutral-50 dark:bg-neutral-950 font-sans">
+    <html lang="en" className={`${sansFont.variable} ${serifFont.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-[#0b0c10] text-neutral-100 font-sans selection:bg-indigo-600 selection:text-white">
         <AuthProvider>
           <CartProvider>
             <Navbar />
             <div className="flex-1">{children}</div>
+            <Footer />
             <CartDrawer />
             <CheckoutModal />
           </CartProvider>
