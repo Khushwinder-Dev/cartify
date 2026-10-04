@@ -140,7 +140,7 @@ export default function AdminSidebar() {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold tracking-tight text-white text-base leading-none">
-                ATELIER
+                CARTIFY
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
                 PRO

@@ -3,7 +3,18 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, ShieldCheck, Compass, Sparkles, Search, PackageCheck, Zap, User as UserIcon, LogOut } from 'lucide-react';
+import {
+  ShoppingBag,
+  Search,
+  User as UserIcon,
+  LogOut,
+  Sparkles,
+  Menu,
+  X,
+  Package,
+  Heart,
+  ChevronDown
+} from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 
@@ -11,6 +22,7 @@ export default function Navbar() {
   const { cart, openCart } = useCart();
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const userInitials = user?.name
     ? user.name
@@ -19,119 +31,101 @@ export default function Navbar() {
         .join('')
         .slice(0, 2)
         .toUpperCase()
-    : 'CU';
+    : 'U';
+
+  const navLinks = [
+    { label: 'Shop All', href: '/#catalog' },
+    { label: 'Outerwear', href: '/#catalog' },
+    { label: 'Hoodies', href: '/#catalog' },
+    { label: 'T-Shirts', href: '/#catalog' },
+    { label: 'Denim & Pants', href: '/#catalog' },
+    { label: 'Collections', href: '/collections' },
+  ];
 
   return (
     <>
       {/* Top Promotional Ribbon */}
-      <div className="bg-gradient-to-r from-neutral-900 via-indigo-950 to-neutral-900 text-white text-[11px] font-semibold py-1.5 px-4 text-center border-b border-indigo-900/30 flex items-center justify-center space-x-2">
-        <span className="flex items-center gap-1 text-amber-400">
-          <Zap className="w-3 h-3 fill-current" />
-          <span>SS/26 CAPSULE EVENT:</span>
+      <div className="bg-neutral-900 text-white text-[11px] font-medium py-2 px-4 text-center border-b border-neutral-800 flex items-center justify-center gap-2">
+        <span className="bg-indigo-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+          Spring Drop
         </span>
         <span className="text-neutral-300">
-          Free Worldwide Express Delivery on Orders $100+ • Use Code <strong className="text-white bg-indigo-500/30 px-1.5 py-0.5 rounded font-mono">WELCOME10</strong> for 10% Off
+          Complimentary shipping on orders over $75 • Use code <strong className="text-white font-mono bg-white/10 px-1.5 py-0.5 rounded">CARTIFY10</strong> for 10% off
         </span>
       </div>
 
       {/* Main Navigation Header */}
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/85 dark:bg-neutral-950/85 border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors">
+      <header className="sticky top-0 z-40 w-full bg-[#0b0c10]/90 backdrop-blur-md border-b border-neutral-800/80 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Brand */}
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-violet-500/20 group-hover:scale-105 transition-transform">
-                <Sparkles className="w-5 h-5" />
+          {/* Left: Mobile Menu Toggle & Brand */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-neutral-400 hover:text-white"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+                C
               </div>
-              <div>
-                <span className="font-black tracking-tight text-lg text-neutral-950 dark:text-white block leading-none">
-                  ATELIER
-                </span>
-                <span className="text-[10px] tracking-widest uppercase text-neutral-400 font-bold">
-                  Self-Hosted Architecture
-                </span>
-              </div>
+              <span className="font-extrabold tracking-tight text-xl text-white font-sans">
+                CARTIFY
+              </span>
             </Link>
 
-            {/* Nav Links */}
-            <nav className="hidden md:flex items-center space-x-1 text-xs font-bold uppercase tracking-wider">
-              <Link
-                href="/"
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  pathname === '/'
-                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                }`}
-              >
-                <Compass className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Storefront</span>
-              </Link>
-
-              <Link
-                href="/collections"
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  pathname.startsWith('/collections')
-                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                }`}
-              >
-                <span>Collections</span>
-              </Link>
-
-              <Link
-                href="/wishlist"
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  pathname.startsWith('/wishlist')
-                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                }`}
-              >
-                <span>Wishlist</span>
-              </Link>
-
-              <Link
-                href="/orders"
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  pathname.startsWith('/orders')
-                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                }`}
-              >
-                <PackageCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Track Order</span>
-              </Link>
-
-              <Link
-                href="/account"
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
-                  pathname.startsWith('/account')
-                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                }`}
-              >
-                <span>Account</span>
-              </Link>
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-1 text-xs font-semibold text-neutral-300">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-neutral-800/60 transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           </div>
 
-          {/* Action Controls */}
-          <div className="flex items-center space-x-3">
+          {/* Right Action Icons */}
+          <div className="flex items-center gap-3">
+            {/* Track Orders Link */}
+            <Link
+              href="/orders"
+              className="hidden lg:flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white px-2 py-1 transition"
+            >
+              <Package className="w-3.5 h-3.5 text-neutral-400" />
+              <span>Track Order</span>
+            </Link>
+
+            {/* Wishlist Link */}
+            <Link
+              href="/wishlist"
+              className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-xl transition"
+              title="Saved Wishlist"
+            >
+              <Heart className="w-4 h-4" />
+            </Link>
+
             {/* Customer Authentication State */}
             {user ? (
-              <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-1">
+              <div className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-800 rounded-xl p-1">
                 <Link
                   href="/account"
-                  className="flex items-center gap-2 px-2.5 py-1 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                  className="flex items-center gap-2 px-2.5 py-1 text-xs font-semibold text-neutral-200 hover:text-indigo-400 transition"
                 >
                   <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
                     {userInitials}
                   </div>
-                  <span className="hidden sm:inline max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
+                  <span className="hidden sm:inline max-w-[90px] truncate">{user.name.split(' ')[0]}</span>
                 </Link>
                 <button
                   onClick={() => logout()}
                   title="Sign Out"
-                  className="p-1.5 text-neutral-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition"
+                  className="p-1.5 text-neutral-400 hover:text-rose-400 hover:bg-rose-950/30 rounded-lg transition cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                 </button>
@@ -139,42 +133,63 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center space-x-1.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 transition"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide flex items-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 transition"
               >
-                <UserIcon className="w-3.5 h-3.5" />
+                <UserIcon className="w-3.5 h-3.5 text-neutral-400" />
                 <span>Sign In</span>
               </Link>
             )}
-
-            {/* Admin Back-Office Switch */}
-            <a
-              href="http://localhost:3001"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open Isolated Admin Back-Office (Port 3001)"
-              className="hidden lg:flex px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wide items-center space-x-1.5 border border-indigo-200 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all shadow-sm"
-            >
-              <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              <span>Admin Studio</span>
-              <span className="text-[10px] bg-indigo-200/60 dark:bg-indigo-800/60 px-1 py-0.2 rounded font-mono">↗</span>
-            </a>
 
             {/* Cart Trigger */}
             <button
               id="cart-drawer-trigger"
               onClick={openCart}
               aria-label="Shopping Cart"
-              className="relative p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors flex items-center justify-center text-neutral-800 dark:text-neutral-200"
+              className="relative p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center justify-center shadow-lg shadow-indigo-600/20 cursor-pointer"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-4 h-4" />
               {cart && cart.items_count > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-bounce">
+                <span className="absolute -top-1.5 -right-1.5 bg-white text-neutral-950 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-bounce">
                   {cart.items_count}
                 </span>
               )}
             </button>
           </div>
         </div>
+
+        {/* Mobile Slide-down Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-neutral-800 bg-[#0b0c10] px-4 py-4 space-y-3">
+            <nav className="flex flex-col space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-xl text-sm font-semibold text-neutral-300 hover:text-white hover:bg-neutral-900 transition"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                href="/orders"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-xl text-sm font-semibold text-neutral-300 hover:text-white hover:bg-neutral-900 transition flex items-center gap-2"
+              >
+                <Package className="w-4 h-4 text-indigo-400" />
+                <span>Track Order</span>
+              </Link>
+              <Link
+                href="/account"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-xl text-sm font-semibold text-neutral-300 hover:text-white hover:bg-neutral-900 transition flex items-center gap-2"
+              >
+                <UserIcon className="w-4 h-4 text-indigo-400" />
+                <span>My Account</span>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
     </>
   );

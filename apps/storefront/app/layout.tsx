@@ -21,8 +21,8 @@ const serifFont = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'ATELIER & CO. | Luxury Engineered Goods & Living',
-  description: 'Ultra-refined e-commerce platform crafted with Cartesian variant matrices, pessimistic concurrency, and bespoke global fulfillment.',
+  title: 'Cartify | Modern Everyday Clothing & Essentials',
+  description: 'Premium everyday clothing, custom-milled heavyweight fleece hoodies, Japanese selvedge denim, and elevated wardrobe essentials.',
 };
 
 export default function RootLayout({

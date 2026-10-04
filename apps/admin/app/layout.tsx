@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Atelier Admin Studio | Self-Hosted E-Commerce Back Office',
-  description: 'Enterprise back-office dashboard for Atelier E-Commerce. Cartesian product matrix, inventory adjustments, orders fulfillment, CRM, and discount rules.',
+  title: 'Cartify Admin Studio | Merchant Back-Office',
+  description: 'Enterprise back-office dashboard for Cartify Apparel. Variant matrix control, inventory adjustments, orders fulfillment, CRM, and discount rules.',
 };
 
 export default function RootLayout({
