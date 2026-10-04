@@ -21,10 +21,20 @@ class DatabaseSeeder extends Seeder
         $variantService = app(ProductVariantService::class);
 
         // 1. Admin & Customer Users
-        $admin = User::firstOrCreate(
+        User::firstOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Cartify Administrator',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'phone' => '+1 (555) 100-2000',
+            ]
+        );
+
+        User::firstOrCreate(
             ['email' => 'admin@shopify-clone.test'],
             [
-                'name' => 'Store Administrator',
+                'name' => 'Cartify Admin',
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'phone' => '+1 (555) 123-4567',
@@ -32,6 +42,16 @@ class DatabaseSeeder extends Seeder
         );
 
         $customer = User::firstOrCreate(
+            ['email' => 'customer@customer.com'],
+            [
+                'name' => 'Sophia Laurent',
+                'password' => Hash::make('password123'),
+                'role' => 'customer',
+                'phone' => '+1 (555) 300-4000',
+            ]
+        );
+
+        User::firstOrCreate(
             ['email' => 'customer@example.com'],
             [
                 'name' => 'Eleanor Vance',
@@ -44,19 +64,30 @@ class DatabaseSeeder extends Seeder
         CustomerAddress::firstOrCreate(
             ['user_id' => $customer->id, 'is_default' => true],
             [
-                'first_name' => 'Eleanor',
-                'last_name' => 'Vance',
-                'company' => 'Atelier Studio',
-                'address_line1' => '742 Evergreen Terrace',
-                'city' => 'Springfield',
-                'state' => 'OR',
-                'postal_code' => '97477',
+                'first_name' => 'Sophia',
+                'last_name' => 'Laurent',
+                'company' => 'Cartify Atelier',
+                'address_line1' => '450 Fashion Avenue, Suite 12',
+                'city' => 'New York',
+                'state' => 'NY',
+                'postal_code' => '10018',
                 'country' => 'US',
-                'phone' => '+1 (555) 987-6543',
+                'phone' => '+1 (555) 300-4000',
             ]
         );
 
         // 2. Discounts
+        Discount::firstOrCreate(
+            ['code' => 'CARTIFY10'],
+            [
+                'type' => 'percentage',
+                'value' => 10.00,
+                'min_subtotal' => 50.00,
+                'is_active' => true,
+                'usage_limit' => 500,
+            ]
+        );
+
         Discount::firstOrCreate(
             ['code' => 'WELCOME10'],
             [
@@ -79,26 +110,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        Discount::firstOrCreate(
-            ['code' => 'FLASH25'],
-            [
-                'type' => 'percentage',
-                'value' => 25.00,
-                'min_subtotal' => 150.00,
-                'is_active' => true,
-            ]
-        );
-
-        // 3. Multi-Variant Products
+        // 3. 100% Clothing Catalog
         $catalog = [
             [
                 'title' => 'Minimalist Japanese Wool Overshirt',
                 'slug' => 'minimalist-japanese-wool-overshirt',
                 'description' => 'Tailored from heavyweight 380gsm Japanese melton wool. Features horn buttons, French seams, and a relaxed boxy drape designed for versatile layering throughout the year.',
                 'status' => 'active',
-                'vendor' => 'Noragi Studio',
+                'vendor' => 'Cartify Tailoring',
                 'product_type' => 'Apparel',
-                'tags' => ['wool', 'outerwear', 'minimalist', 'japan'],
+                'tags' => ['wool', 'outerwear', 'minimalist', 'overshirt'],
                 'media' => [
                     ['url' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Overshirt Front view', 'is_primary' => true],
                     ['url' => 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Wool fabric texture', 'is_primary' => false],
@@ -112,62 +133,100 @@ class DatabaseSeeder extends Seeder
                 'base_inventory' => 15,
             ],
             [
-                'title' => 'Aerospace Titanium Chronograph Watch',
-                'slug' => 'aerospace-titanium-chronograph-watch',
-                'description' => 'Engineered from grade 5 aerospace titanium with anti-reflective sapphire crystal glass. Features precision Japanese automatic movement with 42 hours power reserve and 100m water resistance.',
+                'title' => 'Heavyweight Organic Cotton T-Shirt',
+                'slug' => 'heavyweight-organic-cotton-tee',
+                'description' => 'Crafted from 100% GOTS-certified 260gsm ringspun organic cotton. Features double-needle bound collar, drop shoulders, and pre-shrunk combed weave for timeless everyday durability.',
                 'status' => 'active',
-                'vendor' => 'Horology Lab',
-                'product_type' => 'Accessories',
-                'tags' => ['watch', 'titanium', 'luxury', 'chronograph'],
+                'vendor' => 'Cartify Basics',
+                'product_type' => 'Apparel',
+                'tags' => ['cotton', 'basics', 't-shirt', 'casual'],
                 'media' => [
-                    ['url' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Titanium watch dial', 'is_primary' => true],
-                    ['url' => 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Watch leather strap detail', 'is_primary' => false],
+                    ['url' => 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80', 'alt' => 'White Heavyweight Tee', 'is_primary' => true],
+                    ['url' => 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Cotton fabric texture', 'is_primary' => false],
                 ],
                 'options' => [
-                    ['name' => 'Dial', 'values' => ['Midnight Black', 'Polar White']],
-                    ['name' => 'Strap', 'values' => ['Milanese Mesh', 'Full Grain Leather']],
+                    ['name' => 'Size', 'values' => ['XS', 'S', 'M', 'L', 'XL', 'XXL']],
+                    ['name' => 'Color', 'values' => ['Optic White', 'Washed Black', 'Sand Dune']],
                 ],
-                'base_price' => 450.00,
-                'compare_at_price' => 520.00,
-                'base_inventory' => 8,
+                'base_price' => 48.00,
+                'compare_at_price' => 60.00,
+                'base_inventory' => 45,
             ],
             [
-                'title' => 'Noise-Cancelling Studio Headphones Pro',
-                'slug' => 'noise-cancelling-studio-headphones-pro',
-                'description' => 'Audiophile-grade 40mm planar magnetic drivers delivering ultra-low distortion and expansive soundstage. Hybrid active noise cancellation with 45 hours battery life and premium leather memory foam ear cushions.',
+                'title' => 'Relaxed Linen Pleated Trousers',
+                'slug' => 'relaxed-linen-pleated-trousers',
+                'description' => 'Woven from airy French Normandy flax linen. Cut with a relaxed straight leg, double forward pleats, and an elasticated waistband with hidden drawstring for elevated comfort.',
                 'status' => 'active',
-                'vendor' => 'Acoustics Sound',
-                'product_type' => 'Electronics',
-                'tags' => ['audio', 'headphones', 'wireless', 'anc'],
+                'vendor' => 'Cartify Tailoring',
+                'product_type' => 'Apparel',
+                'tags' => ['linen', 'trousers', 'summer', 'pleated'],
                 'media' => [
-                    ['url' => 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Headphones angled view', 'is_primary' => true],
-                    ['url' => 'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Ear cup texture', 'is_primary' => false],
+                    ['url' => 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Linen Trousers on model', 'is_primary' => true],
                 ],
                 'options' => [
-                    ['name' => 'Color', 'values' => ['Obsidian Black', 'Silver Mist', 'Sandstone Tan']],
+                    ['name' => 'Waist', 'values' => ['30', '32', '34', '36']],
+                    ['name' => 'Color', 'values' => ['Natural Ecru', 'Navy Ink', 'Olive']],
                 ],
-                'base_price' => 299.00,
-                'compare_at_price' => 349.00,
-                'base_inventory' => 20,
+                'base_price' => 140.00,
+                'compare_at_price' => 175.00,
+                'base_inventory' => 22,
             ],
             [
-                'title' => 'Solid Walnut Ergonomic Desk',
-                'slug' => 'solid-walnut-ergonomic-desk',
-                'description' => 'Sustainably harvested American black walnut with natural beveled contour edge. Dual-motor synchronized height adjustment with digital memory presets and integrated aluminum cable management channel.',
+                'title' => 'Pure Mongolian Cashmere Crewneck',
+                'slug' => 'pure-mongolian-cashmere-crewneck',
+                'description' => 'Spun from Grade-A 2-ply 12-gauge Mongolian cashmere. Unbelievably soft handfeel with thermal regulation, ribbed cuffs, and seamless tubular knit construction.',
                 'status' => 'active',
-                'vendor' => 'Kanso Living',
-                'product_type' => 'Furniture',
-                'tags' => ['desk', 'walnut', 'ergonomic', 'furniture'],
+                'vendor' => 'Cartify Knitwear',
+                'product_type' => 'Apparel',
+                'tags' => ['knitwear', 'cashmere', 'sweater', 'winter'],
                 'media' => [
-                    ['url' => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Walnut desk workspace', 'is_primary' => true],
+                    ['url' => 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Cashmere Crewneck detail', 'is_primary' => true],
                 ],
                 'options' => [
-                    ['name' => 'Size', 'values' => ['55 Inch', '63 Inch']],
-                    ['name' => 'Frame', 'values' => ['Matte Black', 'Arctic White']],
+                    ['name' => 'Size', 'values' => ['S', 'M', 'L', 'XL']],
+                    ['name' => 'Color', 'values' => ['Heather Grey', 'Caramel Camel', 'Midnight']],
                 ],
-                'base_price' => 680.00,
-                'compare_at_price' => 790.00,
-                'base_inventory' => 6,
+                'base_price' => 265.00,
+                'compare_at_price' => 320.00,
+                'base_inventory' => 18,
+            ],
+            [
+                'title' => 'Structured Cotton Gabardine Trench',
+                'slug' => 'structured-cotton-gabardine-trench',
+                'description' => 'Double-breasted storm trench engineered in water-repellent dense cotton gabardine. Features horn buckles, storm flap, deep welt pockets, and vented back.',
+                'status' => 'active',
+                'vendor' => 'Cartify Tailoring',
+                'product_type' => 'Apparel',
+                'tags' => ['trench', 'outerwear', 'coat', 'waterproof'],
+                'media' => [
+                    ['url' => 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Trench Coat Model', 'is_primary' => true],
+                ],
+                'options' => [
+                    ['name' => 'Size', 'values' => ['S', 'M', 'L']],
+                    ['name' => 'Color', 'values' => ['Classic Honey', 'Night Charcoal']],
+                ],
+                'base_price' => 340.00,
+                'compare_at_price' => 410.00,
+                'base_inventory' => 12,
+            ],
+            [
+                'title' => 'French Terry Loopback Hoodie',
+                'slug' => 'french-terry-loopback-hoodie',
+                'description' => 'Constructed from 480gsm ultra-dense unbrushed French terry cotton. Clean crossover hood with no drawstrings, hidden side seam pockets, and structured ribbed hems.',
+                'status' => 'active',
+                'vendor' => 'Cartify Basics',
+                'product_type' => 'Apparel',
+                'tags' => ['hoodie', 'sweatshirt', 'terry', 'casual'],
+                'media' => [
+                    ['url' => 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1000&q=80', 'alt' => 'Loopback Hoodie', 'is_primary' => true],
+                ],
+                'options' => [
+                    ['name' => 'Size', 'values' => ['S', 'M', 'L', 'XL']],
+                    ['name' => 'Color', 'values' => ['Heather Ash', 'Washed Olive', 'Jet Black']],
+                ],
+                'base_price' => 110.00,
+                'compare_at_price' => 135.00,
+                'base_inventory' => 30,
             ],
         ];
 
