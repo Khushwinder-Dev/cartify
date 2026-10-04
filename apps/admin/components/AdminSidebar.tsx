@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -78,17 +78,56 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [adminUser, setAdminUser] = useState<{ name?: string; email?: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userStr = localStorage.getItem('admin_user');
+      if (userStr) {
+        try {
+          setAdminUser(JSON.parse(userStr));
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }, [pathname]);
 
   // If on login page, do not render sidebar
   if (pathname === '/login') {
     return null;
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    if (token) {
+      try {
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
+        await fetch(`${API_BASE}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+      } catch {
+        // ignore network error on logout
+      }
+    }
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_user');
     router.push('/login');
   };
+
+  const initials = adminUser?.name
+    ? adminUser.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : 'AD';
 
   const NavContent = (
     <div className="flex flex-col h-full bg-neutral-950 border-r border-neutral-800/80 text-neutral-300 w-64 select-none">
@@ -183,13 +222,17 @@ export default function AdminSidebar() {
 
         {/* User Card */}
         <div className="flex items-center justify-between p-2 rounded-xl bg-neutral-900/40 border border-neutral-800/40">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow">
-              AD
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold shadow shrink-0">
+              {initials}
             </div>
-            <div className="text-left text-xs leading-tight">
-              <p className="font-semibold text-white">Merchant Admin</p>
-              <p className="text-[10px] text-neutral-500">Sanctum RBAC</p>
+            <div className="text-left text-xs leading-tight min-w-0">
+              <p className="font-semibold text-white truncate max-w-[130px]">
+                {adminUser?.name || 'Administrator'}
+              </p>
+              <p className="text-[10px] text-neutral-500 truncate max-w-[130px]">
+                {adminUser?.email || 'admin@admin.com'}
+              </p>
             </div>
           </div>
           <button

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminTopNav from '@/components/AdminTopNav';
+import AdminAuthGuard from '@/components/AdminAuthGuard';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,11 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full bg-neutral-950 text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white">
-        <AdminSidebar />
-        <div className="md:pl-64 flex flex-col min-h-screen">
-          <AdminTopNav />
-          <main className="flex-1">{children}</main>
-        </div>
+        <AdminAuthGuard>
+          <AdminSidebar />
+          <div className="md:pl-64 flex flex-col min-h-screen">
+            <AdminTopNav />
+            <main className="flex-1">{children}</main>
+          </div>
+        </AdminAuthGuard>
       </body>
     </html>
   );

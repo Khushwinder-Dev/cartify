@@ -18,6 +18,15 @@ class Cart extends Model
         'currency',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (Cart $cart) {
+            if (empty($cart->token)) {
+                $cart->token = (string) Str::uuid();
+            }
+        });
+    }
+
     public static function createWithToken(?int $userId = null, string $currency = 'USD'): self
     {
         return self::create([
