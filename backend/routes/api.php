@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentGatewayController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\Api\WebhookController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Middleware\EnsureAdmin;
@@ -50,6 +52,10 @@ Route::prefix('v1')->group(function () {
 
     // 8. Webhooks
     Route::post('/webhooks/payment', [WebhookController::class, 'handlePayment']);
+
+    // Public Shipping & Payment Methods (e.g. for checkout preview)
+    Route::get('/shipping-methods', [ShippingController::class, 'index']);
+    Route::get('/payment-gateways', [PaymentGatewayController::class, 'index']);
 
     // 9. Authenticated Customer Routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -98,8 +104,27 @@ Route::prefix('v1')->group(function () {
         Route::patch('/reviews/{id}', [ReviewController::class, 'updateStatus']);
         Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
 
-        // Customers CRM
+        // Customers CRM (Full CRUD)
         Route::get('/customers', [CustomerController::class, 'index']);
+        Route::post('/customers', [CustomerController::class, 'store']);
         Route::get('/customers/{id}', [CustomerController::class, 'show']);
+        Route::put('/customers/{id}', [CustomerController::class, 'update']);
+        Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
+
+        // Shipping Methods Management (Full CRUD)
+        Route::get('/shipping', [ShippingController::class, 'index']);
+        Route::post('/shipping', [ShippingController::class, 'store']);
+        Route::get('/shipping/{id}', [ShippingController::class, 'show']);
+        Route::put('/shipping/{id}', [ShippingController::class, 'update']);
+        Route::patch('/shipping/{id}/toggle', [ShippingController::class, 'toggle']);
+        Route::delete('/shipping/{id}', [ShippingController::class, 'destroy']);
+
+        // Payment Gateways Management (Full CRUD)
+        Route::get('/payments', [PaymentGatewayController::class, 'index']);
+        Route::post('/payments', [PaymentGatewayController::class, 'store']);
+        Route::get('/payments/{id}', [PaymentGatewayController::class, 'show']);
+        Route::put('/payments/{id}', [PaymentGatewayController::class, 'update']);
+        Route::patch('/payments/{id}/toggle', [PaymentGatewayController::class, 'toggle']);
+        Route::delete('/payments/{id}', [PaymentGatewayController::class, 'destroy']);
     });
 });

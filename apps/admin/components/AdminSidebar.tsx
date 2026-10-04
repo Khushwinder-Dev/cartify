@@ -21,7 +21,9 @@ import {
   Menu,
   X,
   Server,
-  Activity
+  Activity,
+  Truck,
+  CreditCard,
 } from 'lucide-react';
 
 interface NavItem {
@@ -57,6 +59,8 @@ const navGroups: NavGroup[] = [
     items: [
       { label: 'Orders', href: '/orders', icon: ShoppingBag, badge: 'Live', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
       { label: 'Inventory', href: '/inventory', icon: Boxes, badge: 'Alerts', badgeColor: 'bg-amber-500/20 text-amber-400' },
+      { label: 'Shipping & Delivery', href: '/shipping', icon: Truck },
+      { label: 'Payment Gateways', href: '/payments', icon: CreditCard },
     ],
   },
   {

@@ -153,7 +153,7 @@ class ProductController extends BaseApiController
     }
 
     /**
-     * Admin: Update product info and options.
+     * Admin: Update product info, options, pricing, and stock.
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -166,16 +166,50 @@ class ProductController extends BaseApiController
             'vendor' => 'nullable|string|max:255',
             'product_type' => 'nullable|string|max:255',
             'tags' => 'nullable|array',
+            'price' => 'nullable|numeric|min:0',
+            'compare_at_price' => 'nullable|numeric|min:0',
+            'inventory_quantity' => 'nullable|integer|min:0',
             'options' => 'nullable|array',
+            'media' => 'nullable|array',
+            'media.*.url' => 'required_with:media|url',
         ]);
 
-        $product->update($validated);
+        $product->update(collect($validated)->except(['price', 'compare_at_price', 'inventory_quantity', 'options', 'media'])->toArray());
 
-        if (isset($validated['options'])) {
+        // If price or inventory passed directly, update all variants or primary variant
+        $variantUpdates = [];
+        if (isset($validated['price'])) {
+            $variantUpdates['price'] = $validated['price'];
+        }
+        if (array_key_exists('compare_at_price', $validated)) {
+            $variantUpdates['compare_at_price'] = $validated['compare_at_price'];
+        }
+        if (isset($validated['inventory_quantity'])) {
+            $variantUpdates['inventory_quantity'] = $validated['inventory_quantity'];
+        }
+
+        if (!empty($variantUpdates)) {
+            $product->variants()->update($variantUpdates);
+        }
+
+        if (isset($validated['options']) && !empty($validated['options'])) {
             $product = $this->variantService->generateVariantsFromOptions($product, $validated['options']);
         }
 
-        return $this->success(new ProductResource($product->load(['options.values', 'variants.optionValues', 'media'])), 'Product updated');
+        // If media passed, update media
+        if (isset($validated['media']) && is_array($validated['media'])) {
+            $product->media()->delete();
+            foreach ($validated['media'] as $pos => $mediaItem) {
+                $product->media()->create([
+                    'url' => $mediaItem['url'],
+                    'alt_text' => $mediaItem['alt_text'] ?? null,
+                    'position' => $pos,
+                    'is_primary' => $mediaItem['is_primary'] ?? ($pos === 0),
+                ]);
+            }
+        }
+
+        return $this->success(new ProductResource($product->load(['options.values', 'variants.optionValues', 'media', 'primaryMedia'])), 'Product updated successfully');
     }
 
     /**

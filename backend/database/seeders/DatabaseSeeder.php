@@ -269,5 +269,126 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // 4. Shipping Methods
+        \App\Models\ShippingMethod::firstOrCreate(
+            ['code' => 'standard'],
+            [
+                'name' => 'Standard Ground Shipping',
+                'description' => 'Reliable, cost-effective ground delivery directly to your door.',
+                'cost' => 5.00,
+                'free_threshold' => 75.00,
+                'estimated_days' => '3-5 Business Days',
+                'carrier' => 'FedEx Ground',
+                'is_active' => true,
+                'position' => 1,
+            ]
+        );
+
+        \App\Models\ShippingMethod::firstOrCreate(
+            ['code' => 'express'],
+            [
+                'name' => 'Express Air Courier',
+                'description' => 'Fast 2-day domestic air shipping with full tracking and SMS updates.',
+                'cost' => 15.00,
+                'free_threshold' => 150.00,
+                'estimated_days' => '2 Business Days',
+                'carrier' => 'DHL Express',
+                'is_active' => true,
+                'position' => 2,
+            ]
+        );
+
+        \App\Models\ShippingMethod::firstOrCreate(
+            ['code' => 'overnight'],
+            [
+                'name' => 'Priority Overnight',
+                'description' => 'Guaranteed next-morning delivery for urgent garment orders.',
+                'cost' => 28.00,
+                'free_threshold' => null,
+                'estimated_days' => '1 Business Day (Next Morning)',
+                'carrier' => 'UPS Next Day Air',
+                'is_active' => true,
+                'position' => 3,
+            ]
+        );
+
+        \App\Models\ShippingMethod::firstOrCreate(
+            ['code' => 'international'],
+            [
+                'name' => 'International Priority',
+                'description' => 'Worldwide door-to-door delivery with customs pre-clearance.',
+                'cost' => 38.00,
+                'free_threshold' => 250.00,
+                'estimated_days' => '5-7 Business Days',
+                'carrier' => 'DHL Global',
+                'is_active' => true,
+                'position' => 4,
+            ]
+        );
+
+        // 5. Payment Gateways
+        \App\Models\PaymentGateway::firstOrCreate(
+            ['code' => 'stripe'],
+            [
+                'name' => 'Stripe Card Payments',
+                'description' => 'Accept Visa, Mastercard, AMEX, Discover, Apple Pay, and Google Pay with PCI-DSS Level 1 security.',
+                'instructions' => 'Encrypted credit card tokenization via Stripe Elements.',
+                'is_active' => true,
+                'is_test_mode' => true,
+                'transaction_fee_percent' => 2.90,
+                'credentials' => [
+                    'publishable_key' => 'pk_test_51MockStripeKeyCartifyLive001',
+                    'secret_key' => 'sk_test_51MockStripeSecretCartifyLive001',
+                    'webhook_secret' => 'whsec_MockWebhookCartifyLive001',
+                ],
+                'position' => 1,
+            ]
+        );
+
+        \App\Models\PaymentGateway::firstOrCreate(
+            ['code' => 'paypal'],
+            [
+                'name' => 'PayPal Express Checkout',
+                'description' => 'Safe, direct payments using PayPal balance, linked cards, or Pay in 4 installments.',
+                'instructions' => 'Customers are redirected to PayPal to authorize the transaction.',
+                'is_active' => true,
+                'is_test_mode' => true,
+                'transaction_fee_percent' => 3.49,
+                'credentials' => [
+                    'client_id' => 'sb-client-id-cartify-demo',
+                    'secret' => 'sb-secret-cartify-demo',
+                ],
+                'position' => 2,
+            ]
+        );
+
+        \App\Models\PaymentGateway::firstOrCreate(
+            ['code' => 'cod'],
+            [
+                'name' => 'Cash on Delivery (COD)',
+                'description' => 'Pay in cash upon physical receipt and inspection of your garment order.',
+                'instructions' => 'Please keep exact cash ready upon arrival of the delivery courier.',
+                'is_active' => true,
+                'is_test_mode' => false,
+                'transaction_fee_percent' => 0.00,
+                'credentials' => null,
+                'position' => 3,
+            ]
+        );
+
+        \App\Models\PaymentGateway::firstOrCreate(
+            ['code' => 'bank_transfer'],
+            [
+                'name' => 'Direct Bank Wire Transfer',
+                'description' => 'Direct B2B wire payment to Cartify corporate escrow account.',
+                'instructions' => 'Please transfer to Account: 9876543210, Routing: 021000021, Bank: JPMorgan Chase. Use your Order ID as payment reference.',
+                'is_active' => false,
+                'is_test_mode' => false,
+                'transaction_fee_percent' => 0.00,
+                'credentials' => null,
+                'position' => 4,
+            ]
+        );
     }
 }
