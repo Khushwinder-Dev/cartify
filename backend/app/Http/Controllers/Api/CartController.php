@@ -54,7 +54,7 @@ class CartController extends BaseApiController
     {
         $validated = $request->validate([
             'product_variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'nullable|integer|min:1',
+            'quantity' => 'nullable|integer|min:1|max:99',
         ]);
 
         $quantity = $validated['quantity'] ?? 1;
@@ -94,7 +94,7 @@ class CartController extends BaseApiController
     public function updateItem(Request $request, int $itemId): JsonResponse
     {
         $validated = $request->validate([
-            'quantity' => 'required|integer|min:0',
+            'quantity' => 'required|integer|min:0|max:99',
         ]);
 
         $cart = $this->resolveCart($request);

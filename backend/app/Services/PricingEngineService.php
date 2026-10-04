@@ -49,10 +49,24 @@ class PricingEngineService
         }
         $taxTotal = round($taxableAmount * $taxRate, 2);
 
-        // 3. Shipping rate engine: Free shipping over $100, else flat $10 (or express $25)
+        // 3. Database-driven Shipping Rate Engine
         $shippingRateType = $shippingAddress['shipping_rate'] ?? 'standard';
-        if ($subtotal >= 100.00 && $shippingRateType === 'standard') {
-            $shippingTotal = 0.00;
+        $shippingMethod = \App\Models\ShippingMethod::where('code', $shippingRateType)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$shippingMethod) {
+            $shippingMethod = \App\Models\ShippingMethod::where('is_active', true)
+                ->orderBy('position')
+                ->first();
+        }
+
+        if ($shippingMethod) {
+            if ($shippingMethod->free_threshold !== null && $subtotal >= (float) $shippingMethod->free_threshold) {
+                $shippingTotal = 0.00;
+            } else {
+                $shippingTotal = (float) $shippingMethod->cost;
+            }
         } else {
             $shippingTotal = $shippingRateType === 'express' ? 25.00 : 10.00;
         }
